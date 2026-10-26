@@ -1,22 +1,27 @@
 /* 유현종 차장 — '내 벤츠 고르기' 앱 화면 꾸밈 v4 '흰 바탕 · 벤츠 코리아 분위기' (2026-10-26 · 차장님 "흰 바탕 벤츠 코리아 톤 + 버튼 축소")
    분위기만 가져옴(흰 바탕 · 연회색 면 · 검정 글자·검정 버튼 · 여백) — 로고·삼각별·공식 글꼴·메뉴 구성은 쓰지 않음(회사 브랜드 흉내 금지)
-   기준: 폰 375px · 버튼 44~46px · 글씨 15~16px · 큰 숫자만 굵게 · 가로로 넘기는 카드 · 아래에서 올라오는 시트 */
+   기준: 폰 375px · 버튼 44~46px · 글씨 15~16px · 큰 숫자만 굵게 · 가로로 넘기는 카드 · 아래에서 올라오는 시트
+   10/26 손질(Hallmark·Impeccable 지침 · 본부 지시): 머리 위 영문 꼬리표 없앰 · 글자 사이 벌림 없앰 · 흐린 글씨 진하게(4.5:1) · 키보드 초점 · 움직임 줄이기 설정 · 손가락 닿는 크기 44px · 상자 안 상자 없앰 · 레이아웃·색·버튼은 그대로 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600&family=Noto+Sans+KR:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
 :root{
   --bg:#ffffff;--sf:#f4f4f2;--sf2:#ececea;--sf3:#e3e3e0;--hair:rgba(0,0,0,.08);--hair2:rgba(0,0,0,.16);
-  --ink:#111111;--ink2:#333333;--mute:#6b6b6b;--mute2:#a0a0a0;--gold:#6b6b6b;--ok:#1f7a3e;--okbg:rgba(31,122,62,.1);
+  --ink:#111111;--ink2:#333333;--mute:#6b6b6b;--mute2:#767676;--gold:#6b6b6b;--ok:#1f7a3e;--okbg:rgba(31,122,62,.1);
   --r:14px;--r2:12px;--pad:20px;--ease:cubic-bezier(.2,.8,.2,1)
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
+html,body{overflow-x:clip}
+::selection{background:#111;color:#fff}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mc[aria-pressed=true]:focus-visible,.btn.p:focus-visible,.seg button[aria-pressed=true]:focus-visible{outline-color:var(--ink);outline-offset:3px}
 body{margin:0;background:#ebebe9;color:var(--ink);font-family:"Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;font-size:15px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
-.app{max-width:430px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative;padding-bottom:110px;overflow-x:hidden}
+.app{max-width:430px;margin:0 auto;background:var(--bg);min-height:100vh;min-height:100dvh;position:relative;padding-bottom:110px;overflow-x:hidden}
 @media (min-width:431px){.app{box-shadow:0 0 0 1px var(--hair)}}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;color:inherit}
 .num{font-family:Inter,"Noto Sans KR",sans-serif;font-variant-numeric:tabular-nums}
 .serif{font-family:"Noto Serif KR",serif;font-weight:600;letter-spacing:-.02em}
-.eyebrow{font-family:Inter,sans-serif;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.eyebrow{font-size:12px;font-weight:500;color:var(--mute)}
 .cap{font-size:13px;color:var(--mute)}
 .pad{padding:0 var(--pad)}
 /* 위 바 */
@@ -32,7 +37,7 @@ button{font-family:inherit;color:inherit}
 .hero p{margin:0;font-size:14px;color:var(--ink2)}
 /* 묶음 선택(세그먼트) */
 .seg{display:flex;gap:4px;background:var(--sf);border-radius:999px;padding:4px;margin:16px var(--pad) 4px}
-.seg button{flex:1;border:0;background:transparent;color:var(--mute);font-size:14px;font-weight:500;padding:10px 6px;border-radius:999px;transition:all .25s var(--ease)}
+.seg button{flex:1;border:0;background:transparent;color:var(--mute);font-size:14px;font-weight:500;padding:10px 6px;border-radius:999px;transition:background-color .25s var(--ease),color .25s}
 .seg button[aria-pressed=true]{background:var(--ink);color:#fff;font-weight:700}
 /* 차종 카드(가로 넘김) */
 .rail{display:flex;gap:10px;overflow-x:auto;padding:12px var(--pad) 6px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
@@ -70,24 +75,26 @@ button{font-family:inherit;color:inherit}
 .pill.gold{background:#efe9d8;color:#6b5a2a}
 /* 차 한 대(디테일) */
 .detail{margin:12px var(--pad) 0;background:var(--bg);border:1px solid var(--hair2);border-radius:18px;padding:20px 18px 18px;box-shadow:0 10px 30px rgba(0,0,0,.06);animation:up .35s var(--ease);will-change:transform}
-@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes up{from{transform:translateY(10px)}to{transform:none}}   /* 글자는 처음부터 보이게(움직임이 멈춰도 흐려지지 않음) */
 .detail .name{font-size:26px;line-height:1.15;margin:4px 0 2px}
 .detail .sub{font-size:12px;color:var(--mute);margin-bottom:12px}
 .ysw{display:inline-flex;gap:2px;background:var(--sf);border-radius:999px;padding:3px;margin-bottom:14px}
-.ysw button{border:0;background:transparent;color:var(--mute);font-size:13px;font-weight:600;padding:7px 13px;border-radius:999px}
+.ysw button{border:0;background:transparent;color:var(--mute);font-size:13px;font-weight:600;padding:0 14px;min-height:40px;border-radius:999px}
 .ysw button[aria-pressed=true]{background:var(--ink);color:#fff}
 .price{margin:4px 0 2px}
 .price .big{font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1}
 .price .big small{font-size:16px;font-weight:600;margin-left:2px}
 .price .lab{font-size:12px;color:var(--mute);margin-top:6px}
 .lines{margin-top:12px;border-top:1px solid var(--hair)}
-.lines div{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--hair);font-size:14px;color:var(--ink2)}
-.lines div b{font-weight:500;color:var(--ink)}
+.lines div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--hair);font-size:14px;color:var(--ink2)}
+.lines div b{font-weight:500;color:var(--ink);white-space:nowrap}
 .lines div .m{color:var(--mute);font-size:12px;margin-left:6px}
 .lines div.sum{background:var(--sf);margin:0 -18px;padding:10px 18px}
 .lines div.sum b{font-size:16px;font-weight:700}
+.lines div.sum .m{display:block;margin:2px 0 0}
+.lines div>span,.li .t b,.sum{word-break:keep-all}
 .note{font-size:12px;color:var(--mute);line-height:1.6;margin:10px 0 0}
-.h3{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-family:Inter,sans-serif;font-weight:600;margin:20px 0 8px}
+.h3{font-size:14px;font-weight:700;color:var(--ink);margin:24px 0 10px}
 /* 색 */
 .sw{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 6px;scrollbar-width:none;margin:0 -4px}
 .sw::-webkit-scrollbar{display:none}
@@ -128,9 +135,9 @@ button{font-family:inherit;color:inherit}
 .grab{width:36px;height:4px;border-radius:2px;background:var(--hair2);margin:4px auto 14px}
 .sheet h2{font-size:21px;margin:0 0 2px}
 .sheet .cap{margin-bottom:6px}
-.x{position:absolute;right:16px;top:14px;width:34px;height:34px;border-radius:50%;background:var(--sf);border:0;color:var(--ink);font-size:18px}
+.x{position:absolute;right:14px;top:12px;width:40px;height:40px;border-radius:50%;background:var(--sf);border:0;color:var(--ink);font-size:18px}
 .opts{display:flex;gap:8px;flex-wrap:wrap}
-.opt{border:1px solid var(--hair2);background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 14px;font-size:14px;font-weight:500;min-height:40px;cursor:pointer;transition:all .2s}
+.opt{border:1px solid var(--hair2);background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 14px;font-size:14px;font-weight:500;min-height:44px;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
 .opt[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .days{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:2px 20px 6px}
 .days::-webkit-scrollbar{display:none}
@@ -151,6 +158,10 @@ button{font-family:inherit;color:inherit}
 .empty{padding:16px 0;color:var(--mute);font-size:13px}
 footer{padding:24px var(--pad) 10px;font-size:11px;color:var(--mute2);line-height:1.7}
 .fade{animation:fade .4s var(--ease)}
+/* 차 화면 안의 색 목록: 상자 안 상자 대신 위아래 선만 */
+.detail .card{border:0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);border-radius:0;margin:0 -18px}
+.detail .card .li{padding-left:18px;padding-right:18px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 
 /* 지인에게 보내기 · 알림 한 줄 · 마감 D-day · 토스트 (10/26) */
