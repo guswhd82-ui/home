@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
+<title>벤츠 차종 가이드 — 유현종 차장</title>
+<meta name="description" content="메르세데스-벤츠 전 차종 가이드 — 차종을 고르면 가격·이달 조건·지금 있는 색·블로그 글·영상이 한 곳에. 유현종 차장 개인 상담 페이지.">
+<meta property="og:title" content="벤츠 차종 가이드">
+<meta property="og:description" content="차종 하나를 고르면 가격·색·글·영상이 한 곳에 — 유현종 차장">
+<link rel="stylesheet" href="site.css">
+</head>
+<body><div class="app">
+<main class="wrap">
+  <!-- 차종 허브 : prices.json + stock.json + posts.json (전부 자동) -->
+  <section id="models">
+    <div class="kicker">Model guide</div>
+    <h2>차종 가이드</h2>
+    <p class="sub">차종을 고르면 가격 · 이달 조건 · 지금 있는 색 · 글 · 영상이 한 곳에 모입니다.</p>
+    <input id="q" class="search" type="search" placeholder="차종 검색 (예: GLE, E클래스)" aria-label="차종 검색">
+    <div id="groups"></div>
+  </section>
+</main>
+<div id="bottom"></div>
+</div>
+<script src="site.js"></script>
+<script>
+(function () {
+  var S = window.SITE, $ = S.$, el = S.el; S.chrome('models.html');
+  var GROUPS = [['세단 · 해치백', /^(A|C|E|S|CLA|CLE|V)클래스|^(CLA|CLE)$|^A클래스|^C클래스|^E클래스|^S클래스/], ['SUV', /^G|^GL/], ['전기차', /^EQ|일렉트릭|electric/i], ['쿠페 · 로드스터 · AMG GT', /AMG GT|^SL$|GT/], ['마이바흐', /마이바흐|Maybach/i]];
+  var D = { prices: null, stock: null, posts: null }, q = '';
+  function group(fam) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][1].test(fam)) return GROUPS[i][0]; return '기타'; }
+  function render() {
+    var box = $('groups'); box.textContent = '';
+    var fams = {}; if (D.prices) D.prices.목록.forEach(function (r) { var f = fams[r.계열] = fams[r.계열] || { n: 0, ys: {}, colors: 0, posts: 0 }; f.n++; f.ys[r.연식] = 1; });
+    if (D.stock) D.stock.목록.forEach(function (r) { var f = fams[r.계열] = fams[r.계열] || { n: 0, ys: {}, colors: 0, posts: 0 }; f.colors++; });
+    if (D.posts) D.posts.차종.forEach(function (c) { Object.keys(fams).forEach(function (k) { if (S.famKey(c.이름).indexOf(S.famKey(k)) === 0) fams[k].posts += c.글.length; }); });
+    var by = {}; Object.keys(fams).forEach(function (k) { if (q && S.norm(k).indexOf(S.norm(q)) < 0) return; (by[group(k)] = by[group(k)] || []).push(k); });
+    GROUPS.map(function (g) { return g[0]; }).concat(['기타']).forEach(function (g) {
+      if (!by[g]) return; var sec = el('div'); sec.appendChild(el('div', 'kicker', g));
+      by[g].sort().forEach(function (k) {
+        var f = fams[k], a = S.a('guide.html?car=' + encodeURIComponent(k), 'tile'); a.appendChild(el('b', '', k));
+        var bits = []; if (f.n) bits.push('모델 ' + f.n + '개 · ' + Object.keys(f.ys).sort().reverse().map(function (y) { return '20' + y.slice(2); }).join('·') + '년식'); if (f.colors) bits.push('지금 있는 색 ' + f.colors + '조합'); if (f.posts) bits.push('글 ' + f.posts + '편');
+        a.appendChild(el('span', '', bits.join(' · ') || '상담으로 안내')); sec.appendChild(a);
+      });
+      box.appendChild(sec);
+    });
+    if (!box.children.length) box.appendChild(el('div', 'empty', '찾는 차종이 없습니다 — 상담으로 안내해 드립니다.'));
+  }
+  $('q').addEventListener('input', function (e) { q = e.target.value; render(); });
+  Promise.all(['prices', 'stock', 'posts'].map(function (k) { return S.getJSON(k + '.json').then(function (d) { D[k] = d; }).catch(function () {}); })).then(render);
+})();
+</script>
+</body>
+</html>

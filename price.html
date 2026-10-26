@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
+<title>벤츠 가격 · 이달 조건 — 유현종 차장</title>
+<meta name="description" content="메르세데스-벤츠 차종별 권장 소비자가격(부가세 포함 · 개별소비세 5%)과 이달 조건. 기준일 표시 · 세부 조건은 유현종 차장 상담으로.">
+<meta property="og:title" content="벤츠 가격 · 이달 조건">
+<meta property="og:description" content="가격표 기준 정가 + 이달 조건 — 유현종 차장 개인 상담 페이지">
+<link rel="stylesheet" href="site.css">
+</head>
+<body><div class="app">
+<main class="wrap">
+  <!-- 가격 : prices.json(가격표 새 판 자동) + promo.json(이달 조건 · 월초 1번) -->
+  <section id="price">
+    <div class="kicker">Price &amp; Conditions</div>
+    <h2>가격 · 이달 조건</h2>
+    <p class="sub" id="priceAsof">불러오는 중…</p>
+    <div id="promoNote" class="stale" hidden></div>
+    <div id="priceChips" class="chips scroll" role="group" aria-label="차종 선택"></div>
+    <div id="priceList"></div>
+    <p class="note">권장 소비자가격(부가세 포함 · 개별소비세 5%) 기준이며, 이달 조건은 달마다 바뀝니다. 금융 · 추가 조건 · 실제 배정은 상담으로 안내합니다.</p>
+    <a class="ask" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">내 조건으로 상담 →</a>
+  </section>
+</main>
+<div id="bottom"></div>
+</div>
+<script src="site.js"></script>
+<script>
+(function () {
+  var S = window.SITE, $ = S.$; S.chrome('price.html');
+  var P = { d: null, promo: null, fam: S.param('car') };
+  function render() {
+    var list = $('priceList'); list.textContent = '';
+    var rows = P.d.목록.filter(function (r) { return r.계열 === P.fam; });
+    if (!rows.length) { list.appendChild(S.el('div', 'empty', '차종을 골라 주세요.')); return; }
+    var box = S.el('div', 'plist'), ys = {}; rows.forEach(function (r) { ys[r.연식] = 1; });
+    Object.keys(ys).sort().reverse().forEach(function (my) {
+      box.appendChild(S.el('h3', '', '20' + my.slice(2) + '년식'));
+      rows.filter(function (r) { return r.연식 === my; }).forEach(function (r) { box.appendChild(S.priceRow(r, P.promo)); });
+    });
+    list.appendChild(box);
+  }
+  Promise.all([S.getJSON('prices.json'), S.getJSON('promo.json').catch(function () { return null; })]).then(function (a) {
+    P.d = a[0]; P.promo = a[1];
+    var t = '가격표 ' + P.d.기준 + ' 기준'; if (S.promoOK(P.promo)) t += ' · 이달 조건 ' + P.promo.기준 + ' 반영'; $('priceAsof').textContent = t;
+    if (P.promo && P.promo.모의) $('priceAsof').appendChild(S.el('span', 'mock', '조건은 모의'));
+    if (P.promo && !S.promoOK(P.promo)) { $('promoNote').hidden = false; $('promoNote').textContent = '※ 이달 조건이 아직 반영되지 않았습니다 — 조건은 상담으로 확인해 주세요.'; }
+    var cnt = {}; P.d.목록.forEach(function (r) { cnt[r.계열] = (cnt[r.계열] || 0) + 1; });
+    var order = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; }); if (!cnt[P.fam]) P.fam = order[0];
+    S.chipBar($('priceChips'), order.map(function (k) { return [k, k]; }), function () { return P.fam; }, function (v) { P.fam = v; }, render, false);
+    render();
+  }).catch(function () { $('priceAsof').textContent = '불러오지 못했습니다'; $('priceList').appendChild(S.el('div', 'empty', '가격 정보를 불러오지 못했습니다. 카톡으로 문의해 주세요.')); });
+})();
+</script>
+</body>
+</html>

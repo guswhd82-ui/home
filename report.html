@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
+<title>이달의 벤츠 구매 리포트 — 유현종 차장</title>
+<meta name="description" content="이달 벤츠 구매 전략 — 조건과 재고를 함께 보는 월간 리포트. 유현종 차장 개인 상담 페이지.">
+<link rel="stylesheet" href="site.css">
+</head>
+<body><div class="app">
+<main class="wrap">
+  <!-- 이달 리포트 : 원고 = 블로그 이달 글(자동 연결) · 재고 기준·가격표 기준·이달 조건 칸은 자동 · 지난 호 목록 자동 -->
+  <section id="report">
+    <div class="kicker">Monthly report</div>
+    <h2 id="rTitle">이달의 구매 리포트</h2>
+    <p class="sub" id="rSub"></p>
+    <div id="rStale" class="stale" hidden></div>
+    <div class="card"><h3>이달 기준</h3>
+      <div class="row"><div class="c">재고 기준</div><div class="n" id="kStock">—</div></div>
+      <div class="row"><div class="c">가격표</div><div class="n" id="kPrice">—</div></div>
+      <div class="row"><div class="c">이달 조건</div><div class="n" id="kPromo">—</div></div>
+    </div>
+    <div id="thisMonth"></div>
+    <div class="card"><h3>다섯 가지만 알려 주세요</h3><p class="sub" style="margin:0 0 8px">첫 상담이 짧아집니다.</p>
+      <div class="row"><div class="c">① 차종 · 연식 · 트림</div></div>
+      <div class="row"><div class="c">② 원하는 색 1 · 2순위</div></div>
+      <div class="row"><div class="c">③ 출고 희망 시기</div></div>
+      <div class="row"><div class="c">④ 구매 방법 · 예산</div></div>
+      <div class="row"><div class="c">⑤ 보유 차 · 재구매 · 제휴 여부</div></div>
+      <div class="big" style="margin-top:12px"><a class="p" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">카톡으로 보내기</a><a data-track="sms" id="smsBtn" href="#">문자로 보내기</a></div>
+    </div>
+    <h3 style="margin:22px 0 6px">지난 리포트</h3>
+    <div id="pastList"></div>
+  </section>
+</main>
+<div id="bottom"></div>
+</div>
+<script src="site.js"></script>
+<script>
+(function () {
+  var S = window.SITE, $ = S.$; S.chrome('report.html');
+  $('smsBtn').href = S.sms('상담 신청\n① 차종·연식·트림: \n② 색 1·2순위: \n③ 출고 희망 시기: \n④ 구매 방법·예산: \n⑤ 보유 차·재구매·제휴: ');
+  var ym = S.ym(); $('rSub').textContent = ym.slice(0, 4) + '년 ' + parseInt(ym.slice(5)) + '월';
+  S.getJSON('stock.json').then(function (d) { $('kStock').textContent = d.기준시각; }).catch(function () { $('kStock').textContent = '준비 중'; });
+  S.getJSON('prices.json').then(function (d) { $('kPrice').textContent = d.기준; }).catch(function () {});
+  S.getJSON('promo.json').then(function (p) { $('kPromo').textContent = S.promoOK(p) ? p.기준 + ' 반영' : '확인 필요'; }).catch(function () { $('kPromo').textContent = '확인 필요'; });
+  S.getJSON('posts.json').then(function (d) {
+    var list = S.monthly(d); if (!list.length) { $('thisMonth').appendChild(S.el('div', 'empty', '이달 리포트 글이 올라오면 여기에 자동으로 연결됩니다.')); return; }
+    var cur = list.filter(function (p) { return p.날짜.slice(0, 7) === ym; }), past = list.filter(function (p) { return p.날짜.slice(0, 7) !== ym; });
+    if (cur.length) cur.forEach(function (p) { $('thisMonth').appendChild(S.postCard(p)); }); else { $('rStale').hidden = false; $('rStale').textContent = '※ 이달 리포트는 준비 중입니다. 아래는 지난 달 기록입니다.'; past.slice(0, 1).forEach(function (p) { $('thisMonth').appendChild(S.postCard(p)); }); past = past.slice(1); }
+    if (past.length) past.forEach(function (p) { $('pastList').appendChild(S.postCard(p)); }); else $('pastList').appendChild(S.el('div', 'empty', '지난 호가 쌓이면 여기에 나타납니다.'));
+  }).catch(function () {});
+})();
+</script>
+</body>
+</html>
