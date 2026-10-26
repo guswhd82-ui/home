@@ -33,6 +33,7 @@
   <div class="eyebrow">Recommended</div>
   <h2 class="serif" style="margin-top:6px">이달의 추천 <small id="recCap"></small></h2>
   <div class="card" id="recList"></div>
+  <p class="note" id="recNote" style="margin:8px 2px 0"></p>
 </section>
 
 <div class="seg" id="seg" role="tablist"></div>
@@ -170,7 +171,7 @@
     function line(a, b, m, sum) { var r = el('div', sum ? 'sum' : ''); var l = el('span', '', a); if (m) l.appendChild(el('span', 'm', m)); r.appendChild(l); r.appendChild(el('b', 'num', b)); ln.appendChild(r); }
     if (pm && pm.할인율 === 0) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.정가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
     else if (pm) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.최종가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
-      line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('벤츠파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
+      line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('최대 혜택가 · MBM 파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
       $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지.'; }
     else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.floor(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
       var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
@@ -283,10 +284,13 @@
       var seen = {}; c.forEach(function (x) { if (pick.length < 3 && !seen[x.f.이름]) { seen[x.f.이름] = 1; pick.push(x); } });
     }
     if (!pick.length) { sec.hidden = true; return; } sec.hidden = false;
-    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중';
+    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중'; $('recNote').textContent = ok ? '표시 금액은 이달 최대 할인(현금 할인 + MBM 파이낸셜 추가 할인 함께 적용) 기준 — MBM 파이낸셜 이용 시 · 조건은 상담으로 확인해 드립니다.' : '이달 조건은 확인 중입니다 — 상담으로 바로 알려 드립니다.';
     pick.forEach(function (x) {
       var b = btn('li', null, x.t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', x.t.모델)); var tg = el('div', 'tags');
-      if (ok && x.rate > 0) tg.appendChild(el('span', 'pill gold', '할인 ' + x.rate + '%')); tg.appendChild(el('span', 'pill ' + (x.imm > 0 ? 'ok' : ''), x.imm > 0 ? '즉시 출고' : '출고 예정')); tg.appendChild(el('span', 'pill', x.f.이름 + ' · 20' + x.y.slice(2) + '년식')); tt.appendChild(tg); b.appendChild(tt); b.appendChild(el('span', 'chev'));
+      var pm0 = ok ? promoOf(x.f, x.t, x.y) : null, cc = pm0 ? calc(x.t, x.y, pm0) : null, mx = cc && cc.금융최종가 ? cc.금융할인율 + cc.할인율 : (cc ? cc.할인율 : 0);   // 큰 숫자 = 이달 받을 수 있는 가장 큰 할인(현금 + MBM 파이낸셜 함께 적용) · 같이 못 받는 건 안 더함(조건표 기준)
+      if (ok && mx > 0) tg.appendChild(el('span', 'pill gold', (cc.금융최종가 ? '최대 ' : '할인 ') + (Math.round(mx * 10) / 10) + '%')); tg.appendChild(el('span', 'pill ' + (x.imm > 0 ? 'ok' : ''), x.imm > 0 ? '즉시 출고' : '출고 예정')); tg.appendChild(el('span', 'pill', x.f.이름 + ' · 20' + x.y.slice(2) + '년식')); tt.appendChild(tg); b.appendChild(tt);
+      if (ok && cc && mx > 0) { var pc = el('div', 'p num'); pc.appendChild(el('s', '', man(cc.정가))); pc.appendChild(el('b', '', man(cc.금융최종가 || cc.최종가))); pc.appendChild(el('span', '', cc.금융최종가 ? 'MBM 파이낸셜 이용 시' : '일시불 기준')); pc.lastChild.style.cssText = 'display:block;font-size:10px;color:var(--mute);margin-top:2px'; b.appendChild(pc); }
+      b.appendChild(el('span', 'chev'));
       b.addEventListener('click', function () { st.grp = grp(x.f.이름); st.fam = x.f; st.trim = x.t; st.sub = family(x.t.모델); st.year = x.y; st.showAll = false; st.color = ''; st.pay = ''; st.ben = {}; renderSeg(); renderTrims(); setTimeout(function () { $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
     });
