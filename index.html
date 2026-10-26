@@ -114,6 +114,8 @@
       || D.promo.목록.filter(function (x) { return x.계열 === fam.이름 && x.연식 === y && pr && x.정가 === pr && nm(x.모델).indexOf(k.slice(0, 6)) === 0; })[0] || null;   // 이름이 달라도 같은 계열·연식·정가면(S 450 표준/롱처럼 가격표가 이름을 가른 경우)
   }
   function rows(t, y) { if (!t.재고) return t.재고; return t.재고.filter(function (r) { return !y || !r.연식 || r.연식 === '20' + y.slice(2); }); }
+  function hasStock(t) { return (t.재고 || []).length > 0; }   // 재고 있는 트림만 화면에 (차장님 10/26 "재고가 있는 차만 띄워")
+  function stockYear(t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if ((rows(t, ys[i]) || []).length) return ys[i]; return ys[0]; }
   function man(n) { n = Math.round(n); return n % 10000 === 0 ? (n / 10000).toLocaleString('ko-KR') + '만 원' : n.toLocaleString('ko-KR') + '원'; }   // 정확히(반올림 X): 만 원으로 딱 떨어지면 만 원 · 아니면 원 단위 전부
   function bigNum(n) { n = Math.round(n); return n % 10000 === 0 ? [(n / 10000).toLocaleString('ko-KR'), '만 원'] : [n.toLocaleString('ko-KR'), '원']; }   // 화면 숫자는 만 원 단위로 끊어 읽기 쉽게
   function en(f) { return { 'E클래스': 'E', 'S클래스': 'S', 'C클래스': 'C', 'A클래스': 'A', 'G클래스': 'G', 'V클래스': 'V' }[f] || f.replace('클래스', ''); }
@@ -122,15 +124,15 @@
 
   // ① 묶음(세그먼트) → 차종 카드(가로)
   function renderSeg() {
-    var gs = {}; D.cars.차종.forEach(function (c) { gs[grp(c.이름)] = 1; });
+    var gs = {}; D.cars.차종.forEach(function (c) { if (c.트림.some(hasStock)) gs[grp(c.이름)] = 1; });
     var seg = $('seg'); seg.textContent = '';
     GROUPS.map(function (g) { return g[0]; }).concat(['기타']).filter(function (g) { return gs[g]; }).forEach(function (g) { var b = btn('', g, g); b.setAttribute('role', 'tab'); b.addEventListener('click', function () { st.grp = g; st.fam = null; st.trim = null; press(seg, 'button', g); renderRail(); renderTrims(); }); seg.appendChild(b); });
     if (!st.grp) st.grp = seg.firstChild.dataset.v; press(seg, 'button', st.grp); renderRail();
   }
   function renderRail() {
     var rail = $('rail'); rail.textContent = '';
-    D.cars.차종.filter(function (c) { return grp(c.이름) === st.grp; }).sort(function (a, b) { return ord(a.이름) - ord(b.이름); }).forEach(function (c) {
-      var b = btn('mc', null, c.이름), n = c.트림.length, drv = c.트림.some(function (t) { return t.시승; }), av = c.트림.some(function (t) { return (t.재고 || []).length; });
+    D.cars.차종.filter(function (c) { return grp(c.이름) === st.grp && c.트림.some(hasStock); }).sort(function (a, b) { return ord(a.이름) - ord(b.이름); }).forEach(function (c) {
+      var b = btn('mc', null, c.이름), n = c.트림.filter(hasStock).length, drv = c.트림.some(function (t) { return hasStock(t) && t.시승; }), av = true;
       var top = el('div'); top.appendChild(el('b', 'num', en(c.이름))); top.appendChild(el('i', '', c.이름)); b.appendChild(top);
       b.appendChild(el('small', '', '트림 ' + n + '개' + (drv ? ' · 시승 가능' : '') + (av ? ' · 지금 출고 가능' : '')));
       if (av) b.appendChild(el('span', 'dot'));
@@ -142,7 +144,7 @@
   // ② 트림 목록
   function renderTrims() {
     var sec = $('trimSec'), box = $('trims'); box.textContent = ''; sec.hidden = !st.fam; if (!st.fam) { renderDetail(); return; }
-    var list = st.fam.트림.slice().sort(function (a, b) { return (priceOf(a, years(a)[0]) || 0) - (priceOf(b, years(b)[0]) || 0); });
+    var list = st.fam.트림.filter(hasStock).sort(function (a, b) { return (priceOf(a, stockYear(a)) || 0) - (priceOf(b, stockYear(b)) || 0); });
     // 2단계: 모델군(GLE 450 · GLE 450 d · AMG GLE 53 …) — 트림이 5개 넘을 때만
     var fams = []; list.forEach(function (t) { var f = family(t.모델); if (fams.indexOf(f) < 0) fams.push(f); });
     fams.sort(function (a, b) { var x = famKeyOrder(a), y = famKeyOrder(b); return x[0] - y[0] || x[1] - y[1] || (x[2] < y[2] ? -1 : 1); });
@@ -154,12 +156,12 @@
     if (sub.style.display !== 'none' && !st.sub) { box.appendChild(el('div', 'empty', '　위에서 모델을 골라 주세요.')); renderDetail(); return; }
     var shown = st.trim && !st.showAll ? pool.filter(function (t) { return t === st.trim; }) : pool;   // 고르면 그 트림만 남기고 카드가 바로 아래
     shown.forEach(function (t) {
-      var py = promoYear(st.fam, t), y = py || years(t)[0], pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm), av = (rows(t, y) || []).length;
+      var py = promoYear(st.fam, t), y = py || stockYear(t), pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm), av = (rows(t, y) || []).length;
       var b = btn('li', null, t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', t.모델));
       var tags = el('div', 'tags'); tags.appendChild(el('span', 'pill', years(t).map(function (v) { return '20' + v.slice(2); }).join('·') + '년식')); if (av) tags.appendChild(el('span', 'pill ok', '지금 출고 가능')); if (t.시승) tags.appendChild(el('span', 'pill gold', '시승')); if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
       var p = el('div', 'p num'); if (pm && c && c.할인율 > 0) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('b', '', man(c.최종가))); } else p.appendChild(el('b', '', c ? man(c.정가) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
       b.setAttribute('aria-pressed', String(st.trim === t));
-      b.addEventListener('click', function () { st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = promoYear(st.fam, t) || years(t)[0]; st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
+      b.addEventListener('click', function () { st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = promoYear(st.fam, t) || stockYear(t); st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
     });
     if (st.trim && !st.showAll && pool.length > 1) { var m = btn('li', null, 'more'), mt = el('div', 't'); mt.appendChild(el('b', '', '다른 트림 보기')); mt.appendChild(el('span', '', (st.sub || st.fam.이름) + ' 트림 ' + pool.length + '개')); m.appendChild(mt); m.appendChild(el('span', 'chev')); m.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(m); }
