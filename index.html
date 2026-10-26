@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="index,follow">
-<meta name="theme-color" content="#0a0a0b">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
 <title>유현종 차장 — 내 벤츠 고르기 · 가격 · 이달 조건 · 지금 고를 수 있는 색 · 시승</title>
@@ -162,8 +162,8 @@
       $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지.'; }
     else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.floor(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
       var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
-      if (oy) { nt.appendChild(document.createTextNode('이 연식은 ' + parseInt(S.ym().slice(5)) + '월 조건표에 없고, ')); var sw = el('a', '', '20' + oy.slice(2) + '년식 조건 보기 →'); sw.href = '#'; sw.style.color = 'var(--gold)'; sw.addEventListener('click', function (e) { e.preventDefault(); st.year = oy; renderDetail(); }); nt.appendChild(sw); }
-      else { nt.appendChild(document.createTextNode(parseInt(S.ym().slice(5)) + '월 조건표에 없는 모델입니다(신차·한정판 등) — ')); var q = el('a', '', '이달 조건은 견적 요청 →'); q.href = '#'; q.style.color = 'var(--gold)'; q.addEventListener('click', function (e) { e.preventDefault(); sheet('quote'); }); nt.appendChild(q); } }
+      if (oy) { nt.appendChild(document.createTextNode('이 연식은 ' + parseInt(S.ym().slice(5)) + '월 조건표에 없고, ')); var sw = el('a', '', '20' + oy.slice(2) + '년식 조건 보기 →'); sw.href = '#'; sw.style.textDecoration = "underline"; sw.addEventListener('click', function (e) { e.preventDefault(); st.year = oy; renderDetail(); }); nt.appendChild(sw); }
+      else { nt.appendChild(document.createTextNode(parseInt(S.ym().slice(5)) + '월 조건표에 없는 모델입니다(신차·한정판 등) — ')); var q = el('a', '', '이달 조건은 견적 요청 →'); q.href = '#'; q.style.textDecoration = "underline"; q.addEventListener('click', function (e) { e.preventDefault(); sheet('quote'); }); nt.appendChild(q); } }
     // 색
     var cc = $('dColors'); cc.textContent = ''; var rs = rows(t, y);
     if (rs == null) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 견적 요청하시면 바로 확인해 드립니다.'));
