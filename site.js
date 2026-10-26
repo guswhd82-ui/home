@@ -95,7 +95,8 @@
   };
 
   // 이달 조건(promo.json): {월:"2026-10", 기준:"…", 목록:[{계열, 모델(비우면 계열 전체), 연식, 할인율, 조건}]} — 월이 이번 달이 아니면 '확인 필요'
-  S.promoOK = function (p) { return !!(p && p.월 === S.ym() && p.목록 && p.목록.length); };
+  // 이달 조건이 '지금' 유효한가 — 브라우저 시계 기준: 월이 이번 달이어야 하고, (있으면) 유효기간(YYYY-MM-DD)도 안 지났어야 함 → 아니면 할인·최종가를 숨기고 '확인 중'(틀린 가격이 손님에게 가지 않게)
+  S.promoOK = function (p) { if (!(p && p.월 === S.ym() && p.목록 && p.목록.length)) return false; if (p.유효기간) { var d = new Date(); var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); if (today > p.유효기간) return false; } return true; };
   S.promoFor = function (p, row) {   // row = prices 줄 → 맞는 할인 줄(모델 이름 우선 · 없으면 계열 전체)
     if (!S.promoOK(p)) return null; var best = null;
     p.목록.forEach(function (x) { if (x.계열 !== row.계열) return; if (x.연식 && x.연식 !== row.연식) return; if (x.모델) { if (S.norm(x.모델) === S.norm(row.모델)) best = x; } else if (!best) best = x; });

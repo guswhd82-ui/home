@@ -185,7 +185,7 @@ footer{font-size:12px}
     if (pm) { row('정가', S.man(pm.정가)); row('이달 기본 할인', '−' + pm.할인율 + '% (' + S.man(pm.할인액) + ')'); row('일시불 기준', S.man(pm.최종가), true); if (pm.금융최종가) row('벤츠파이낸셜 이용 시', S.man(pm.금융최종가), false, '추가 ' + pm.금융할인율 + '%'); }
     else if (pr) row('권장 소비자가격', S.man(pr), true, '부가세 포함 · 개소세 5%'); else row('가격', '상담');
     p.appendChild(pl);
-    p.appendChild(el('p', 'note', pm ? (D.promo.월.slice(0, 4) + '년 ' + parseInt(D.promo.월.slice(5)) + '월 조건 · 재구매·타 브랜드 보유·제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다.') : (D.promo ? '이달 조건이 아직 반영되지 않았습니다 — 견적 요청하시면 바로 알려 드립니다.' : '이달 조건은 견적 요청하시면 바로 알려 드립니다.')));
+    p.appendChild(el('p', 'note', pm ? (D.promo.월.slice(0, 4) + '년 ' + parseInt(D.promo.월.slice(5)) + '월 조건 · 재구매·타 브랜드 보유·제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다.') : (parseInt(S.ym().slice(5)) + '월 조건 확인 중 — 견적 요청하시면 바로 알려 드립니다.')));
     // 색
     var cc = $('cColors'); cc.textContent = ''; var rows = stockRows(t, st.year);
     if (rows === null || rows === undefined) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 견적 요청하시면 바로 확인해 드립니다.'));
@@ -233,7 +233,7 @@ footer{font-size:12px}
   // 접힌 칸
   function extras() {
     if (D.posts) { var n = S.news(D.posts, 6); if (n.length) n.forEach(function (q) { $('newsList').appendChild(S.postCard(q)); }); else $('newsList').appendChild(el('div', 'empty', '새 소식이 올라오면 여기에 자동으로 나타납니다.')); }
-    var pb = $('promoBox'); if (S.promoOK(D.promo)) { pb.appendChild(el('p', '', D.promo.월.slice(0, 4) + '년 ' + parseInt(D.promo.월.slice(5)) + '월 조건이 각 차 가격에 반영돼 있습니다.')); if (D.promo.안내) pb.appendChild(el('p', 'note', D.promo.안내)); } else pb.appendChild(el('p', '', '이달 조건은 견적 요청하시면 바로 알려 드립니다.'));
+    var pb = $('promoBox'); if (S.promoOK(D.promo)) { pb.appendChild(el('p', '', D.promo.월.slice(0, 4) + '년 ' + parseInt(D.promo.월.slice(5)) + '월 조건이 각 차 가격에 반영돼 있습니다.')); if (D.promo.안내) pb.appendChild(el('p', 'note', D.promo.안내)); } else pb.appendChild(el('p', '', parseInt(S.ym().slice(5)) + '월 조건 확인 중 — 견적 요청하시면 바로 알려 드립니다.'));
     if (D.posts) S.monthly(D.posts).slice(0, 2).forEach(function (q) { pb.appendChild(S.postCard(q)); });
     var k = D.cars.기준 || {}; $('asof').textContent = (k.재고 ? '재고 ' + k.재고 : '재고 준비 중') + (k.가격표 ? ' · 가격표 ' + k.가격표 : '') + (S.promoOK(D.promo) ? ' · 조건 ' + D.promo.월 : '');
     $('mq').addEventListener('input', function () { var box = $('mList'); box.textContent = ''; var q = S.norm(this.value); if (!q) return; if (!D.mou) { box.appendChild(el('div', 'empty', '제휴 목록 준비 중 — 회사명을 남겨 주시면 확인해 드립니다.')); return; } var hit = (D.mou.목록 || []).filter(function (n) { return S.norm(n).indexOf(q) >= 0; }).slice(0, 20); hit.forEach(function (n) { var r = el('div', 'row'); r.appendChild(el('div', 'c', n)); r.appendChild(el('div', 'n', '제휴')); box.appendChild(r); }); if (!hit.length) box.appendChild(el('div', 'empty', '검색 결과 없음 — 계열사는 상담으로 확인해 드립니다.')); });
