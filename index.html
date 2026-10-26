@@ -79,7 +79,9 @@
   var st = { grp: '', fam: null, trim: null, year: '', color: '', pay: '', ben: {}, day: '', time: '' };
   var TIMES = ['10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시'], DOW = ['일', '월', '화', '수', '목', '금', '토'], PAYS = ['일시불', '할부', '리스'];
   function grp(f) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][1].test(f)) return GROUPS[i][0]; return '기타'; }
-  function nm(s) { return S.norm(s).replace('mercedes-amg', 'amg').replace('m-amg', 'amg').replace('mercedes-maybach', '마이바흐').replace(/®/g, ''); }
+  // 이름 맞춤(가격표 ↔ 조건표): 대소문자·띄어쓰기·Coupé/Coupe·괄호 꼬리 '(Launch Edition)'·Mercedes-AMG/AMG·오타 MANUFKATUR 까지 같은 것으로
+  function nm(s) { return String(s || '').toLowerCase().replace(/[éèê]/g, 'e').replace(/\(.*?\)/g, '').replace(/mercedes-amg|m-amg/g, 'amg').replace(/mercedes-maybach/g, 'maybach').replace(/manufkatur/g, 'manufaktur').replace(/[^a-z0-9+가-힣]/g, ''); }
+  function promoYear(fam, t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if (promoOf(fam, t, ys[i])) return ys[i]; return null; }   // 이달 조건이 있는 가장 새 연식
   function years(t) { var ys = (t.가격 || []).map(function (p) { return p.연식; }); var cur = ys.filter(function (y) { return y >= 'MY26'; }); return (cur.length ? cur : ys).sort().reverse(); }
   function priceOf(t, y) { var p = (t.가격 || []).filter(function (x) { return x.연식 === y; })[0]; return p ? p.원 : null; }
   // 이달 조건: cars.json 트림의 '조건'(제작방이 합침 · 기준.조건월이 이번 달일 때만) → 없으면 promo.json에서 이름으로
@@ -119,12 +121,12 @@
     $('trimCap').textContent = st.fam.이름 + ' · ' + list.length + '개';
     var shown = st.trim && !st.showAll ? list.filter(function (t) { return t === st.trim; }) : list;   // 고르면 그 트림만 남기고 카드가 바로 아래
     shown.forEach(function (t) {
-      var y = years(t)[0], pr = priceOf(t, y), pm = promoOf(st.fam, t, y), av = (rows(t, y) || []).length;
+      var py = promoYear(st.fam, t), y = py || years(t)[0], pr = priceOf(t, y), pm = py ? promoOf(st.fam, t, y) : null, av = (rows(t, y) || []).length;
       var b = btn('li', null, t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', t.모델));
-      var tags = el('div', 'tags'); tags.appendChild(el('span', 'pill', years(t).map(function (v) { return '20' + v.slice(2); }).join('·') + '년식')); if (av) tags.appendChild(el('span', 'pill ok', '지금 출고 가능')); if (t.시승) tags.appendChild(el('span', 'pill gold', '시승')); tt.appendChild(tags); b.appendChild(tt);
-      var p = el('div', 'p num'); if (pm) { p.appendChild(el('s', '', S.man(pm.정가))); p.appendChild(el('b', '', man(pm.최종가))); } else p.appendChild(el('b', '', pr ? man(pr) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
+      var tags = el('div', 'tags'); tags.appendChild(el('span', 'pill', years(t).map(function (v) { return '20' + v.slice(2); }).join('·') + '년식')); if (av) tags.appendChild(el('span', 'pill ok', '지금 출고 가능')); if (t.시승) tags.appendChild(el('span', 'pill gold', '시승')); if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
+      var p = el('div', 'p num'); if (pm) { p.appendChild(el('s', '', man(pm.정가))); p.appendChild(el('b', '', man(pm.최종가))); } else p.appendChild(el('b', '', pr ? man(pr) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
       b.setAttribute('aria-pressed', String(st.trim === t));
-      b.addEventListener('click', function () { st.trim = t; st.showAll = false; st.year = years(t)[0]; st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
+      b.addEventListener('click', function () { st.trim = t; st.showAll = false; st.year = promoYear(st.fam, t) || years(t)[0]; st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
     });
     if (st.trim && !st.showAll) { var m = btn('li', null, 'more'), mt = el('div', 't'); mt.appendChild(el('b', '', '다른 트림 보기')); mt.appendChild(el('span', '', st.fam.이름 + ' 트림 ' + list.length + '개')); m.appendChild(mt); m.appendChild(el('span', 'chev')); m.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(m); }
@@ -141,7 +143,10 @@
     if (pm) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.최종가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
       line('정가', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('벤츠파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
       $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지.'; }
-    else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.floor(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격'; $('dNote').textContent = parseInt(S.ym().slice(5)) + '월 조건 확인 중 — 견적 요청하시면 바로 알려 드립니다.'; }
+    else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.floor(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
+      var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
+      if (oy) { nt.appendChild(document.createTextNode('이 연식은 ' + parseInt(S.ym().slice(5)) + '월 조건표에 없고, ')); var sw = el('a', '', '20' + oy.slice(2) + '년식 조건 보기 →'); sw.href = '#'; sw.style.color = 'var(--gold)'; sw.addEventListener('click', function (e) { e.preventDefault(); st.year = oy; renderDetail(); }); nt.appendChild(sw); }
+      else { nt.appendChild(document.createTextNode(parseInt(S.ym().slice(5)) + '월 조건표에 없는 모델입니다(신차·한정판 등) — ')); var q = el('a', '', '이달 조건은 견적 요청 →'); q.href = '#'; q.style.color = 'var(--gold)'; q.addEventListener('click', function (e) { e.preventDefault(); sheet('quote'); }); nt.appendChild(q); } }
     // 색
     var cc = $('dColors'); cc.textContent = ''; var rs = rows(t, y);
     if (rs == null) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 견적 요청하시면 바로 확인해 드립니다.'));
@@ -220,7 +225,7 @@
   // 깊은 링크 ?car=E300 / ?car=GLE
   function deep() {
     var q = S.param('car'); if (!q) return; var k = nm(q);
-    D.cars.차종.forEach(function (c) { if (st.trim) return; if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; return; } c.트림.forEach(function (t) { if (!st.trim && nm(t.모델).indexOf(k) === 0) { st.grp = grp(c.이름); st.fam = c; st.trim = t; st.year = years(t)[0]; } }); });
+    D.cars.차종.forEach(function (c) { if (st.trim) return; if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; return; } c.트림.forEach(function (t) { if (!st.trim && nm(t.모델).indexOf(k) === 0) { st.grp = grp(c.이름); st.fam = c; st.trim = t; st.year = promoYear(c, t) || years(t)[0]; } }); });
   }
   Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {})]).then(function () {
     deep(); renderSeg(); renderTrims(); dock();
