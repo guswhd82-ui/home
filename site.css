@@ -159,6 +159,7 @@ button{font-family:inherit;color:inherit}
 footer{padding:24px var(--pad) 10px;font-size:11px;color:var(--mute2);line-height:1.7}
 .fade{animation:fade .4s var(--ease)}
 /* 차 화면 안의 색 목록: 상자 안 상자 대신 위아래 선만 */
+.detail{scroll-margin-top:72px}   /* 공유 링크로 열 때 차 이름이 위 바에 가리지 않게 */
 .detail .card{border:0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);border-radius:0;margin:0 -18px}
 .detail .card .li{padding-left:18px;padding-right:18px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
