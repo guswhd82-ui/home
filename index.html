@@ -115,6 +115,7 @@
   }
   function rows(t, y) { if (!t.재고) return t.재고; return t.재고.filter(function (r) { return !y || !r.연식 || r.연식 === '20' + y.slice(2); }); }
   function hasStock(t) { return (t.재고 || []).length > 0; }   // 재고 있는 트림만 화면에 (차장님 10/26 "재고가 있는 차만 띄워")
+  function pickYear(fam, t) { var ys = years(t).filter(function (y) { return (rows(t, y) || []).length; }); for (var i = 0; i < ys.length; i++) if (promoOf(fam, t, ys[i])) return ys[i]; return ys[0] || years(t)[0]; }   // 재고 있는 연식 중 이달 조건 있는 가장 새 연식
   function stockYear(t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if ((rows(t, ys[i]) || []).length) return ys[i]; return ys[0]; }
   function man(n) { n = Math.round(n); return n % 10000 === 0 ? (n / 10000).toLocaleString('ko-KR') + '만 원' : n.toLocaleString('ko-KR') + '원'; }   // 정확히(반올림 X): 만 원으로 딱 떨어지면 만 원 · 아니면 원 단위 전부
   function bigNum(n) { n = Math.round(n); return n % 10000 === 0 ? [(n / 10000).toLocaleString('ko-KR'), '만 원'] : [n.toLocaleString('ko-KR'), '원']; }   // 화면 숫자는 만 원 단위로 끊어 읽기 쉽게
@@ -156,12 +157,12 @@
     if (sub.style.display !== 'none' && !st.sub) { box.appendChild(el('div', 'empty', '　위에서 모델을 골라 주세요.')); renderDetail(); return; }
     var shown = st.trim && !st.showAll ? pool.filter(function (t) { return t === st.trim; }) : pool;   // 고르면 그 트림만 남기고 카드가 바로 아래
     shown.forEach(function (t) {
-      var py = promoYear(st.fam, t), y = py || stockYear(t), pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm), av = (rows(t, y) || []).length;
+      var y = pickYear(st.fam, t), py = promoOf(st.fam, t, y) ? y : null, pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm), av = (rows(t, y) || []).length;
       var b = btn('li', null, t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', t.모델));
       var tags = el('div', 'tags'); tags.appendChild(el('span', 'pill', years(t).map(function (v) { return '20' + v.slice(2); }).join('·') + '년식')); if (av) tags.appendChild(el('span', 'pill ok', '지금 출고 가능')); if (t.시승) tags.appendChild(el('span', 'pill gold', '시승')); if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
       var p = el('div', 'p num'); if (pm && c && c.할인율 > 0) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('b', '', man(c.최종가))); } else p.appendChild(el('b', '', c ? man(c.정가) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
       b.setAttribute('aria-pressed', String(st.trim === t));
-      b.addEventListener('click', function () { st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = promoYear(st.fam, t) || stockYear(t); st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
+      b.addEventListener('click', function () { st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = pickYear(st.fam, t); st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
     });
     if (st.trim && !st.showAll && pool.length > 1) { var m = btn('li', null, 'more'), mt = el('div', 't'); mt.appendChild(el('b', '', '다른 트림 보기')); mt.appendChild(el('span', '', (st.sub || st.fam.이름) + ' 트림 ' + pool.length + '개')); m.appendChild(mt); m.appendChild(el('span', 'chev')); m.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(m); }
