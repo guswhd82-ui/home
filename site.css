@@ -68,7 +68,7 @@ button{font-family:inherit;color:inherit}
 .pill.ok{background:rgba(159,211,174,.14);color:var(--ok)}
 .pill.gold{background:rgba(200,180,138,.14);color:var(--gold)}
 /* 차 한 대(디테일) */
-.detail{margin:14px var(--pad) 0;background:linear-gradient(180deg,var(--sf2),var(--sf));border:1px solid var(--hair2);border-radius:22px;padding:22px 20px 20px;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:up .45s var(--ease)}
+.detail{will-change:transform;margin:14px var(--pad) 0;background:linear-gradient(180deg,var(--sf2),var(--sf));border:1px solid var(--hair2);border-radius:22px;padding:22px 20px 20px;animation:up .35s var(--ease)}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .detail .name{font-size:28px;line-height:1.15;margin:4px 0 2px}
 .detail .sub{font-size:13px;color:var(--mute);margin-bottom:14px}
@@ -118,9 +118,9 @@ button{font-family:inherit;color:inherit}
 .dock>div{pointer-events:auto;width:100%;max-width:430px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(rgba(10,10,11,0),rgba(10,10,11,.92) 30%,var(--bg));display:flex;gap:10px}
 .dock .btn{box-shadow:0 10px 30px rgba(0,0,0,.5)}
 /* 시트(아래에서 올라옴) */
-.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;display:flex;justify-content:center;pointer-events:none}
-.sheet>div{pointer-events:auto;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;background:var(--sf);border-radius:24px 24px 0 0;padding:10px 20px calc(20px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s var(--ease);box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.sheet>div{will-change:transform;pointer-events:auto;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;background:var(--sf);border-radius:24px 24px 0 0;padding:10px 20px calc(20px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s var(--ease);box-shadow:0 -20px 60px rgba(0,0,0,.6)}
 .open .sheet-bg{opacity:1;pointer-events:auto}
 .open .sheet>div{transform:none}
 .grab{width:40px;height:4px;border-radius:2px;background:var(--hair2);margin:4px auto 14px}

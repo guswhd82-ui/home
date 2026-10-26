@@ -31,6 +31,7 @@
 
 <section class="sec" id="trimSec" hidden>
   <h2 class="serif">트림 <small id="trimCap"></small></h2>
+  <div class="opts" id="subChips" style="margin:0 0 12px"></div>
   <div class="card" id="trims"></div>
 </section>
 
@@ -83,8 +84,13 @@
   var ORDER = ['A클래스', 'CLA', 'C클래스', 'CLE', 'E클래스', 'S클래스', '마이바흐', 'V클래스', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS', 'G클래스', 'EQA', 'EQB', 'EQE', 'EQS', 'CLA 일렉트릭', 'GLC 일렉트릭', 'AMG GT', 'SL'];
   function ord(f) { var i = ORDER.indexOf(f); if (i < 0) i = ORDER.findIndex(function (o) { return S.famKey(f).indexOf(S.famKey(o)) === 0; }); return i < 0 ? 99 : i; }
   // 이름 맞춤(가격표 ↔ 조건표): 대소문자·띄어쓰기·Coupé/Coupe·괄호 꼬리 '(Launch Edition)'·Mercedes-AMG/AMG·오타 MANUFKATUR 까지 같은 것으로
-  function nm(s) { return String(s || '').toLowerCase().replace(/[éèê]/g, 'e').replace(/\(.*?\)/g, '').replace(/mercedes-amg|m-amg/g, 'amg').replace(/mercedes-maybach/g, 'maybach').replace(/manufkatur/g, 'manufaktur').replace(/[^a-z0-9+가-힣]/g, ''); }
+  function nm(s) { return String(s || '').toLowerCase().replace(/[éèê]/g, 'e').replace(/mercedes-amg|m-amg/g, 'amg').replace(/mercedes-maybach/g, 'maybach').replace(/manufkatur/g, 'manufaktur').replace(/rof ed\.?/g, 'rof edition').replace(/[^a-z0-9+가-힣]/g, ''); }   // 에디션 꼬리(RoF·140주년)는 따로 둔다 — 기본 모델과 섞이면 가격이 틀림
   function promoYear(fam, t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if (promoOf(fam, t, ys[i])) return ys[i]; return null; }   // 이달 조건이 있는 가장 새 연식
+  // 가격 계산: 정가(가격표 개소세 5%) × (1 − 현금%) · 금융 = × (1 − 현금% − MBM%) — 조건표의 금액은 안 쓰고 %만 쓴다(차장님 10/26 "%를 알면 금액은 계산")
+  function calc(t, y, pm) { var pr = priceOf(t, y) || (pm && pm.정가) || null; if (!pr) return null; var r = pm ? (pm.할인율 || 0) : 0, m = pm ? (pm.금융할인율 || 0) : 0; return { 정가: pr, 할인율: r, 할인액: Math.round(pr * r / 100), 최종가: Math.round(pr * (1 - r / 100)), 금융할인율: m, 금융최종가: m ? Math.round(pr * (1 - (r + m) / 100)) : null }; }
+  // 모델군(2단계): 'GLE 450 4MATIC AMG Line' → 'GLE 450' · 'GLE 450 d 4MATIC Coupé AMG Line' → 'GLE 450 d Coupé' · 'Mercedes-AMG GLE 53 4MATIC+' → 'AMG GLE 53'
+  function family(model) { return String(model).replace(/Mercedes-AMG/g, 'AMG').replace(/Mercedes-Maybach/g, '마이바흐').replace(/\(.*?\)/g, '').replace(/\b(4MATIC\+?|AMG Line\+?|AVANTGARDE|EXCLUSIVE|Progressive|Essential|Advanced|Premium|Long|Special Edition|Limited Edition|Launch Edition|Final Edition|Edition 1|Edition ONE|Hatch|Sedan|MANUFAKTUR|Performance|Limited|with EQ Technology|HYBRID)\b/g, '').replace(/ \+/g, '').replace(/\s+/g, ' ').trim(); }
+  function famKeyOrder(f) { var m = f.match(/(\d+)/); return [(/^AMG|마이바흐/.test(f) ? 1 : 0), m ? parseInt(m[1]) : 999, f]; }   // 모델군 순서: 숫자 작은 것부터 · AMG·마이바흐는 뒤
   function years(t) { var ys = (t.가격 || []).map(function (p) { return p.연식; }); var cur = ys.filter(function (y) { return y >= 'MY26'; }); return (cur.length ? cur : ys).sort().reverse(); }
   function priceOf(t, y) { var p = (t.가격 || []).filter(function (x) { return x.연식 === y; })[0]; return p ? p.원 : null; }
   // 이달 조건: cars.json 트림의 '조건'(제작방이 합침 · 기준.조건월이 이번 달일 때만) → 없으면 promo.json에서 이름으로
@@ -113,7 +119,7 @@
       b.appendChild(el('small', '', '트림 ' + n + '개' + (drv ? ' · 시승 가능' : '') + (av ? ' · 지금 출고 가능' : '')));
       if (av) b.appendChild(el('span', 'dot'));
       b.setAttribute('aria-pressed', String(st.fam === c));
-      b.addEventListener('click', function () { st.fam = c; st.trim = null; press(rail, '.mc', c.이름); renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50); });
+      b.addEventListener("click", function () { st.fam = c; st.trim = null; st.sub = ""; press(rail, '.mc', c.이름); renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50); });
       rail.appendChild(b);
     });
   }
@@ -121,30 +127,38 @@
   function renderTrims() {
     var sec = $('trimSec'), box = $('trims'); box.textContent = ''; sec.hidden = !st.fam; if (!st.fam) { renderDetail(); return; }
     var list = st.fam.트림.slice().sort(function (a, b) { return (priceOf(a, years(a)[0]) || 0) - (priceOf(b, years(b)[0]) || 0); });
-    $('trimCap').textContent = st.fam.이름 + ' · ' + list.length + '개';
-    var shown = st.trim && !st.showAll ? list.filter(function (t) { return t === st.trim; }) : list;   // 고르면 그 트림만 남기고 카드가 바로 아래
+    // 2단계: 모델군(GLE 450 · GLE 450 d · AMG GLE 53 …) — 트림이 5개 넘을 때만
+    var fams = []; list.forEach(function (t) { var f = family(t.모델); if (fams.indexOf(f) < 0) fams.push(f); });
+    fams.sort(function (a, b) { var x = famKeyOrder(a), y = famKeyOrder(b); return x[0] - y[0] || x[1] - y[1] || (x[2] < y[2] ? -1 : 1); });
+    var sub = $('subChips'); sub.textContent = ''; sub.style.display = (list.length > 5 && fams.length > 1) ? '' : 'none';
+    if (sub.style.display !== 'none') { if (!st.sub || fams.indexOf(st.sub) < 0) st.sub = st.trim ? family(st.trim.모델) : ''; fams.forEach(function (f) { var b = btn('opt', f, f); b.setAttribute('aria-pressed', String(st.sub === f)); b.addEventListener('click', function () { st.sub = f; st.trim = null; st.showAll = false; renderTrims(); }); sub.appendChild(b); }); }
+    else st.sub = '';
+    var pool = st.sub ? list.filter(function (t) { return family(t.모델) === st.sub; }) : list;
+    $('trimCap').textContent = (st.sub || st.fam.이름) + ' · ' + pool.length + '개';
+    if (sub.style.display !== 'none' && !st.sub) { box.appendChild(el('div', 'empty', '　위에서 모델을 골라 주세요.')); renderDetail(); return; }
+    var shown = st.trim && !st.showAll ? pool.filter(function (t) { return t === st.trim; }) : pool;   // 고르면 그 트림만 남기고 카드가 바로 아래
     shown.forEach(function (t) {
-      var py = promoYear(st.fam, t), y = py || years(t)[0], pr = priceOf(t, y), pm = py ? promoOf(st.fam, t, y) : null, av = (rows(t, y) || []).length;
+      var py = promoYear(st.fam, t), y = py || years(t)[0], pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm), av = (rows(t, y) || []).length;
       var b = btn('li', null, t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', t.모델));
       var tags = el('div', 'tags'); tags.appendChild(el('span', 'pill', years(t).map(function (v) { return '20' + v.slice(2); }).join('·') + '년식')); if (av) tags.appendChild(el('span', 'pill ok', '지금 출고 가능')); if (t.시승) tags.appendChild(el('span', 'pill gold', '시승')); if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
-      var p = el('div', 'p num'); if (pm) { p.appendChild(el('s', '', man(pm.정가))); p.appendChild(el('b', '', man(pm.최종가))); } else p.appendChild(el('b', '', pr ? man(pr) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
+      var p = el('div', 'p num'); if (pm && c) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('b', '', man(c.최종가))); } else p.appendChild(el('b', '', c ? man(c.정가) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
       b.setAttribute('aria-pressed', String(st.trim === t));
-      b.addEventListener('click', function () { st.trim = t; st.showAll = false; st.year = promoYear(st.fam, t) || years(t)[0]; st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
+      b.addEventListener('click', function () { st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = promoYear(st.fam, t) || years(t)[0]; st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
     });
-    if (st.trim && !st.showAll) { var m = btn('li', null, 'more'), mt = el('div', 't'); mt.appendChild(el('b', '', '다른 트림 보기')); mt.appendChild(el('span', '', st.fam.이름 + ' 트림 ' + list.length + '개')); m.appendChild(mt); m.appendChild(el('span', 'chev')); m.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(m); }
+    if (st.trim && !st.showAll && pool.length > 1) { var m = btn('li', null, 'more'), mt = el('div', 't'); mt.appendChild(el('b', '', '다른 트림 보기')); mt.appendChild(el('span', '', (st.sub || st.fam.이름) + ' 트림 ' + pool.length + '개')); m.appendChild(mt); m.appendChild(el('span', 'chev')); m.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(m); }
     renderDetail();
   }
   // ③ 차 한 대
   function renderDetail() {
     var t = st.trim, d = $('detail'); d.hidden = !t; dock(); if (!t) return;
-    var ys = years(t); if (ys.indexOf(st.year) < 0) st.year = ys[0]; var y = st.year, pr = priceOf(t, y), pm = promoOf(st.fam, t, y);
+    var ys = years(t); if (ys.indexOf(st.year) < 0) st.year = ys[0]; var y = st.year, pr = priceOf(t, y), pm0 = promoOf(st.fam, t, y), pm = pm0 ? calc(t, y, pm0) : null;
     $('dEye').textContent = st.fam.이름 + ' · ' + (t.시승 ? '시승 가능' : '상담 후 시승'); $('dName').textContent = t.모델; $('dSub').textContent = '20' + y.slice(2) + '년식 · 권장 소비자가격 기준(부가세 포함 · 개소세 5%)';
     var ysw = $('ysw'); ysw.textContent = ''; ysw.style.display = ys.length > 1 ? '' : 'none'; ys.forEach(function (v) { var b = btn('', '20' + v.slice(2) + '년식', v); b.setAttribute('aria-pressed', String(v === y)); b.addEventListener('click', function () { st.year = v; renderDetail(); }); ysw.appendChild(b); });
     var big = $('dBig'), lab = $('dLab'), ln = $('dLines'); ln.textContent = '';
     function line(a, b, m, sum) { var r = el('div', sum ? 'sum' : ''); var l = el('span', '', a); if (m) l.appendChild(el('span', 'm', m)); r.appendChild(l); r.appendChild(el('b', 'num', b)); ln.appendChild(r); }
     if (pm) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.최종가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
-      line('정가', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('벤츠파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
+      line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('벤츠파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
       $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지.'; }
     else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.floor(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
       var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
@@ -228,7 +242,7 @@
   // 깊은 링크 ?car=E300 / ?car=GLE
   function deep() {
     var q = S.param('car'); if (!q) return; var k = nm(q);
-    D.cars.차종.forEach(function (c) { if (st.trim) return; if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; return; } c.트림.forEach(function (t) { if (!st.trim && nm(t.모델).indexOf(k) === 0) { st.grp = grp(c.이름); st.fam = c; st.trim = t; st.year = promoYear(c, t) || years(t)[0]; } }); });
+    D.cars.차종.forEach(function (c) { if (st.trim) return; if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; return; } c.트림.forEach(function (t) { if (!st.trim && nm(t.모델).indexOf(k) === 0) { st.grp = grp(c.이름); st.fam = c; st.trim = t; st.sub = family(t.모델); st.year = promoYear(c, t) || years(t)[0]; } }); });
   }
   Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {})]).then(function () {
     deep(); renderSeg(); renderTrims(); dock();
