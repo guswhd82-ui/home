@@ -169,11 +169,11 @@
     if (rs == null) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 견적 요청하시면 바로 확인해 드립니다.'));
     else if (!rs.length) cc.appendChild(el('div', 'empty', '지금은 바로 출고 가능한 차가 없습니다 — 입고 예정은 상담으로.'));
     else {
-      var ext = {}; rs.forEach(function (r) { (ext[r.외장] = ext[r.외장] || { ints: [], eta: false }); var i = S.cleanInt(r.내장); if (i && ext[r.외장].ints.indexOf(i) < 0) ext[r.외장].ints.push(i); if (r.출고예정 && Object.keys(r.출고예정).length) ext[r.외장].eta = true; });
+      var ext = {}; rs.forEach(function (r) { (ext[r.외장] = ext[r.외장] || { ints: [], eta: false }); var i = S.cleanInt(r.내장); if (i && ext[r.외장].ints.indexOf(i) < 0) ext[r.외장].ints.push(i); var later = S.etaLater(r); if (later.length) ext[r.외장].eta = parseInt(later[0].slice(5, 7)) + '월 출고 예정'; });
       var names = Object.keys(ext); if (!st.color || names.indexOf(st.color) < 0) st.color = names[0];
       var sw = el('div', 'sw'); names.forEach(function (n) { var b = btn('swi', null, n), c = el('span', 'c'); c.style.background = S.color(n); if (!ext[n].eta) c.appendChild(el('span', 'b')); b.appendChild(c); b.appendChild(el('span', '', n.replace(/^MANUFAKTUR\s*/, ''))); b.setAttribute('aria-pressed', String(n === st.color)); b.addEventListener('click', function () { st.color = n; press(sw, '.swi', n); ints(); }); sw.appendChild(b); });
       cc.appendChild(sw); var ib = el('div', 'ints'); cc.appendChild(ib);
-      function ints() { ib.textContent = ''; ext[st.color].ints.forEach(function (i) { var s = el('span', 'int'), c = el('span', 'c'); c.style.background = S.color(i); s.appendChild(c); s.appendChild(document.createTextNode('내장 ' + i)); ib.appendChild(s); }); var eta = el('span', 'pill ' + (ext[st.color].eta ? 'gold' : 'ok'), ext[st.color].eta ? '출고 예정' : '지금 출고 가능'); eta.style.marginLeft = '0'; ib.appendChild(eta); }
+      function ints() { ib.textContent = ''; ext[st.color].ints.forEach(function (i) { var s = el('span', 'int'), c = el('span', 'c'); c.style.background = S.color(i); s.appendChild(c); s.appendChild(document.createTextNode('내장 ' + i)); ib.appendChild(s); }); var eta = el('span', 'pill ' + (ext[st.color].eta ? 'gold' : 'ok'), ext[st.color].eta || '지금 출고 가능'); eta.style.marginLeft = '0'; ib.appendChild(eta); }
       ints(); cc.appendChild(el('p', 'note', '● 초록 점 = 지금 출고 가능 · 기준 ' + (D.cars.기준.재고 || '') + ' · 실제 배정은 상담으로 확인해 드립니다.'));
     }
     // 글

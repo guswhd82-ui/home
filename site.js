@@ -53,10 +53,13 @@
       if (q && S.norm([r.계열, r.차종, r.외장, r.내장, r.연식].join(' ')).indexOf(q) < 0) return;
       var m = models[r.차종] = models[r.차종] || { 계열: r.계열, 차종: r.차종, years: {}, pdd: {}, imm: false, rows: [] };
       m.rows.push(r); if (r.연식) m.years[r.연식] = 1;
-      if (r.출고예정 && Object.keys(r.출고예정).length) Object.keys(r.출고예정).forEach(function (k) { m.pdd[k] = 1; }); else m.imm = true;
+      var ms = S.pddMonths(r); if (ms.length) ms.forEach(function (k) { m.pdd[k] = 1; }); else m.imm = true;
     });
     return Object.keys(models).sort().map(function (k) { return models[k]; });
   };
+  // 출고예정: {"YYYY-MM": 대수} 또는 ["YYYY-MM", …] 둘 다 받음 · 이번 달 이하는 '지금 출고 가능'으로 봄
+  S.pddMonths = function (r) { var p = r.출고예정; if (!p) return []; return Array.isArray(p) ? p.slice() : Object.keys(p); };
+  S.etaLater = function (r) { var ref = S.ym(); return S.pddMonths(r).filter(function (k) { return String(k) > ref; }).sort(); };
   S.fams = function (d) { var f = {}; (d && d.목록 || []).forEach(function (r) { f[r.계열] = (f[r.계열] || 0) + 1; }); return f; };
   S.pddBadges = function (m) {
     var now = new Date(), ref = now.getFullYear() * 100 + (now.getMonth() + 1), box = el('span', 'meta'), ys = Object.keys(m.years).sort();
