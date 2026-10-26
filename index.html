@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://benzyoo.kr/">
 <meta property="og:title" content="유현종 차장 — 내 벤츠 고르기">
 <meta property="og:description" content="차종 → 트림 → 정가·이달 조건 · 색 · 견적 요청 · 시승 신청이 한 화면에">
-<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="site.css?v=1026b">
 </head>
 <body><div class="app" id="app">
 <!-- 한 화면 '내 벤츠 고르기' v3 — 데이터: cars.json(차종·트림·가격·재고·글·시승) + promo.json(이달 조건 · 월 지나면 숨김) · 대수 없음 · 연락처는 블로그 공개분만 -->
@@ -63,6 +63,7 @@
   <div class="actions">
     <button class="btn p" id="bQuote">견적 요청</button>
     <div class="row2"><button class="btn" id="bDrive">시승 신청</button><a class="btn" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">카톡 상담</a></div>
+    <button class="share" id="bShare" type="button">지인에게 이 차 보내기</button>
   </div>
 </section>
 
@@ -70,6 +71,7 @@
   <div class="card">
     <button class="li" data-sheet="news"><div class="t"><b>신차 · 사전예약 소식</b><span id="newsCap">블로그에서 자동으로</span></div><span class="chev"></span></button>
     <button class="li" data-sheet="promo"><div class="t"><b>이달 조건 안내</b><span id="promoCap"></span></div><span class="chev"></span></button>
+    <button class="li" data-sheet="alert"><div class="t"><b>재고 알림 신청</b><span>찾는 차가 없으면 — 들어오면 문자로 알려 드려요</span></div><span class="chev"></span></button>
     <button class="li" data-sheet="mou"><div class="t"><b>제휴(MOU) 확인</b><span>회사명으로 검색</span></div><span class="chev"></span></button>
     <button class="li" data-sheet="about"><div class="t"><b>유현종 차장 · 상담</b><span>카톡 · 전화 · 문자</span></div><span class="chev"></span></button>
   </div>
@@ -81,7 +83,7 @@
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet"><div id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<script src="site.js"></script>
+<script src="site.js?v=1026b"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$, el = S.el;
@@ -117,6 +119,8 @@
   function hasStock(t) { return (t.재고 || []).length > 0; }   // 재고 있는 트림만 화면에 (차장님 10/26 "재고가 있는 차만 띄워")
   function pickYear(fam, t) { var ys = years(t).filter(function (y) { return (rows(t, y) || []).length; }); for (var i = 0; i < ys.length; i++) if (promoOf(fam, t, ys[i])) return ys[i]; return ys[0] || years(t)[0]; }   // 재고 있는 연식 중 이달 조건 있는 가장 새 연식
   function stockYear(t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if ((rows(t, ys[i]) || []).length) return ys[i]; return ys[0]; }
+  // 이달 조건 마감 D-10부터 작게 표시(차장님 10/26) · 유효기간 없으면 안 보임
+  function dday() { if (!S.promoOK(D.promo) || !D.promo.유효기간) return null; var e = new Date(D.promo.유효기간 + 'T00:00:00'), n = new Date(); n = new Date(n.getFullYear(), n.getMonth(), n.getDate()); var d = Math.round((e - n) / 86400000); return d >= 0 && d <= 10 ? (d ? 'D-' + d : '오늘 마감') : null; }
   function man(n) { n = Math.round(n); return n % 10000 === 0 ? (n / 10000).toLocaleString('ko-KR') + '만 원' : n.toLocaleString('ko-KR') + '원'; }   // 정확히(반올림 X): 만 원으로 딱 떨어지면 만 원 · 아니면 원 단위 전부
   function bigNum(n) { n = Math.round(n); return n % 10000 === 0 ? [(n / 10000).toLocaleString('ko-KR'), '만 원'] : [n.toLocaleString('ko-KR'), '원']; }   // 화면 숫자는 만 원 단위로 끊어 읽기 쉽게
   function en(f) { return { 'E클래스': 'E', 'S클래스': 'S', 'C클래스': 'C', 'A클래스': 'A', 'G클래스': 'G', 'V클래스': 'V' }[f] || f.replace('클래스', ''); }
@@ -166,6 +170,7 @@
       box.appendChild(b);
     });
     if (st.trim && !st.showAll && pool.length > 1) { var m = btn('li', null, 'more'), mt = el('div', 't'); mt.appendChild(el('b', '', '다른 트림 보기')); mt.appendChild(el('span', '', (st.sub || st.fam.이름) + ' 트림 ' + pool.length + '개')); m.appendChild(mt); m.appendChild(el('span', 'chev')); m.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(m); }
+    if (!st.trim && st.fam.트림.some(function (t) { return !hasStock(t); })) { var a = btn('li ask', null, 'alert'), at = el('div', 't'); at.appendChild(el('b', '', '찾는 트림이 없으신가요?')); at.appendChild(el('span', '', '재고가 들어오면 문자로 바로 알려 드려요')); a.appendChild(at); a.appendChild(el('span', 'chev')); a.addEventListener('click', function () { st.aFam = st.fam; st.aTrim = ''; sheet('alert', true); }); box.appendChild(a); }
     renderDetail();
   }
   // ③ 차 한 대
@@ -179,7 +184,7 @@
     if (pm && pm.할인율 === 0) { big.textContent = ''; var bn0 = bigNum(pm.정가); big.appendChild(document.createTextNode(bn0[0])); big.appendChild(el('small', '', bn0[1])); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
     else if (pm) { big.textContent = ''; var bn = bigNum(pm.최종가); big.appendChild(document.createTextNode(bn[0])); big.appendChild(el('small', '', bn[1])); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
       line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('최대 혜택가 · MBM 파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
-      $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지.'; }
+      $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지' + (dday() ? ' (' + dday() + ')' : '') + '.'; }
     else { big.textContent = ''; var bn1 = pr ? bigNum(pr) : ['—', '']; big.appendChild(document.createTextNode(bn1[0])); big.appendChild(el('small', '', bn1[1])); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
       var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
       if (oy) { nt.appendChild(document.createTextNode('이 연식은 ' + parseInt(S.ym().slice(5)) + '월 조건표에 없고, ')); var sw = el('a', '', '20' + oy.slice(2) + '년식 조건 보기 →'); sw.href = '#'; sw.style.textDecoration = "underline"; sw.addEventListener('click', function (e) { e.preventDefault(); st.year = oy; renderDetail(); }); nt.appendChild(sw); }
@@ -216,12 +221,22 @@
     if (st.trim) { var q = btn('btn p', '견적 요청'); q.addEventListener('click', function () { sheet('quote'); }); var d = btn('btn', st.trim.시승 ? '시승 신청' : '시승 문의'); d.addEventListener('click', function () { sheet('drive'); }); k.appendChild(q); k.appendChild(d); }
     else { k.appendChild(S.a(S.kakao, 'btn p', '카톡 상담', 'kakao')); k.appendChild(S.a('tel:' + S.tel, 'btn', '전화', 'tel')); }
   }
+  $('bShare').addEventListener('click', share);
+  // 지인에게 보내기: 폰 공유창(카톡 등) → 없으면 링크 복사 · 받은 사람은 그 차 화면으로 바로
+  function share() {
+    var t = st.trim; if (!t) return; var url = location.origin + '/?car=' + encodeURIComponent(t.모델) + '&y=' + st.year, text = t.모델 + ' 20' + st.year.slice(2) + '년식 — 가격·색·이달 조건 한 번에 보기';
+    S.track('share', 'body');
+    if (navigator.share) { navigator.share({ title: t.모델, text: text, url: url }).catch(function () {}); return; }
+    function old() { var ta = el('textarea'); ta.value = url; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove(); }
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).catch(old).then(function () { toast('링크를 복사했어요 — 카톡에 붙여 넣어 보내세요'); });
+  }
+  function toast(m) { var x = el('div', 'toast', m); document.body.appendChild(x); setTimeout(function () { x.remove(); }, 2200); }
   $('bQuote').addEventListener('click', function () { sheet('quote'); }); $('bDrive').addEventListener('click', function () { sheet('drive'); });
-  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet]'), function (b) { b.addEventListener('click', function () { sheet(b.dataset.sheet); }); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet]'), function (b) { b.addEventListener('click', function () { if (b.dataset.sheet === 'alert') { st.aFam = st.fam; st.aTrim = ''; } sheet(b.dataset.sheet); }); });
   // 시트
   function close() { document.body.classList.remove('open'); }
   $('sheetBg').addEventListener('click', close);
-  function sheet(kind) {
+  function sheet(kind, fixed) {
     var s = $('sheet'); s.textContent = ''; s.appendChild(el('div', 'grab')); var x = btn('x', '×'); x.addEventListener('click', close); s.appendChild(x);
     var t = st.trim;
     if (kind === 'quote' && t) {
@@ -245,6 +260,17 @@
       var sm2 = el('div', 'sum'), send2 = S.a('#', 'btn p', '유 차장에게 시승 신청 보내기', 'sms'); s.appendChild(sm2); s.appendChild(send2); s.appendChild(el('p', 'note', '보내기를 누르면 문자 앱이 열리고 내용이 적혀 있습니다 — 그대로 보내시면 확인 문자로 답해 드립니다. 운전면허 지참.'));
       function sum2() { sm2.textContent = ''; sm2.appendChild(el('b', '', t.모델 + ' 시승')); sm2.appendChild(document.createTextNode(' · ' + (st.day || '날짜 미정') + ' ' + (st.time || '') + ' · 서초 전시장')); send2.href = S.sms('[시승 신청] ' + t.모델 + '\n날짜: ' + (st.day || '(날짜)') + ' ' + (st.time || '(시간)') + '\n이름: ' + (nI.value || '').trim() + '\n(확인 문자로 답해 드립니다)'); }
       sum2();
+    } else if (kind === 'alert') {
+      // 재고 알림 신청: 차종(트림 목록에서 왔으면 고정) → 지금 재고 없는 트림 → 보내기 · 이름·번호 입력 없음(문자 자체가 번호)
+      s.appendChild(el('h2', 'serif', '재고 알림 신청')); s.appendChild(el('p', 'cap', '원하는 차가 들어오면 문자로 바로 알려 드려요.'));
+      var fams = D.cars.차종.filter(function (f) { return f.이름 !== 'AMG'; }).sort(function (a, b) { return ord(a.이름) - ord(b.이름); }), af = el('div'), sm3 = el('div', 'sum'), send3 = S.a('#', 'btn p', '알림 신청 보내기', 'sms');
+      if (!fixed) { s.appendChild(el('div', 'h3', '차종')); var fb = el('div', 'opts'); fams.forEach(function (f) { var b = btn('opt', f.이름, f.이름); b.setAttribute('aria-pressed', String(st.aFam === f)); b.addEventListener('click', function () { st.aFam = f; st.aTrim = ''; press(fb, '.opt', f.이름); trims3(); }); fb.appendChild(b); }); s.appendChild(fb); }
+      s.appendChild(af); s.appendChild(sm3); s.appendChild(send3); s.appendChild(el('p', 'note', '보내기를 누르면 문자 앱이 열립니다 — 그대로 보내시면 들어오는 대로 연락드립니다.'));
+      function trims3() { af.textContent = ''; var f = st.aFam; if (!f) { sum3(); return; } var ts = f.트림.filter(function (t) { return !hasStock(t); }); if (!ts.length) ts = f.트림; af.appendChild(el('div', 'h3', (fixed ? f.이름 + ' · ' : '') + '모델')); var tb3 = el('div', 'opts'), seen3 = {}, names3 = [];
+        ts.forEach(function (t) { var v = family(t.모델).replace(/Coupé/g, 'Coupe'), k3 = nm(v); if (!seen3[k3]) { seen3[k3] = 1; names3.push(v); } });   // 트림 이름 대신 모델군(가격표 표기 차이 Coupe/Coupé·에디션 꼬리 합침) — 손님은 고르기 쉽게
+        names3.concat(['트림 상관없음']).forEach(function (v) { var b = btn('opt', v, v); b.setAttribute('aria-pressed', String(st.aTrim === v)); b.addEventListener('click', function () { st.aTrim = v; press(tb3, '.opt', v); sum3(); }); tb3.appendChild(b); }); af.appendChild(tb3); sum3(); }
+      function sum3() { var f = st.aFam, v = !f ? '' : (st.aTrim && st.aTrim !== '트림 상관없음' ? st.aTrim : f.이름 + (st.aTrim ? ' (트림 상관없음)' : '')); sm3.textContent = ''; sm3.appendChild(el('b', '', v || '차를 골라 주세요')); send3.href = S.sms('[재고 알림 신청] ' + (v || '') + '\n재고 들어오면 알려 주세요.'); }
+      trims3();
     } else if (kind === 'news') {
       s.appendChild(el('h2', 'serif', '신차 · 사전예약 소식')); s.appendChild(el('p', 'cap', '블로그 글에서 자동으로 모입니다.')); var n = D.posts ? S.news(D.posts, 8) : [];
       if (n.length) { var c = el('div', 'card'); n.forEach(function (q) { var a = S.a(q.주소, 'li', null, 'post'), tt = el('div', 't'); tt.appendChild(el('b', '', q.제목)); tt.appendChild(el('span', '', q.날짜)); a.appendChild(tt); a.appendChild(el('span', 'chev')); c.appendChild(a); }); s.appendChild(c); } else s.appendChild(el('div', 'empty', '새 소식이 올라오면 여기에 자동으로 나타납니다.'));
@@ -291,7 +317,7 @@
       var seen = {}; c.forEach(function (x) { if (pick.length < 3 && !seen[x.f.이름]) { seen[x.f.이름] = 1; pick.push(x); } });
     }
     if (!pick.length) { sec.hidden = true; return; } sec.hidden = false;
-    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중'; $('recNote').textContent = ok ? '표시 금액은 이달 최대 할인(현금 할인 + MBM 파이낸셜 추가 할인 함께 적용) 기준 — MBM 파이낸셜 이용 시 · 조건은 상담으로 확인해 드립니다.' : '이달 조건은 확인 중입니다 — 상담으로 바로 알려 드립니다.';
+    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중'; if (ok && dday()) $('recCap').appendChild(el('span', 'pill gold dd', '마감 ' + dday())); $('recNote').textContent = ok ? '표시 금액은 이달 최대 할인(현금 할인 + MBM 파이낸셜 추가 할인 함께 적용) 기준 — MBM 파이낸셜 이용 시 · 조건은 상담으로 확인해 드립니다.' : '이달 조건은 확인 중입니다 — 상담으로 바로 알려 드립니다.';
     pick.forEach(function (x) {
       var b = btn('li', null, x.t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', x.t.모델)); var tg = el('div', 'tags');
       var pm0 = ok ? promoOf(x.f, x.t, x.y) : null, cc = pm0 ? calc(x.t, x.y, pm0) : null, mx = cc && cc.금융최종가 ? cc.금융할인율 + cc.할인율 : (cc ? cc.할인율 : 0);   // 큰 숫자 = 이달 받을 수 있는 가장 큰 할인(현금 + MBM 파이낸셜 함께 적용) · 같이 못 받는 건 안 더함(조건표 기준)
@@ -305,12 +331,15 @@
   // 깊은 링크 ?car=E300 / ?car=GLE
   function deep() {
     var q = S.param('car'); if (!q) return; var k = nm(q);
-    D.cars.차종.forEach(function (c) { if (st.trim) return; if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; return; } c.트림.forEach(function (t) { if (!st.trim && nm(t.모델).indexOf(k) === 0) { st.grp = grp(c.이름); st.fam = c; st.trim = t; st.sub = family(t.모델); st.year = promoYear(c, t) || years(t)[0]; } }); });
+    var all = []; D.cars.차종.forEach(function (c) { if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; } c.트림.forEach(function (t) { all.push([c, t]); }); }); if (st.fam) return;
+    var hit = all.filter(function (x) { return nm(x[1].모델) === k; })[0] || all.filter(function (x) { return nm(x[1].모델).indexOf(k) === 0 && hasStock(x[1]); })[0] || all.filter(function (x) { return nm(x[1].모델).indexOf(k) === 0; })[0]; if (!hit) return;
+    var c = hit[0], t = hit[1], y = S.param('y'); st.grp = grp(c.이름); st.fam = c; if (!hasStock(t)) return;   // 그 사이 재고가 빠졌으면 차종만 열기(재고 있는 트림 + 알림 한 줄이 보임)
+    st.trim = t; st.sub = family(t.모델); st.year = (y && (rows(t, y) || []).length) ? y : pickYear(c, t);
   }
   Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {})]).then(function () {
     deep(); renderSeg(); renderTrims(); dock(); renderRec();
     var k = D.cars.기준 || {}; $('asof').textContent = (k.재고 ? '재고 ' + k.재고 : '재고 준비 중') + (k.가격표 ? ' · 가격표 ' + k.가격표 : '') + (S.promoOK(D.promo) ? ' · 조건 ' + D.promo.월 : '');
-    $('promoCap').textContent = S.promoOK(D.promo) ? parseInt(D.promo.월.slice(5)) + '월 조건 반영 중' : parseInt(S.ym().slice(5)) + '월 조건 확인 중';
+    $('promoCap').textContent = S.promoOK(D.promo) ? parseInt(D.promo.월.slice(5)) + '월 조건 반영 중' + (dday() ? ' · 마감 ' + dday() : '') : parseInt(S.ym().slice(5)) + '월 조건 확인 중';
     if (D.posts) { var n = S.news(D.posts, 1)[0]; if (n) $('newsCap').textContent = n.제목; }
     if (st.trim) setTimeout(function () { $('detail').scrollIntoView({ block: 'start' }); }, 80);
   }).catch(function () { $('rail').appendChild(el('div', 'empty', '차종 정보를 불러오지 못했습니다 — 카톡으로 문의해 주세요.')); dock(); });

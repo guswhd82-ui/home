@@ -152,3 +152,9 @@ button{font-family:inherit;color:inherit}
 footer{padding:24px var(--pad) 10px;font-size:11px;color:var(--mute2);line-height:1.7}
 .fade{animation:fade .4s var(--ease)}
 @keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* 지인에게 보내기 · 알림 한 줄 · 마감 D-day · 토스트 (10/26) */
+.share{display:block;width:100%;margin-top:10px;padding:12px;border:0;background:none;color:var(--mute);font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.li.ask .t b{font-weight:500;font-size:14px}
+.pill.dd{margin-left:6px;vertical-align:middle;font-family:inherit}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#111;color:#fff;font-size:13px;padding:10px 14px;border-radius:10px;z-index:99;max-width:86vw;text-align:center}
