@@ -111,7 +111,7 @@
       || D.promo.목록.filter(function (x) { return x.계열 === fam.이름 && x.연식 === y && pr && x.정가 === pr && nm(x.모델).indexOf(k.slice(0, 6)) === 0; })[0] || null;   // 이름이 달라도 같은 계열·연식·정가면(S 450 표준/롱처럼 가격표가 이름을 가른 경우)
   }
   function rows(t, y) { if (!t.재고) return t.재고; return t.재고.filter(function (r) { return !y || !r.연식 || r.연식 === '20' + y.slice(2); }); }
-  function man(n) { return (Math.floor(n / 10000)).toLocaleString('ko-KR') + '만 원'; }   // 화면 숫자는 만 원 단위로 끊어 읽기 쉽게
+  function man(n) { return (Math.round(n / 10000)).toLocaleString('ko-KR') + '만 원'; }   // 화면 숫자는 만 원 단위로 끊어 읽기 쉽게
   function en(f) { return { 'E클래스': 'E', 'S클래스': 'S', 'C클래스': 'C', 'A클래스': 'A', 'G클래스': 'G', 'V클래스': 'V' }[f] || f.replace('클래스', ''); }
   function press(box, sel, val) { Array.prototype.forEach.call(box.querySelectorAll(sel), function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === val)); }); }
   function btn(cls, txt, v) { var b = el('button', cls, txt); b.type = 'button'; if (v != null) b.dataset.v = v; return b; }
@@ -169,11 +169,11 @@
     var ysw = $('ysw'); ysw.textContent = ''; ysw.style.display = ys.length > 1 ? '' : 'none'; ys.forEach(function (v) { var b = btn('', '20' + v.slice(2) + '년식', v); b.setAttribute('aria-pressed', String(v === y)); b.addEventListener('click', function () { st.year = v; renderDetail(); }); ysw.appendChild(b); });
     var big = $('dBig'), lab = $('dLab'), ln = $('dLines'); ln.textContent = '';
     function line(a, b, m, sum) { var r = el('div', sum ? 'sum' : ''); var l = el('span', '', a); if (m) l.appendChild(el('span', 'm', m)); r.appendChild(l); r.appendChild(el('b', 'num', b)); ln.appendChild(r); }
-    if (pm && pm.할인율 === 0) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.정가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
-    else if (pm) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.최종가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
+    if (pm && pm.할인율 === 0) { big.textContent = ''; big.appendChild(document.createTextNode(Math.round(pm.정가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
+    else if (pm) { big.textContent = ''; big.appendChild(document.createTextNode(Math.round(pm.최종가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
       line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('최대 혜택가 · MBM 파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
       $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지.'; }
-    else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.floor(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
+    else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.round(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
       var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
       if (oy) { nt.appendChild(document.createTextNode('이 연식은 ' + parseInt(S.ym().slice(5)) + '월 조건표에 없고, ')); var sw = el('a', '', '20' + oy.slice(2) + '년식 조건 보기 →'); sw.href = '#'; sw.style.textDecoration = "underline"; sw.addEventListener('click', function (e) { e.preventDefault(); st.year = oy; renderDetail(); }); nt.appendChild(sw); }
       else { nt.appendChild(document.createTextNode(parseInt(S.ym().slice(5)) + '월 조건표에 없는 모델입니다(신차·한정판 등) — ')); var q = el('a', '', '이달 조건은 견적 요청 →'); q.href = '#'; q.style.textDecoration = "underline"; q.addEventListener('click', function (e) { e.preventDefault(); sheet('quote'); }); nt.appendChild(q); } }
