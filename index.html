@@ -174,14 +174,17 @@
     if (rs == null) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 견적 요청하시면 바로 확인해 드립니다.'));
     else if (!rs.length) cc.appendChild(el('div', 'empty', '지금은 바로 출고 가능한 차가 없습니다 — 입고 예정은 상담으로.'));
     else {
-      var ext = {}; rs.forEach(function (r) { (ext[r.외장] = ext[r.외장] || { ints: [], eta: false }); var i = S.cleanInt(r.내장); if (i && ext[r.외장].ints.indexOf(i) < 0) ext[r.외장].ints.push(i); var later = S.etaLater(r); if (later.length) { if (!ext[r.외장].eta) ext[r.외장].eta = parseInt(later[0].slice(5, 7)) + '월 출고 예정'; } else ext[r.외장].imm = true; });
+      var ext = {}; rs.forEach(function (r) { (ext[r.외장] = ext[r.외장] || { ints: [], eta: false }); if (r.정가) { var e0 = ext[r.외장]; e0.lo = e0.lo ? Math.min(e0.lo, r.정가) : r.정가; e0.hi = e0.hi ? Math.max(e0.hi, r.정가) : r.정가; } if (r.입고) ext[r.외장].arr = true; var i = S.cleanInt(r.내장); if (i && ext[r.외장].ints.indexOf(i) < 0) ext[r.외장].ints.push(i); var later = S.etaLater(r); if (later.length) { if (!ext[r.외장].eta) ext[r.외장].eta = parseInt(later[0].slice(5, 7)) + '월 출고 예정'; } else ext[r.외장].imm = true; });
       var names = Object.keys(ext); if (!st.color || names.indexOf(st.color) < 0) st.color = names[0];
       // 외장 하나 → 그 아래 그 외장에 실제로 있는 내장만(조합이 섞여 보이지 않게 · 차장님 10/26) · 누르면 견적에 그 색이 들어감
       var box = el('div', 'card'); names.forEach(function (n) {
         var g = btn('li', null, n), c = el('span', 'c'); c.style.background = S.color(n); c.style.cssText += 'width:34px;height:34px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.12);box-shadow:0 2px 6px rgba(0,0,0,.12)';
         var t = el('div', 't'), bb = el('b', '', n.replace(/^MANUFAKTUR\s*/, '')); if (ext[n].imm || !ext[n].eta) { bb.appendChild(el('span', 'pill ok', '지금 출고 가능')); bb.lastChild.style.marginLeft = '6px'; } if (ext[n].eta) { bb.appendChild(el('span', 'pill gold', ext[n].eta)); bb.lastChild.style.marginLeft = '6px'; } t.appendChild(bb);
-        var ib = el('div', 'ints'); ib.style.marginTop = '6px'; ext[n].ints.forEach(function (i) { var s = el('span', 'int'), ci = el('span', 'c'); ci.style.background = S.color(i); s.appendChild(ci); s.appendChild(document.createTextNode(i)); ib.appendChild(s); }); t.appendChild(ib);
-        g.appendChild(c); g.appendChild(t); g.style.alignItems = 'flex-start'; g.setAttribute('aria-pressed', String(n === st.color));
+        var ib = el('div', 'ints'); ib.style.marginTop = '6px'; ext[n].ints.forEach(function (i) { var s = el('span', 'int'), ci = el('span', 'c'); ci.style.background = S.color(i); s.appendChild(ci); s.appendChild(document.createTextNode(i)); ib.appendChild(s); }); ib.style.cssText += 'flex:0 0 100%;margin-top:2px';
+        if (ext[n].arr) { bb.appendChild(el('span', 'pill', '한국 도착')); bb.lastChild.style.marginLeft = '6px'; }
+        g.appendChild(c); g.appendChild(t);
+        if (ext[n].lo) { var pc = el('div', 'p num'), rate = pm0 && pm0.할인율 ? pm0.할인율 : 0, f = function (v) { return man(Math.round(v * (1 - rate / 100))); }; if (rate) pc.appendChild(el('s', '', man(ext[n].lo) + (ext[n].hi !== ext[n].lo ? '~' : ''))); pc.appendChild(el('b', '', f(ext[n].lo) + (ext[n].hi !== ext[n].lo ? '~' : ''))); g.appendChild(pc); }
+        g.appendChild(ib); g.style.cssText += 'align-items:flex-start;flex-wrap:wrap;row-gap:8px'; g.setAttribute('aria-pressed', String(n === st.color));
         g.addEventListener('click', function () { st.color = n; press(box, '.li', n); }); box.appendChild(g);
       });
       cc.appendChild(box); cc.appendChild(el('p', 'note', '외장색 아래가 그 색에 지금 있는 내장입니다 · 기준 ' + (D.cars.기준.재고 || '') + ' · 실제 배정은 상담으로 확인해 드립니다.'));
