@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://benzyoo.kr/">
 <meta property="og:title" content="유현종 차장 — 내 벤츠 고르기">
 <meta property="og:description" content="차종 → 트림 → 정가·이달 조건 · 색 · 견적 요청 · 시승 신청이 한 화면에">
-<link rel="stylesheet" href="site.css?v=1026m">
+<link rel="stylesheet" href="site.css?v=1026o">
 </head>
 <body><div class="app" id="app">
 <!-- 한 화면 '내 벤츠 고르기' v3 — 데이터: cars.json(차종·트림·가격·재고·글·시승) + promo.json(이달 조건 · 월 지나면 숨김) · 대수 없음 · 연락처는 블로그 공개분만 -->
@@ -81,7 +81,7 @@
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet"><div id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<script src="site.js?v=1026m"></script>
+<script src="site.js?v=1026o"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$, el = S.el;
@@ -213,6 +213,9 @@
     }
     // 글
     var pp = $('dPosts'); pp.textContent = ''; var ps = st.fam.글 || [], key = nm(t.모델).replace(/4matic.*$/, ''), hit = ps.filter(function (q) { return nm(q.제목).indexOf(key) >= 0; });
+    // 공식 카탈로그(차장님 10/26 "1번" = 공식 사이트 PDF로 바로 · 파일은 안 올림) — 맨 앞 카드 · AMG·마이바흐 트림은 그 카탈로그 먼저
+    var cl = D.cat && D.cat.목록, ck = st.fam.이름 + (/maybach/i.test(t.모델) ? '|마이바흐' : /^(Mercedes-AMG|M-AMG)/.test(t.모델) ? '|AMG' : ''), cg = cl && (cl[ck] || cl[st.fam.이름]);
+    if (cg) { var ca = S.a(cg.주소, 'pc cat', null, 'catalog'); ca.appendChild(el('b', '', '카탈로그 다운로드')); ca.setAttribute('aria-label', '카탈로그 다운로드 (PDF' + (cg.날짜 ? ' · ' + cg.날짜 + ' 판' : '') + ')'); pp.appendChild(ca); }   // 글자는 이것만(차장님 10/26)
     (hit.length ? hit : ps).slice(0, 5).forEach(function (q) { var a = S.a(q.주소, 'pc', null, 'post'); a.appendChild(el('b', '', q.제목)); a.appendChild(el('span', '', q.날짜)); pp.appendChild(a); });
     if (!ps.length) pp.appendChild(el('div', 'empty', '아직 이 차 글이 없습니다 — 궁금한 점은 상담으로.'));
     $('bDrive').textContent = t.시승 ? '시승 신청' : '시승 문의';
@@ -337,7 +340,7 @@
     var c = hit[0], t = hit[1], y = S.param('y'); st.grp = grp(c.이름); st.fam = c; if (!hasStock(t)) return;   // 그 사이 재고가 빠졌으면 차종만 열기(재고 있는 트림 + 알림 한 줄이 보임)
     st.trim = t; st.sub = family(t.모델); st.year = (y && (rows(t, y) || []).length) ? y : pickYear(c, t);
   }
-  Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {})]).then(function () {
+  Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {}), S.getJSON('catalogs.json').then(function (d) { D.cat = d; }).catch(function () {})]).then(function () {
     deep(); renderSeg(); renderTrims(); dock(); renderRec();
     var k = D.cars.기준 || {}; $('asof').textContent = (k.재고 ? '재고 ' + k.재고 : '재고 준비 중') + (k.가격표 ? ' · 가격표 ' + k.가격표 : '') + (S.promoOK(D.promo) ? ' · 조건 ' + D.promo.월 : '');
     $('promoCap').textContent = S.promoOK(D.promo) ? parseInt(D.promo.월.slice(5)) + '월 조건 반영 중' + (dday() ? ' · 마감 ' + dday() : '') : parseInt(S.ym().slice(5)) + '월 조건 확인 중';
