@@ -97,7 +97,10 @@
   function nm(s) { return String(s || '').toLowerCase().replace(/[éèê]/g, 'e').replace(/mercedes-amg|m-amg/g, 'amg').replace(/mercedes-maybach/g, 'maybach').replace(/manufkatur/g, 'manufaktur').replace(/rof ed\.?/g, 'rof edition').replace(/[^a-z0-9+가-힣]/g, ''); }   // 에디션 꼬리(RoF·140주년)는 따로 둔다 — 기본 모델과 섞이면 가격이 틀림
   function promoYear(fam, t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if (promoOf(fam, t, ys[i])) return ys[i]; return null; }   // 이달 조건이 있는 가장 새 연식
   // 가격 계산: 정가(가격표 개소세 5%) × (1 − 현금%) · 금융 = × (1 − 현금% − MBM%) — 조건표의 금액은 안 쓰고 %만 쓴다(차장님 10/26 "%를 알면 금액은 계산")
-  function calc(t, y, pm) { var pr = priceOf(t, y) || (pm && pm.정가) || null; if (!pr) return null; var r = pm ? (pm.할인율 || 0) : 0, m = pm ? (pm.금융할인율 || 0) : 0; return { 정가: pr, 할인율: r, 할인액: Math.round(pr * r / 100), 최종가: Math.round(pr * (1 - r / 100)), 금융할인율: m, 금융최종가: m ? Math.round(pr * (1 - (r + m) / 100)) : null }; }
+  function calc(t, y, pm) {   // 제작방이 넣은 최대할인율·최대가(전산 캠페인 반영)가 있고 정가가 같으면 그 값을 우선 — 매일 갱신 때 숫자가 저절로 따라옴 · 없으면 정가 × (1−현금%) · 금융 −MBM%
+    var pr = priceOf(t, y) || (pm && pm.정가) || null; if (!pr) return null; var r = pm ? (pm.할인율 || 0) : 0, m = pm ? (pm.금융할인율 || 0) : 0, o = { 정가: pr, 할인율: r, 할인액: Math.round(pr * r / 100), 최종가: Math.round(pr * (1 - r / 100)), 금융할인율: m, 금융최종가: m ? Math.round(pr * (1 - (r + m) / 100)) : null };
+    if (pm && pm.최대가 && pm.최대할인율 && (!pm.정가 || pm.정가 === pr) && pm.최대할인율 > r) { o.금융최종가 = pm.최대가; o.금융할인율 = Math.round((pm.최대할인율 - r) * 10) / 10; }
+    return o; }
   // 모델군(2단계): 'GLE 450 4MATIC AMG Line' → 'GLE 450' · 'GLE 450 d 4MATIC Coupé AMG Line' → 'GLE 450 d Coupé' · 'Mercedes-AMG GLE 53 4MATIC+' → 'AMG GLE 53'
   function family(model) { return String(model).replace(/Mercedes-AMG|M-AMG/g, 'AMG').replace(/with EQ Hybrid Technology|EQ Hybrid Technology/g, '').replace(/Mercedes-Maybach/g, '마이바흐').replace(/\(.*?\)/g, '').replace(/\b(4MATIC\+?|AMG Line\+?|AVANTGARDE|EXCLUSIVE|Progressive|Essential|Advanced|Premium|Long|Special Edition|Limited Edition|Launch Edition|Final Edition|Edition 1|Edition ONE|Hatch|Sedan|MANUFAKTUR|Performance|Limited|with EQ Technology|HYBRID)\b/g, '').replace(/ \+/g, '').replace(/\s+/g, ' ').trim(); }
   function famKeyOrder(f) { var m = f.match(/(\d+)/); return [(/^AMG|마이바흐/.test(f) ? 1 : 0), m ? parseInt(m[1]) : 999, f]; }   // 모델군 순서: 숫자 작은 것부터 · AMG·마이바흐는 뒤
