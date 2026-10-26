@@ -149,7 +149,7 @@
     var fams = []; list.forEach(function (t) { var f = family(t.모델); if (fams.indexOf(f) < 0) fams.push(f); });
     fams.sort(function (a, b) { var x = famKeyOrder(a), y = famKeyOrder(b); return x[0] - y[0] || x[1] - y[1] || (x[2] < y[2] ? -1 : 1); });
     var sub = $('subChips'); sub.textContent = ''; sub.style.display = (list.length > 5 && fams.length > 1) ? '' : 'none';
-    if (sub.style.display !== 'none') { if (!st.sub || fams.indexOf(st.sub) < 0) st.sub = st.trim ? family(st.trim.모델) : ''; fams.forEach(function (f) { var b = btn('opt', f, f); b.setAttribute('aria-pressed', String(st.sub === f)); b.addEventListener('click', function () { st.sub = f; st.trim = null; st.showAll = false; renderTrims(); }); sub.appendChild(b); }); }
+    if (sub.style.display !== 'none') { if (!st.sub || fams.indexOf(st.sub) < 0) st.sub = st.trim ? family(st.trim.모델) : fams[0]; fams.forEach(function (f) { var b = btn('opt', f, f); b.setAttribute('aria-pressed', String(st.sub === f)); b.addEventListener('click', function () { st.sub = f; st.trim = null; st.showAll = false; renderTrims(); }); sub.appendChild(b); }); }
     else st.sub = '';
     var pool = st.sub ? list.filter(function (t) { return family(t.모델) === st.sub; }) : list;
     $('trimCap').textContent = (st.sub || st.fam.이름) + ' · ' + pool.length + '개';
