@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://benzyoo.kr/">
 <meta property="og:title" content="유현종 차장 — 내 벤츠 고르기">
 <meta property="og:description" content="차종 → 트림 → 정가·이달 조건 · 색 · 견적 요청 · 시승 신청이 한 화면에">
-<link rel="stylesheet" href="site.css?v=1026f">
+<link rel="stylesheet" href="site.css?v=1026m">
 </head>
 <body><div class="app" id="app">
 <!-- 한 화면 '내 벤츠 고르기' v3 — 데이터: cars.json(차종·트림·가격·재고·글·시승) + promo.json(이달 조건 · 월 지나면 숨김) · 대수 없음 · 연락처는 블로그 공개분만 -->
@@ -81,7 +81,7 @@
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet"><div id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<script src="site.js?v=1026f"></script>
+<script src="site.js?v=1026m"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$, el = S.el;
@@ -119,8 +119,10 @@
   function stockYear(t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if ((rows(t, ys[i]) || []).length) return ys[i]; return ys[0]; }
   // 이달 조건 마감 D-10부터 작게 표시(차장님 10/26) · 유효기간 없으면 안 보임
   function dday() { if (!S.promoOK(D.promo) || !D.promo.유효기간) return null; var e = new Date(D.promo.유효기간 + 'T00:00:00'), n = new Date(); n = new Date(n.getFullYear(), n.getMonth(), n.getDate()); var d = Math.round((e - n) / 86400000); return d >= 0 && d <= 10 ? (d ? 'D-' + d : '오늘 마감') : null; }
-  function man(n) { n = Math.round(n); return n % 10000 === 0 ? (n / 10000).toLocaleString('ko-KR') + '만 원' : n.toLocaleString('ko-KR') + '원'; }   // 정확히(반올림 X): 만 원으로 딱 떨어지면 만 원 · 아니면 원 단위 전부
-  function bigNum(n) { n = Math.round(n); return n % 10000 === 0 ? [(n / 10000).toLocaleString('ko-KR'), '만 원'] : [n.toLocaleString('ko-KR'), '원']; }   // 화면 숫자는 만 원 단위로 끊어 읽기 쉽게
+  // 금액 표기(차장님 10/26): 만 원 아래는 버리고(절삭) 1억 넘으면 '1억 4,000만원' · 억 단위가 딱 떨어지면 '1억원'
+  function parts(n) { var m = Math.floor(n / 10000), e = Math.floor(m / 10000), r = m % 10000; return e ? (r ? [e + '억 ' + r.toLocaleString('ko-KR'), '만원'] : [e + '억', '원']) : [m.toLocaleString('ko-KR'), '만원']; }
+  function man(n) { var p = parts(n); return p[0] + p[1]; }
+  function bigNum(n) { return parts(n); }   // 큰 숫자 = [숫자, 단위]
   function en(f) { return { 'E클래스': 'E', 'S클래스': 'S', 'C클래스': 'C', 'A클래스': 'A', 'G클래스': 'G', 'V클래스': 'V' }[f] || f.replace('클래스', ''); }
   function press(box, sel, val) { Array.prototype.forEach.call(box.querySelectorAll(sel), function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === val)); }); }
   function btn(cls, txt, v) { var b = el('button', cls, txt); b.type = 'button'; if (v != null) b.dataset.v = v; return b; }
@@ -171,6 +173,7 @@
     if (!st.trim && st.fam.트림.some(function (t) { return !hasStock(t); })) { var a = btn('li ask', null, 'alert'), at = el('div', 't'); at.appendChild(el('b', '', '찾는 트림이 없으신가요?')); at.appendChild(el('span', '', '재고가 들어오면 문자로 바로 알려 드려요')); a.appendChild(at); a.appendChild(el('span', 'chev')); a.addEventListener('click', function () { st.aFam = st.fam; st.aTrim = ''; sheet('alert', true); }); box.appendChild(a); }
     renderDetail();
   }
+  function pl(l, v) { var d = el('div', 'pl'); d.appendChild(el('i', '', l)); d.appendChild(el('b', '', v)); return d; }   // 라벨 + 금액 한 줄
   // ③ 차 한 대
   function renderDetail() {
     var t = st.trim, d = $('detail'); d.hidden = !t; dock(); if (!t) return;
@@ -179,9 +182,9 @@
     var ysw = $('ysw'); ysw.textContent = ''; ysw.style.display = ys.length > 1 ? '' : 'none'; ys.forEach(function (v) { var b = btn('', '20' + v.slice(2) + '년식', v); b.setAttribute('aria-pressed', String(v === y)); b.addEventListener('click', function () { st.year = v; renderDetail(); }); ysw.appendChild(b); });
     var big = $('dBig'), lab = $('dLab'), ln = $('dLines'); ln.textContent = '';
     function line(a, b, m, sum) { var r = el('div', sum ? 'sum' : ''); var l = el('span', '', a); if (m) l.appendChild(el('span', 'm', m)); r.appendChild(l); r.appendChild(el('b', 'num', b)); ln.appendChild(r); }
-    if (pm && pm.할인율 === 0) { big.textContent = ''; var bn0 = bigNum(pm.정가); big.appendChild(document.createTextNode(bn0[0])); big.appendChild(el('small', '', bn0[1])); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
-    else if (pm) { big.textContent = ''; var bn = bigNum(pm.최종가); big.appendChild(document.createTextNode(bn[0])); big.appendChild(el('small', '', bn[1])); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
-      line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('최대 혜택가 · MBM 파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
+    big.className = 'big num'; if (pm && pm.할인율 === 0) { big.textContent = ''; var bn0 = bigNum(pm.정가); big.appendChild(document.createTextNode(bn0[0])); big.appendChild(el('small', '', bn0[1])); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
+    else if (pm) { big.textContent = ''; big.className = 'big num two' + (pm.최종가 >= 100000000 ? ' long' : ''); function blk(l, v) { var d = el('div', 'pr'), n = bigNum(v); d.appendChild(el('i', '', l)); var b = el('b', ''); b.appendChild(document.createTextNode(n[0])); b.appendChild(el('small', '', n[1])); d.appendChild(b); big.appendChild(d); } blk('현금가', pm.최종가); if (pm.금융최종가) blk('벤츠 파이낸셜 이용 시', pm.금융최종가); lab.textContent = parseInt(D.promo.월.slice(5)) + '월 조건 반영' + (pm.금융최종가 ? ' · 벤츠 파이낸셜은 현금 할인에 추가 ' + pm.금융할인율 + '%' : '');
+      line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%');
       $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지' + (dday() ? ' (' + dday() + ')' : '') + '.'; }
     else { big.textContent = ''; var bn1 = pr ? bigNum(pr) : ['—', '']; big.appendChild(document.createTextNode(bn1[0])); big.appendChild(el('small', '', bn1[1])); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
       var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
@@ -201,7 +204,8 @@
         var ib = el('div', 'ints'); ib.style.marginTop = '6px'; ext[n].ints.forEach(function (i) { var s = el('span', 'int'), ci = el('span', 'c'); ci.style.background = S.color(i); s.appendChild(ci); s.appendChild(document.createTextNode(i)); ib.appendChild(s); }); ib.style.cssText += 'flex:0 0 100%;margin-top:2px';
         if (ext[n].arr) { bb.appendChild(el('span', 'pill', '한국 도착')); bb.lastChild.style.marginLeft = '6px'; }
         g.appendChild(c); g.appendChild(t);
-        if (ext[n].lo) { var pc = el('div', 'p num'), rate = pm0 && pm0.할인율 ? pm0.할인율 : 0, f = function (v) { return man(Math.round(v * (1 - rate / 100))); }; if (rate) pc.appendChild(el('s', '', man(ext[n].lo) + (ext[n].hi !== ext[n].lo ? '~' : ''))); pc.appendChild(el('b', '', f(ext[n].lo) + (ext[n].hi !== ext[n].lo ? '~' : ''))); g.appendChild(pc); }
+        if (ext[n].lo) { var pc = el('div', 'p num pp'), rate = pm0 && pm0.할인율 ? pm0.할인율 : 0, tl = ext[n].hi !== ext[n].lo ? '~' : '', mf = rate && pm && pm.금융최종가 ? pm.금융할인율 : 0, f = function (v) { return man(Math.round(v * (1 - rate / 100))); }, ff = function (v) { return man(v === pm.정가 ? pm.금융최종가 : Math.round(v * (1 - (rate + mf) / 100))); };
+          if (rate) { pc.appendChild(pl('현금', f(ext[n].lo) + tl)); if (mf) pc.appendChild(pl('벤츠 파이낸셜', ff(ext[n].lo) + tl)); } else { pc.className = 'p num'; pc.appendChild(el('b', '', man(ext[n].lo) + tl)); } g.appendChild(pc); }
         g.appendChild(ib); g.style.cssText += 'align-items:flex-start;flex-wrap:wrap;row-gap:8px'; g.setAttribute('aria-pressed', String(n === st.color));
         g.addEventListener('click', function () { st.color = n; press(box, '.li', n); }); box.appendChild(g);
       });
@@ -315,13 +319,12 @@
       var seen = {}; c.forEach(function (x) { if (pick.length < 3 && !seen[x.f.이름]) { seen[x.f.이름] = 1; pick.push(x); } });
     }
     if (!pick.length) { sec.hidden = true; return; } sec.hidden = false;
-    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중'; if (ok && dday()) $('recCap').appendChild(el('span', 'pill gold dd', '마감 ' + dday())); $('recNote').textContent = ok ? '표시 금액은 이달 최대 할인(현금 할인 + MBM 파이낸셜 추가 할인 함께 적용) 기준 — MBM 파이낸셜 이용 시 · 조건은 상담으로 확인해 드립니다.' : '이달 조건은 확인 중입니다 — 상담으로 바로 알려 드립니다.';
+    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중'; if (ok && dday()) $('recCap').appendChild(el('span', 'pill gold dd', '마감 ' + dday())); $('recNote').textContent = ok ? '현금은 이달 기본 할인 기준, 벤츠 파이낸셜은 이용 시 추가 할인까지 반영한 금액입니다 — 조건은 상담으로 확인해 드립니다.' : '이달 조건은 확인 중입니다 — 상담으로 바로 알려 드립니다.';
     pick.forEach(function (x) {
       var b = btn('li', null, x.t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', x.t.모델)); var tg = el('div', 'tags');
       var pm0 = ok ? promoOf(x.f, x.t, x.y) : null, cc = pm0 ? calc(x.t, x.y, pm0) : null, mx = cc && cc.금융최종가 ? cc.금융할인율 + cc.할인율 : (cc ? cc.할인율 : 0);   // 큰 숫자 = 이달 받을 수 있는 가장 큰 할인(현금 + MBM 파이낸셜 함께 적용) · 같이 못 받는 건 안 더함(조건표 기준)
       if (ok && mx > 0) tg.appendChild(el('span', 'pill gold', (cc.금융최종가 ? '최대 ' : '할인 ') + (Math.round(mx * 10) / 10) + '%')); tg.appendChild(el('span', 'pill ' + (x.imm > 0 ? 'ok' : ''), x.imm > 0 ? '즉시 출고' : '출고 예정')); tg.appendChild(el('span', 'pill', x.f.이름 + ' · 20' + x.y.slice(2) + '년식')); tt.appendChild(tg); b.appendChild(tt);
-      if (ok && cc && mx > 0) { var pc = el('div', 'p num'); pc.appendChild(el('s', '', man(cc.정가))); pc.appendChild(el('b', '', man(cc.금융최종가 || cc.최종가))); pc.appendChild(el('span', '', cc.금융최종가 ? 'MBM 파이낸셜 이용 시' : '일시불 기준')); pc.lastChild.style.cssText = 'display:block;font-size:10px;color:var(--mute);margin-top:2px'; b.appendChild(pc); }
-      b.appendChild(el('span', 'chev'));
+      if (ok && cc && mx > 0) { var pc = el('div', 'p num pp'); pc.appendChild(el('s', '', man(cc.정가))); pc.appendChild(pl('현금', man(cc.최종가))); if (cc.금융최종가) pc.appendChild(pl('벤츠 파이낸셜', man(cc.금융최종가))); b.className += ' rc'; b.appendChild(el('span', 'chev')); b.appendChild(pc); } else b.appendChild(el('span', 'chev'));
       b.addEventListener('click', function () { st.grp = grp(x.f.이름); st.fam = x.f; st.trim = x.t; st.sub = family(x.t.모델); st.year = x.y; st.showAll = false; st.color = ''; st.pay = ''; st.ben = {}; renderSeg(); renderTrims(); setTimeout(function () { $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
     });

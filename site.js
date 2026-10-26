@@ -13,7 +13,7 @@
   var el = S.el = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
   S.a = function (href, cls, txt, kind) { var a = el('a', cls, txt); a.href = href; if (/^https?:/.test(href)) { a.target = '_blank'; a.rel = 'noopener'; } if (kind) a.setAttribute('data-track', kind); return a; };
   S.norm = function (s) { return String(s || '').toLowerCase().replace(/\s+/g, ''); };
-  S.man = function (n) { n = Math.round(n); return n % 10000 === 0 ? (n / 10000).toLocaleString('ko-KR') + '만 원' : n.toLocaleString('ko-KR') + '원'; };
+  S.man = function (n) { var m = Math.floor(n / 10000), e = Math.floor(m / 10000), r = m % 10000; return e ? (r ? e + '억 ' + r.toLocaleString('ko-KR') + '만원' : e + '억원') : m.toLocaleString('ko-KR') + '만원'; };   // 만 원 아래 절삭 · 1억 4,000만원 식
   S.getJSON = function (u) { return fetch(u + '?v=' + Date.now(), { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); };
   S.sms = function (text) { return 'sms:' + S.tel.replace(/-/g, '') + '?&body=' + encodeURIComponent(text); };
   S.param = function (k) { return new URLSearchParams(location.search).get(k) || ''; };

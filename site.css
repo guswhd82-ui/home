@@ -87,6 +87,14 @@ button{font-family:inherit;color:inherit}
 .price .lab{font-size:12px;color:var(--mute);margin-top:6px}
 .lines{margin-top:12px;border-top:1px solid var(--hair)}
 .lines div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--hair);font-size:14px;color:var(--ink2)}
+.price .big.two{display:flex;gap:10px;font-size:28px}
+.price .big.two .pr{flex:1 1 0;min-width:0}
+.price .big.two .pr i{display:block;font-style:normal;font-size:12px;font-weight:500;color:var(--mute);letter-spacing:0;margin-bottom:6px}
+.price .big.two .pr b{display:block;font-size:28px;font-weight:700;white-space:nowrap}
+.price .big.two small{font-size:14px}
+.li .p .pl{display:flex;gap:8px;justify-content:flex-end;align-items:baseline;white-space:nowrap}
+.li .p .pl i{font-style:normal;font-size:11px;color:var(--mute)}
+.li .p .pl b{display:inline;font-size:15px}
 .lines div b{font-weight:500;color:var(--ink);white-space:nowrap}
 .lines div .m{color:var(--mute);font-size:12px;margin-left:6px}
 .lines div.sum{background:var(--sf);margin:0 -18px;padding:10px 18px}
@@ -170,3 +178,26 @@ footer{padding:24px var(--pad) 10px;font-size:11px;color:var(--mute2);line-heigh
 .li.ask .t b{font-weight:500;font-size:14px}
 .pill.dd{margin-left:6px;vertical-align:middle;font-family:inherit}
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#111;color:#fff;font-size:13px;padding:10px 14px;border-radius:10px;z-index:99;max-width:86vw;text-align:center}
+.li .p.pp{flex:0 0 100%;text-align:left;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
+.li .p.pp .pl{display:block}
+.li .p.pp .pl i{display:block;margin-bottom:1px}
+.li .p.pp .pl b{display:block;font-size:16px}
+.li.rc{flex-wrap:wrap;row-gap:6px}
+.li .p.pp s{grid-column:1/-1}
+.li.rc .p.pp{margin-top:0}
+.price .big.two.long .pr b{font-size:23px}
+.price .big.two.long small{font-size:12px}
+/* 요약 금액 칸 크기 맞춤(차장님 10/26 "크기조절 보기좋게"): 회색 판 안 두 칸 · 숫자·단위 비율 고정 · 이름·연식 줄 간격 */
+.detail .name{margin:4px 0 6px}
+.detail .sub{margin-bottom:16px;line-height:1.5}
+.price{margin:6px 0 4px}
+.price .big.two{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--sf);border-radius:12px;padding:14px 0 13px}
+.price .big.two .pr{padding:0 14px;min-width:0}
+.price .big.two .pr+.pr{border-left:1px solid var(--hair2)}
+.price .big.two .pr i{font-size:12px;margin-bottom:5px;color:var(--mute)}
+.price .big.two .pr b{font-size:24px;letter-spacing:-.02em;line-height:1.1}
+.price .big.two small{font-size:13px;font-weight:600;margin-left:2px}
+.price .big.two.long .pr b{font-size:19px}
+.price .big.two.long small{font-size:12px}
+.price .lab{margin-top:9px}
+.li .p.pp .pl b{font-size:16px;letter-spacing:-.01em}
