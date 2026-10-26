@@ -261,21 +261,32 @@
     document.body.classList.add('open'); s.scrollTop = 0;
   }
   // 이달의 추천 3대(자동): 지금 출고 가능한 재고가 있는 트림 중 이달 할인율 높은 순 · 같으면 즉시 출고 줄 많은 순(대수는 안 보임) · 서로 다른 차종
+  // ★이달의 추천 고정 목록(차장님 10/26): 한 줄만 바꾸면 됨 · 비우면([]) 완전 자동(차종 안 겹치게 할인율 순) · 형식 "차종" 또는 "모델군|연식"  — 제작방이 site_config.json "이달의추천"을 cars.json 기준.이달의추천 으로 넘기면 그 값이 우선
+  var PICKS = ["GLE", "E 200|2027", "C 200"];
+  function recCands(ok) {   // 트림×연식 후보: imm = 지금 출고 가능 줄 수 · all = 재고 줄 수 · rate = 이달 할인율
+    var c = []; D.cars.차종.forEach(function (f) { f.트림.forEach(function (t) {
+      var by = {}; (t.재고 || []).forEach(function (r) { var y = 'MY' + String(r.연식).slice(2), o = by[y] = by[y] || { imm: 0, all: 0 }; o.all++; if (S.etaLater(r).length === 0) o.imm++; });
+      Object.keys(by).forEach(function (y) { var pm = ok ? promoOf(f, t, y) : null; c.push({ f: f, t: t, y: y, rate: pm ? (pm.할인율 || 0) : 0, imm: by[y].imm, all: by[y].all }); });
+    }); }); return c;
+  }
   function renderRec() {
-    var sec = $('rec'), box = $('recList'); box.textContent = ''; var ok = S.promoOK(D.promo), c = [];
-    D.cars.차종.forEach(function (f) { f.트림.forEach(function (t) {
-      var imm = (t.재고 || []).filter(function (r) { return S.etaLater(r).length === 0; }); if (!imm.length) return;
-      var yc = {}; imm.forEach(function (r) { var y = 'MY' + String(r.연식).slice(2); yc[y] = (yc[y] || 0) + 1; });
-      var best = null; Object.keys(yc).forEach(function (y) { var pm = ok ? promoOf(f, t, y) : null, rate = pm ? (pm.할인율 || 0) : 0; if (!best || rate > best.rate || (rate === best.rate && yc[y] > best.n)) best = { y: y, rate: rate, n: yc[y] }; });
-      c.push({ f: f, t: t, y: best.y, rate: best.rate, n: imm.length });
-    }); });
-    c.sort(function (a, b) { return b.rate - a.rate || b.n - a.n; });
-    var seen = {}, pick = []; c.forEach(function (x) { if (pick.length < 3 && !seen[x.f.이름]) { seen[x.f.이름] = 1; pick.push(x); } });
+    var sec = $('rec'), box = $('recList'); box.textContent = ''; var ok = S.promoOK(D.promo), c = recCands(ok), pick = [], cfg = (D.cars.기준 && D.cars.기준.이달의추천) || PICKS;
+    function better(a, b) { return (b.imm > 0) - (a.imm > 0) || b.rate - a.rate || b.imm - a.imm || b.all - a.all; }
+    if (cfg && cfg.length) {
+      cfg.forEach(function (spec) {
+        var pr = String(spec).split('|'), name = pr[0].trim(), yy = pr[1] ? 'MY' + pr[1].trim().slice(-2) : '';
+        var m = c.filter(function (x) { return (S.famKey(x.f.이름) === S.famKey(name) || family(x.t.모델) === name) && (!yy || x.y === yy) && x.all > 0 && pick.every(function (p) { return p.t !== x.t; }); }).sort(better)[0];
+        if (m) pick.push(m);   // 재고가 하나도 없으면 그 칸은 숨김
+      });
+    } else {
+      c = c.filter(function (x) { return x.imm > 0; }).sort(function (a, b) { return b.rate - a.rate || b.imm - a.imm; });
+      var seen = {}; c.forEach(function (x) { if (pick.length < 3 && !seen[x.f.이름]) { seen[x.f.이름] = 1; pick.push(x); } });
+    }
     if (!pick.length) { sec.hidden = true; return; } sec.hidden = false;
-    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건 · 지금 출고 가능' : '이달 조건 확인 중 · 지금 출고 가능한 차';
+    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중';
     pick.forEach(function (x) {
       var b = btn('li', null, x.t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', x.t.모델)); var tg = el('div', 'tags');
-      if (ok && x.rate > 0) tg.appendChild(el('span', 'pill gold', '할인 ' + x.rate + '%')); tg.appendChild(el('span', 'pill ok', '즉시 출고')); tg.appendChild(el('span', 'pill', x.f.이름 + ' · 20' + x.y.slice(2) + '년식')); tt.appendChild(tg); b.appendChild(tt); b.appendChild(el('span', 'chev'));
+      if (ok && x.rate > 0) tg.appendChild(el('span', 'pill gold', '할인 ' + x.rate + '%')); tg.appendChild(el('span', 'pill ' + (x.imm > 0 ? 'ok' : ''), x.imm > 0 ? '즉시 출고' : '출고 예정')); tg.appendChild(el('span', 'pill', x.f.이름 + ' · 20' + x.y.slice(2) + '년식')); tt.appendChild(tg); b.appendChild(tt); b.appendChild(el('span', 'chev'));
       b.addEventListener('click', function () { st.grp = grp(x.f.이름); st.fam = x.f; st.trim = x.t; st.sub = family(x.t.모델); st.year = x.y; st.showAll = false; st.color = ''; st.pay = ''; st.ben = {}; renderSeg(); renderTrims(); setTimeout(function () { $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
     });
