@@ -7,13 +7,14 @@
 <meta name="theme-color" content="#0a0a0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
-<title>유현종 차장 — 내 벤츠 고르기 · 가격 · 지금 고를 수 있는 색 · 시승</title>
-<meta name="description" content="차종을 고르면 그 차 한 대의 권장 소비자가격, 지금 고를 수 있는 색·내장, 글, 시승 신청이 한 화면에 — 메르세데스-벤츠 서초 유현종 차장 개인 상담 페이지.">
+<title>유현종 차장 — 내 벤츠 고르기 · 가격 · 이달 조건 · 지금 고를 수 있는 색 · 시승</title>
+<meta name="description" content="차종을 고르면 그 차 한 대의 정가·이달 조건·최종가, 지금 고를 수 있는 색·내장, 글, 견적 요청·시승 신청이 한 화면에 — 메르세데스-벤츠 서초 유현종 차장 개인 상담 페이지.">
 <meta property="og:title" content="유현종 차장 — 내 벤츠 고르기">
-<meta property="og:description" content="차종 → 트림 → 가격 · 색 · 시승 신청이 한 화면에">
+<meta property="og:description" content="차종 → 트림 → 정가·이달 조건 · 색 · 견적 요청 · 시승 신청이 한 화면에">
 <link rel="stylesheet" href="site.css">
 <style>
-/* 한 화면 '내 차 고르기' — 차장님 10/26 "하나로 합치자 · 시인성 크게": 글씨 17~18px · 단추 58px+ · 진한 테두리 */
+/* 한 화면 '내 차 고르기' — 차장님 10/26 "하나로 합치자 · 시인성 크게 · 가격은 투명하게(할인 공개)": 글씨 17~18px · 단추 58px+ · 진한 테두리
+   데이터 = cars.json(차종·트림·가격·재고·글·시승 · 제작방 홈페이지_구성.py) + promo.json(이달 조건 · 홈페이지_조건.py · 월이 이번 달 아니면 '확인 필요') · 대수 없음 */
 :root{--line:#3a3a38;--tab:72px}
 body{font-size:17px;font-weight:400}
 .wrap{padding:0 16px}
@@ -24,30 +25,40 @@ body{font-size:17px;font-weight:400}
 .step{font-family:Inter,sans-serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--sub);margin:22px 0 8px}
 .chips{gap:10px}.chip{font-size:17px;padding:13px 18px;min-height:52px;border:1.5px solid var(--line);color:var(--ink)}
 .chip[aria-pressed=true]{border-color:var(--ink)}
+.chips.sm .chip{font-size:15px;min-height:46px;padding:10px 14px}
 .trim{all:unset;display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;box-sizing:border-box;min-height:62px;padding:14px 16px;margin:8px 0;border:1.5px solid var(--line);border-radius:2px;cursor:pointer}
 .trim:focus-visible{outline:2px solid var(--ink)}
 .trim.on{background:var(--ink);color:#0a0a0a}
 .trim b{font-family:Inter,"Noto Sans KR",sans-serif;font-weight:500;font-size:17px}
 .trim small{display:block;font-size:13px;color:var(--sub);font-weight:400}
 .trim.on small{color:#333}
-.trim .pr{font-family:Inter,sans-serif;font-weight:600;font-size:16px;white-space:nowrap}
+.trim .pr{font-family:Inter,sans-serif;font-weight:600;font-size:16px;white-space:nowrap;text-align:right}
+.trim .pr i{display:block;font-style:normal;font-size:11px;color:var(--sub);font-weight:400;text-decoration:line-through}
+.trim.on .pr i{color:#555}
+.tag{display:inline-block;font-size:11px;letter-spacing:.08em;border:1px solid var(--ok-line);color:var(--ok);border-radius:2px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+.trim.on .tag{border-color:#333;color:#333}
 .car{border:2px solid var(--ink);border-radius:2px;padding:18px 16px;margin:16px 0}
 .car h2{font-size:26px;line-height:1.2;margin:0 0 4px}
-.car .yr{font-family:Inter,sans-serif;font-size:13px;letter-spacing:.1em;color:var(--sub);margin-bottom:14px}
-.car h3{font-family:Inter,"Noto Sans KR",sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--sub);margin:18px 0 8px;font-weight:500}
-.price{border-bottom:1px solid var(--line);padding:6px 0 10px}
-.price .n{display:block;font-family:Inter,sans-serif;font-size:28px;font-weight:600;white-space:nowrap}
-.price .s{display:block;font-size:13px;color:var(--sub);margin-top:4px}
+.car .yr{font-family:Inter,sans-serif;font-size:13px;letter-spacing:.1em;color:var(--sub);margin-bottom:10px}
+.car h3{font-family:Inter,"Noto Sans KR",sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--sub);margin:20px 0 8px;font-weight:500}
+.pl{border-top:1px solid var(--line)}
+.pl .r{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.pl .r .n{font-family:Inter,sans-serif;font-weight:500;white-space:nowrap}
+.pl .r.big{font-size:17px}.pl .r.big .n{font-size:28px;font-weight:600}
+.pl .r .s{display:block;font-size:12px;color:var(--sub)}
 .ext{padding:12px}.ext-h{font-size:16px}.sw{width:24px;height:24px}.int{font-size:14px;padding:6px 10px}.sw.s{width:14px;height:14px}
 .post b{font-size:16px}
 .big a{min-height:58px;display:flex;align-items:center;justify-content:center;font-size:17px;border-width:1.5px}
-.drv{border-top:1px solid var(--line);margin-top:16px;padding-top:12px}
+.panel{border-top:1px solid var(--line);margin-top:16px;padding-top:4px}
 .days{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 12px}
 .day{border:1.5px solid var(--line);border-radius:2px;min-height:58px;text-align:center;font-family:Inter,sans-serif;font-size:18px;color:var(--ink);background:transparent;cursor:pointer}
 .day small{display:block;font-size:12px;color:var(--sub)}
 .day[aria-pressed=true]{background:var(--ink);color:#0a0a0a}.day[aria-pressed=true] small{color:#333}
 .day:disabled{opacity:.3}
 .nm-in{width:100%;min-height:54px;padding:12px 14px;font-size:17px;border:1.5px solid var(--line);border-radius:2px;background:var(--card);color:var(--ink);font-family:inherit;margin:4px 0 12px}
+.opt{display:flex;align-items:center;gap:12px;min-height:56px;border:1.5px solid var(--line);border-radius:2px;padding:0 14px;margin:8px 0;cursor:pointer;font-size:16px}
+.opt input{width:22px;height:22px;accent-color:#f4f4f1;margin:0}
+.opt small{color:var(--sub);font-size:13px;margin-left:auto}
 details{border-top:1px solid var(--line)}
 summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:62px;font-family:"Noto Serif KR",serif;font-size:19px;font-weight:600;padding:12px 0}
 summary::-webkit-details-marker{display:none}
@@ -56,7 +67,7 @@ details[open] summary::after{content:'−'}
 details .in{padding:0 0 18px;font-size:16px}
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;pointer-events:none}
 .bar div{pointer-events:auto;width:100%;max-width:430px;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(10,10,10,.96);border-top:1px solid var(--line)}
-.bar a{flex:1;display:flex;align-items:center;justify-content:center;min-height:54px;text-decoration:none;font-size:17px;font-weight:600;border:1.5px solid var(--ink);border-radius:2px;color:var(--ink)}
+.bar a{flex:1;display:flex;align-items:center;justify-content:center;min-height:54px;text-decoration:none;font-size:16px;font-weight:600;border:1.5px solid var(--ink);border-radius:2px;color:var(--ink)}
 .bar a.p{background:var(--ink);color:#0a0a0a}
 .empty{font-size:15px}
 footer{font-size:12px}
@@ -65,144 +76,175 @@ footer{font-size:12px}
 <body><div class="app">
 <div class="hd"><a class="nm" href="index.html">유현종 차장 · 메르세데스-벤츠 서초</a><a class="k" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">카톡 상담</a></div>
 <main class="wrap">
-  <header class="hero"><h1>내 벤츠 고르기</h1><p>차종을 누르면 그 차 한 대의 가격 · 지금 고를 수 있는 색 · 시승 신청이 바로 아래에 나옵니다.</p></header>
+  <header class="hero"><h1>내 벤츠 고르기</h1><p>차종을 누르면 그 차 한 대의 가격 · 이달 조건 · 지금 고를 수 있는 색 · 견적 요청 · 시승 신청이 바로 아래에 나옵니다.</p></header>
 
   <div class="step">① 어떤 차</div>
   <div id="grpChips" class="chips"></div>
   <div id="famChips" class="chips" hidden></div>
 
-  <div class="step" id="trimStep" hidden>② 트림 · 연식</div>
+  <div class="step" id="trimStep" hidden>② 트림</div>
   <div id="trims"></div>
 
   <!-- 차 한 대 카드 -->
   <section class="car" id="car" hidden>
     <h2 id="cName"></h2><div class="yr" id="cYear"></div>
-    <h3>권장 소비자가격</h3><div id="cPrice"></div>
+    <div id="yearChips" class="chips sm"></div>
+    <h3>가격 · 이달 조건</h3><div id="cPrice"></div>
     <h3>지금 고를 수 있는 색 · 내장</h3><div id="cColors"></div>
     <h3>이 차 이야기</h3><div id="cPosts"></div>
     <div class="big" style="margin-top:16px">
-      <a class="p" href="#drive" id="btnDrive">시승 신청</a>
+      <a class="p" href="#quote" id="btnQuote">견적 요청</a>
+      <a href="#drive" id="btnDrive">시승 신청</a>
       <a data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">카톡 상담</a>
-      <a data-track="sms" id="btnSms" href="#">문자로 남기기</a>
     </div>
-    <div class="drv" id="drive" hidden>
+    <!-- 견적 요청: 색 → 혜택 확인 → 구매 방법 → 문자 -->
+    <div class="panel" id="quote" hidden>
+      <h3>견적 요청 — 색</h3><div id="qColorChips" class="chips sm"></div>
+      <h3>해당되는 혜택이 있나요?</h3><div id="qBenefits"></div>
+      <h3>구매 방법</h3><div id="qPayChips" class="chips sm"></div>
+      <h3>이름 (선택)</h3><input id="qName" class="nm-in" type="text" placeholder="홍길동" autocomplete="name">
+      <div class="big"><a class="p" data-track="sms" id="qSend" href="#">유 차장에게 견적 요청 보내기 (문자)</a></div>
+      <p class="note">보내기를 누르면 문자 앱이 열리고 고르신 내용이 적혀 있습니다 — 그대로 보내시면 견적서로 답해 드립니다. 혜택은 확인 뒤 반영됩니다.</p>
+    </div>
+    <!-- 시승 신청: 날짜 → 시간 → 문자 -->
+    <div class="panel" id="drive" hidden>
       <h3>시승 신청 — 날짜</h3><div id="days" class="days"></div>
-      <h3>시간</h3><div id="timeChips" class="chips"></div>
+      <h3>시간</h3><div id="timeChips" class="chips sm"></div>
       <h3>이름 (선택)</h3><input id="nm" class="nm-in" type="text" placeholder="홍길동" autocomplete="name">
-      <div class="big"><a class="p" data-track="sms" id="sendBtn" href="#">유 차장에게 보내기 (문자)</a></div>
-      <p class="note">보내기를 누르면 문자 앱이 열리고 내용이 적혀 있습니다 — 그대로 보내시면 확인 문자로 답해 드립니다. 운전면허 지참.</p>
+      <div class="big"><a class="p" data-track="sms" id="sendBtn" href="#">유 차장에게 시승 신청 보내기 (문자)</a></div>
+      <p class="note" id="driveNote">보내기를 누르면 문자 앱이 열리고 내용이 적혀 있습니다 — 그대로 보내시면 확인 문자로 답해 드립니다. 운전면허 지참.</p>
     </div>
   </section>
 
   <div style="height:18px"></div>
   <details id="dNews"><summary>신차 · 사전예약 소식</summary><div class="in" id="newsList"></div></details>
-  <details id="dPromo"><summary>이달 조건 · 리포트</summary><div class="in" id="promoBox"></div></details>
+  <details id="dPromo"><summary>이달 조건 안내</summary><div class="in" id="promoBox"></div></details>
   <details><summary>카드혜택</summary><div class="in">카드사 공개 자료 기준으로 정리해 넣습니다(준비 중). 내 차에 맞는 카드 조합은 상담으로 계산해 드립니다.</div></details>
   <details><summary>제휴(MOU) 확인</summary><div class="in"><input id="mq" class="nm-in" type="search" placeholder="회사명 검색"><div id="mList"></div><p class="note" style="margin:0">제휴 여부는 사업자번호 기준으로 최종 확인합니다. 목록에 없어도 계열사는 해당될 수 있으니 문의해 주세요.</p></div></details>
   <details><summary>유현종 차장 · 상담</summary><div class="in">
-    <p style="margin:0 0 12px">차종 고르기부터 색·옵션, 출고 일정까지 함께 정리해 드립니다. 블로그 글은 전시장에서 직접 찍고 썼고, 이 페이지의 재고·가격은 평일마다 새로 만듭니다.</p>
+    <p style="margin:0 0 12px">차종 고르기부터 색·옵션, 출고 일정까지 함께 정리해 드립니다. 블로그 글은 전시장에서 직접 찍고 썼고, 이 페이지의 재고·가격·조건은 프로그램이 새로 만듭니다.</p>
     <div class="big"><a class="p" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">카톡 오픈채팅</a><a data-track="tel" href="tel:010-3820-8633">전화 010-3820-8633</a><a data-track="blog" href="https://blog.naver.com/guswhd82" target="_blank" rel="noopener">블로그</a></div>
   </div></details>
-  <footer>유현종 차장 · 메르세데스-벤츠 서초 · 개인 영업 상담 페이지이며 회사 공식 사이트가 아닙니다 · 재고·가격은 기준 시각의 확인된 값 · 실제 배정·이달 조건은 상담으로 · <span id="asof"></span></footer>
+  <footer>유현종 차장 · 메르세데스-벤츠 서초 · 개인 영업 상담 페이지이며 회사 공식 사이트가 아닙니다 · 가격은 권장 소비자가격(부가세 포함 · 개소세 5%) · 조건·재고는 기준일의 확인된 값 · 실제 배정과 최종 견적은 상담으로 · <span id="asof"></span></footer>
 </main>
 </div>
-<div class="bar"><div id="bar"><a class="p" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">카톡 상담</a><a data-track="tel" href="tel:010-3820-8633">전화</a></div></div>
+<div class="bar"><div id="bar"></div></div>
 <script src="site.js"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$, el = S.el;
-  var GROUPS = [['세단', /^(A|C|E|S|V)클래스$|^CLA$|^CLE$/], ['SUV', /^G클래스$|^GL/], ['전기차', /^EQ|일렉트릭/], ['쿠페 · AMG', /AMG GT|^SL$/], ['마이바흐', /마이바흐/]];
-  var D = { prices: null, stock: null, posts: null, promo: null, drive: null, mou: null };
-  var st = { grp: '', fam: '', model: null, day: '', time: '' };
-  var TIMES = ['10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시'], DOW = ['일', '월', '화', '수', '목', '금', '토'];
+  var GROUPS = [['세단', /^(A|C|E|S|V)클래스$|^CLA$|^CLE$/], ['SUV', /^G클래스$|^GL/], ['전기차', /^EQ|일렉트릭/], ['쿠페 · AMG', /AMG GT|^SL$/]];
+  var D = { cars: null, promo: null, posts: null, mou: null };
+  var st = { grp: '', fam: null, trim: null, year: '', showAll: false, day: '', time: '', qColor: '', qPay: '', ben: {} };
+  var TIMES = ['10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시'], DOW = ['일', '월', '화', '수', '목', '금', '토'], PAYS = ['일시불', '할부', '리스'];
   function grp(f) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][1].test(f)) return GROUPS[i][0]; return '기타'; }
-  function fams() { var f = {}; if (D.prices) D.prices.목록.forEach(function (r) { f[r.계열] = (f[r.계열] || 0) + 1; }); var s = S.fams(D.stock); Object.keys(s).forEach(function (k) { f[k] = (f[k] || 0) + s[k] * 3; }); return f; }
-  function nm(s) { return S.norm(s).replace('mercedes-amg', 'amg').replace('mercedes-maybach', '마이바흐').replace(/®/g, ''); }
-  function stockFor(r) { if (!D.stock) return []; var k = nm(r.모델), y = r.연식 ? '20' + r.연식.slice(2) : ''; return D.stock.목록.filter(function (x) { var n = nm(x.차종); return (n === k || n.indexOf(k) === 0 || k.indexOf(n) === 0) && (!y || !x.연식 || x.연식 === y); }); }
+  function nm(s) { return S.norm(s).replace('mercedes-amg', 'amg').replace('m-amg', 'amg').replace('mercedes-maybach', '마이바흐').replace(/®/g, ''); }
+  function years(t) { var ys = (t.가격 || []).map(function (p) { return p.연식; }); var cur = ys.filter(function (y) { return y >= 'MY26'; }); return (cur.length ? cur : ys).sort().reverse(); }
+  function priceOf(t, y) { var p = (t.가격 || []).filter(function (x) { return x.연식 === y; })[0]; return p ? p.원 : null; }
+  function promoOf(fam, t, y) { if (!S.promoOK(D.promo)) return null; var k = nm(t.모델); return D.promo.목록.filter(function (x) { return x.계열 === fam.이름 && x.연식 === y && nm(x.모델) === k; })[0] || null; }
+  function stockRows(t, y) { if (!t.재고) return t.재고; return t.재고.filter(function (r) { return !y || !r.연식 || r.연식 === '20' + y.slice(2); }).map(function (r) { r.차종 = t.모델; return r; }); }
 
   // ① 묶음 → 차종
   function renderGroups() {
-    var f = fams(), gs = {}; Object.keys(f).forEach(function (k) { gs[grp(k)] = 1; });
-    var items = GROUPS.map(function (g) { return g[0]; }).filter(function (g) { return gs[g]; }).map(function (g) { return [g, g]; });
-    S.chipBar($('grpChips'), items, function () { return st.grp; }, function (v) { st.grp = v; st.fam = ''; st.model = null; }, renderFams, false);
-    renderFams();
+    var gs = {}; D.cars.차종.forEach(function (c) { gs[grp(c.이름)] = 1; });
+    var items = GROUPS.map(function (g) { return g[0]; }).concat(['기타']).filter(function (g) { return gs[g]; }).map(function (g) { return [g, g]; });
+    S.chipBar($('grpChips'), items, function () { return st.grp; }, function (v) { st.grp = v; st.fam = null; st.trim = null; }, renderFams, false); renderFams();
   }
   function renderFams() {
     var box = $('famChips'); if (!st.grp) { box.hidden = true; renderTrims(); return; }
-    var f = fams(), list = Object.keys(f).filter(function (k) { return grp(k) === st.grp; }).sort(function (a, b) { return f[b] - f[a]; });
-    box.hidden = false; if (st.fam && list.indexOf(st.fam) < 0) st.fam = '';
-    S.chipBar(box, list.map(function (k) { return [k, k]; }), function () { return st.fam; }, function (v) { st.fam = v; st.model = null; }, renderTrims, false);
-    renderTrims();
+    var list = D.cars.차종.filter(function (c) { return grp(c.이름) === st.grp; });
+    box.hidden = false; if (st.fam && list.indexOf(st.fam) < 0) st.fam = null;
+    S.chipBar(box, list.map(function (c) { return [c.이름, c.이름]; }), function () { return st.fam ? st.fam.이름 : ''; }, function (v) { st.fam = list.filter(function (c) { return c.이름 === v; })[0]; st.trim = null; }, renderTrims, false); renderTrims();
   }
   // ② 트림
   function renderTrims() {
     var box = $('trims'); box.textContent = ''; $('trimStep').hidden = !st.fam; if (!st.fam) { renderCar(); return; }
-    var rows = D.prices ? D.prices.목록.filter(function (r) { return r.계열 === st.fam; }) : [];
-    if (!rows.length) { box.appendChild(el('div', 'empty', '가격표에 없는 차종입니다 — 상담으로 안내해 드립니다.')); renderCar(); return; }
-    var sorted = rows.slice().sort(function (a, b) { return (b.연식 > a.연식 ? 1 : b.연식 < a.연식 ? -1 : 0) || a.가격 - b.가격; });
-    if (st.model && !st.showAll) sorted = sorted.filter(function (r) { return r === st.model; });   // 고르면 그 트림만 남기고 카드가 바로 아래
-    sorted.forEach(function (r) {
-      var b = el('button', 'trim' + (st.model === r ? ' on' : '')); b.type = 'button';
-      var l = el('span'); l.appendChild(el('b', '', r.모델)); var avail = stockFor(r).length; l.appendChild(el('small', '', '20' + r.연식.slice(2) + '년식' + (avail ? ' · 지금 고를 수 있는 색 ' + avail + '가지' : ''))); b.appendChild(l);
-      b.appendChild(el('span', 'pr', S.man(r.가격)));
-      b.addEventListener('click', function () { st.model = r; st.showAll = false; renderTrims(); renderCar(); });
+    var list = st.fam.트림.slice().sort(function (a, b) { return (priceOf(a, years(a)[0]) || 0) - (priceOf(b, years(b)[0]) || 0); });
+    var shown = st.trim && !st.showAll ? list.filter(function (t) { return t === st.trim; }) : list;
+    shown.forEach(function (t) {
+      var y = years(t)[0], pr = priceOf(t, y), pm = promoOf(st.fam, t, y), avail = (t.재고 || []).length;
+      var b = el('button', 'trim' + (st.trim === t ? ' on' : '')); b.type = 'button';
+      var l = el('span'), bb = el('b', '', t.모델); if (t.시승) bb.appendChild(el('span', 'tag', '시승 가능')); l.appendChild(bb);
+      l.appendChild(el('small', '', years(t).map(function (v) { return '20' + v.slice(2); }).join('·') + '년식' + (avail ? ' · 지금 고를 수 있는 색 ' + avail + '가지' : ''))); b.appendChild(l);
+      var p = el('span', 'pr'); if (pm) { p.appendChild(el('i', '', S.man(pm.정가))); p.appendChild(document.createTextNode(S.man(pm.최종가))); } else p.textContent = pr ? S.man(pr) : '상담'; b.appendChild(p);
+      b.addEventListener('click', function () { st.trim = t; st.year = years(t)[0]; st.showAll = false; st.qColor = ''; st.qPay = ''; st.ben = {}; renderTrims(); renderCar(); });
       box.appendChild(b);
     });
-    if (st.model && !st.showAll) { var more = el('button', 'chip', '다른 트림 보기 (' + rows.length + ')'); more.type = 'button'; more.style.marginTop = '4px'; more.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(more); }
+    if (st.trim && !st.showAll) { var more = el('button', 'chip', '다른 트림 보기 (' + list.length + ')'); more.type = 'button'; more.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(more); }
     renderCar();
   }
   // ③ 차 한 대 카드
   function renderCar() {
-    var r = st.model, c = $('car'); c.hidden = !r; bar(); if (!r) return;
-    $('cName').textContent = r.모델; $('cYear').textContent = r.계열 + ' · 20' + r.연식.slice(2) + '년식';
-    var p = $('cPrice'); p.textContent = ''; var row = el('div', 'price'), x = S.promoFor(D.promo, r);
-    if (x && x.할인율) { row.appendChild(el('span', 'n', S.man(Math.floor(r.가격 * (1 - x.할인율 / 100) / 10000) * 10000))); row.appendChild(el('span', 's', '이달 ' + x.할인율 + '% · 정가 ' + S.man(r.가격))); }
-    else { row.appendChild(el('span', 'n', S.man(r.가격))); row.appendChild(el('span', 's', '부가세 포함 · 개소세 5%' + (D.prices ? ' · 가격표 ' + D.prices.기준 : ''))); }
-    p.appendChild(row); if (!x) p.appendChild(el('p', 'note', '이달 조건은 달마다 바뀌어 상담으로 알려 드립니다.'));
-    var cc = $('cColors'); cc.textContent = ''; var rows = stockFor(r);
-    if (!D.stock) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 상담으로 바로 확인해 드립니다.'));
+    var t = st.trim, c = $('car'); c.hidden = !t; bar(); if (!t) return;
+    var ys = years(t); if (ys.indexOf(st.year) < 0) st.year = ys[0];
+    $('cName').textContent = t.모델; $('cYear').textContent = st.fam.이름 + ' · 20' + st.year.slice(2) + '년식';
+    var yc = $('yearChips'); yc.style.display = ys.length < 2 ? 'none' : ''; S.chipBar(yc, ys.map(function (y) { return [y, '20' + y.slice(2) + '년식']; }), function () { return st.year; }, function (v) { st.year = v; }, renderCar, false);
+    // 가격 · 이달 조건
+    var p = $('cPrice'); p.textContent = ''; var pl = el('div', 'pl'), pr = priceOf(t, st.year), pm = promoOf(st.fam, t, st.year);
+    function row(l, n, big, sub) { var r = el('div', 'r' + (big ? ' big' : '')), a = el('span', '', l); if (sub) a.appendChild(el('span', 's', sub)); r.appendChild(a); r.appendChild(el('span', 'n', n)); pl.appendChild(r); }
+    if (pm) { row('정가', S.man(pm.정가)); row('이달 기본 할인', '−' + pm.할인율 + '% (' + S.man(pm.할인액) + ')'); row('일시불 기준', S.man(pm.최종가), true); if (pm.금융최종가) row('벤츠파이낸셜 이용 시', S.man(pm.금융최종가), false, '추가 ' + pm.금융할인율 + '%'); }
+    else if (pr) row('권장 소비자가격', S.man(pr), true, '부가세 포함 · 개소세 5%'); else row('가격', '상담');
+    p.appendChild(pl);
+    p.appendChild(el('p', 'note', pm ? (D.promo.월.slice(0, 4) + '년 ' + parseInt(D.promo.월.slice(5)) + '월 조건 · 재구매·타 브랜드 보유·제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다.') : (D.promo ? '이달 조건이 아직 반영되지 않았습니다 — 견적 요청하시면 바로 알려 드립니다.' : '이달 조건은 견적 요청하시면 바로 알려 드립니다.')));
+    // 색
+    var cc = $('cColors'); cc.textContent = ''; var rows = stockRows(t, st.year);
+    if (rows === null || rows === undefined) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 견적 요청하시면 바로 확인해 드립니다.'));
     else if (!rows.length) cc.appendChild(el('div', 'empty', '지금은 바로 출고 가능한 차가 없습니다 — 입고 예정은 상담으로.'));
-    else { var m = S.stockModels({ 목록: rows }, '', '')[0]; var card = S.modelCard(m, true); card.querySelector('button').style.display = 'none'; cc.appendChild(card); cc.appendChild(el('p', 'note', '기준 ' + D.stock.기준시각 + ' · 실제 배정은 상담으로 확인해 드립니다.')); }
-    var cp = $('cPosts'); cp.textContent = ''; var ps = []; if (D.posts) S.famPosts(D.posts, r.계열).forEach(function (c2) { ps = ps.concat(c2.글 || []); });
-    var key = nm(r.모델).replace(/4matic.*$/, ''); var hit = ps.filter(function (q) { return nm(q.제목).indexOf(key) >= 0; }); (hit.length ? hit : ps).slice(0, 3).forEach(function (q) { cp.appendChild(S.postCard(q)); });
-    if (!ps.length) cp.appendChild(el('div', 'empty', '아직 이 차 글이 없습니다 — 궁금한 점은 상담으로.'));
-    $('btnSms').href = S.sms('상담 신청: ' + r.모델 + ' 20' + r.연식.slice(2) + '년식 · 원하는 색 · 희망 시기를 남겨 주세요.');
-    $('drive').hidden = true; $('btnDrive').onclick = function (e) { e.preventDefault(); $('drive').hidden = false; days(); $('drive').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-    updateDrive();
+    else { var m = S.stockModels({ 목록: rows }, '', '')[0]; var card = S.modelCard(m, true); card.querySelector('button').style.display = 'none'; cc.appendChild(card); if (D.cars.기준.재고) cc.appendChild(el('p', 'note', '기준 ' + D.cars.기준.재고 + ' · 실제 배정은 상담으로 확인해 드립니다.')); }
+    // 글
+    var cp = $('cPosts'); cp.textContent = ''; var ps = st.fam.글 || [], key = nm(t.모델).replace(/4matic.*$/, ''), hit = ps.filter(function (q) { return nm(q.제목).indexOf(key) >= 0; });
+    (hit.length ? hit : ps).slice(0, 3).forEach(function (q) { cp.appendChild(S.postCard(q)); }); if (!ps.length) cp.appendChild(el('div', 'empty', '아직 이 차 글이 없습니다 — 궁금한 점은 상담으로.'));
+    // 견적·시승 판
+    $('quote').hidden = true; $('drive').hidden = true;
+    $('btnQuote').onclick = function (e) { e.preventDefault(); $('drive').hidden = true; $('quote').hidden = false; quoteUI(); $('quote').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    $('btnDrive').onclick = function (e) { e.preventDefault(); $('quote').hidden = true; $('drive').hidden = false; days(); updateDrive(); $('drive').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    $('btnDrive').textContent = t.시승 ? '시승 신청' : '시승 문의';
+    $('driveNote').textContent = (t.시승 ? '' : '이 트림은 시승차가 준비돼 있지 않아 비슷한 차로 안내드릴 수 있습니다. ') + '보내기를 누르면 문자 앱이 열리고 내용이 적혀 있습니다 — 그대로 보내시면 확인 문자로 답해 드립니다. 운전면허 지참.';
+    updateQuote();
   }
-  // 시승 신청(카드 안)
+  // 견적 요청 판
+  function quoteUI() {
+    var t = st.trim, rows = stockRows(t, st.year) || [], cols = []; rows.forEach(function (r) { var v = r.외장 + (r.내장 ? ' / ' + S.cleanInt(r.내장) : ''); if (cols.indexOf(v) < 0) cols.push(v); });
+    var items = cols.map(function (v) { return [v, v]; }).concat([['색 상관없음', '색 상관없음 · 추천 받기']]);
+    S.chipBar($('qColorChips'), items, function () { return st.qColor; }, function (v) { st.qColor = v; }, updateQuote, false);
+    var bb = $('qBenefits'); bb.textContent = '';
+    var bens = [['재구매', '벤츠 재구매', '벤츠 보유·보유했던 분'], ['타 브랜드 보유', '타 브랜드 차 보유', 'GLC · GLE만'], ['제휴(MOU)', '제휴 회사 재직', '회사명은 아래 제휴 확인']];
+    bens.forEach(function (b) { if (b[0] === '타 브랜드 보유' && !/^GL[CE]$/.test(st.fam.이름)) return; var lab = el('label', 'opt'), ck = el('input'); ck.type = 'checkbox'; ck.checked = !!st.ben[b[0]]; ck.addEventListener('change', function () { st.ben[b[0]] = ck.checked; updateQuote(); }); lab.appendChild(ck); lab.appendChild(el('span', '', b[1])); lab.appendChild(el('small', '', b[2])); bb.appendChild(lab); });
+    S.chipBar($('qPayChips'), PAYS.map(function (v) { return [v, v]; }), function () { return st.qPay; }, function (v) { st.qPay = v; }, updateQuote, false);
+  }
+  function updateQuote() {
+    var t = st.trim; if (!t) return; var ben = Object.keys(st.ben).filter(function (k) { return st.ben[k]; }), who = ($('qName').value || '').trim();
+    $('qSend').href = S.sms('[견적 요청] ' + t.모델 + ' 20' + st.year.slice(2) + '년식 · ' + (st.qColor || '(색)') + ' · ' + (st.qPay || '(구매 방법)') + ' · 혜택: ' + (ben.length ? ben.join(', ') : '없음') + '\n이름: ' + who);
+  }
+  $('qName').addEventListener('input', updateQuote);
+  // 시승 신청 판
   function days() {
     var box = $('days'); box.textContent = ''; var now = new Date();
-    for (var i = 1; i <= 8; i++) { (function (d) { var v = (d.getMonth() + 1) + '/' + d.getDate() + '(' + DOW[d.getDay()] + ')', b = el('button', 'day', String(d.getMonth() + 1) + '/' + d.getDate()); b.type = 'button'; b.appendChild(el('small', '', DOW[d.getDay()])); if (d.getDay() === 0) b.disabled = true; b.setAttribute('aria-pressed', String(st.day === v)); b.addEventListener('click', function () { st.day = v; days(); updateDrive(); }); box.appendChild(b); })(new Date(now.getFullYear(), now.getMonth(), now.getDate() + i)); }
+    for (var i = 1; i <= 8; i++) { (function (d) { var v = (d.getMonth() + 1) + '/' + d.getDate() + '(' + DOW[d.getDay()] + ')', b = el('button', 'day', (d.getMonth() + 1) + '/' + d.getDate()); b.type = 'button'; b.appendChild(el('small', '', DOW[d.getDay()])); if (d.getDay() === 0) b.disabled = true; b.setAttribute('aria-pressed', String(st.day === v)); b.addEventListener('click', function () { st.day = v; days(); updateDrive(); }); box.appendChild(b); })(new Date(now.getFullYear(), now.getMonth(), now.getDate() + i)); }
   }
-  function updateDrive() {
-    var r = st.model; if (!r) return; var who = ($('nm').value || '').trim();
-    $('sendBtn').href = S.sms('시승 신청\n차종: ' + r.모델 + '\n날짜: ' + (st.day || '(날짜)') + ' ' + (st.time || '(시간)') + '\n이름: ' + who + '\n(확인 문자로 답해 드립니다)');
-    bar();
-  }
+  function updateDrive() { var t = st.trim; if (!t) return; var who = ($('nm').value || '').trim(); $('sendBtn').href = S.sms('[시승 신청] ' + t.모델 + '\n날짜: ' + (st.day || '(날짜)') + ' ' + (st.time || '(시간)') + '\n이름: ' + who + '\n(확인 문자로 답해 드립니다)'); }
+  S.chipBar($('timeChips'), TIMES.map(function (v) { return [v, v]; }), function () { return st.time; }, function (v) { st.time = v; }, updateDrive, false);
+  $('nm').addEventListener('input', updateDrive);
   function bar() {
     var b = $('bar'); b.textContent = '';
-    if (st.model) { var a = S.a('#drive', 'p', '시승 신청'); a.onclick = $('btnDrive').onclick; b.appendChild(a); b.appendChild(S.a(S.kakao, '', '카톡 상담', 'kakao')); }
+    if (st.trim) { var a = S.a('#quote', 'p', '견적 요청'); a.onclick = $('btnQuote').onclick; b.appendChild(a); var d = S.a('#drive', '', st.trim.시승 ? '시승 신청' : '시승 문의'); d.onclick = $('btnDrive').onclick; b.appendChild(d); b.appendChild(S.a(S.kakao, '', '카톡', 'kakao')); }
     else { b.appendChild(S.a(S.kakao, 'p', '카톡 상담', 'kakao')); b.appendChild(S.a('tel:' + S.tel, '', '전화', 'tel')); }
   }
-  S.chipBar($('timeChips'), TIMES.map(function (t) { return [t, t]; }), function () { return st.time; }, function (v) { st.time = v; }, updateDrive, false);
-  $('nm').addEventListener('input', updateDrive);
   // 접힌 칸
   function extras() {
     if (D.posts) { var n = S.news(D.posts, 6); if (n.length) n.forEach(function (q) { $('newsList').appendChild(S.postCard(q)); }); else $('newsList').appendChild(el('div', 'empty', '새 소식이 올라오면 여기에 자동으로 나타납니다.')); }
-    var pb = $('promoBox'); if (S.promoOK(D.promo)) pb.appendChild(el('p', '', D.promo.월.slice(0, 4) + '년 ' + parseInt(D.promo.월.slice(5)) + '월 조건이 각 차 가격에 반영돼 있습니다(기준 ' + D.promo.기준 + '). 금융·추가 조건은 상담으로.')); else pb.appendChild(el('p', '', '이달 조건은 상담으로 알려 드립니다.'));
+    var pb = $('promoBox'); if (S.promoOK(D.promo)) { pb.appendChild(el('p', '', D.promo.월.slice(0, 4) + '년 ' + parseInt(D.promo.월.slice(5)) + '월 조건이 각 차 가격에 반영돼 있습니다.')); if (D.promo.안내) pb.appendChild(el('p', 'note', D.promo.안내)); } else pb.appendChild(el('p', '', '이달 조건은 견적 요청하시면 바로 알려 드립니다.'));
     if (D.posts) S.monthly(D.posts).slice(0, 2).forEach(function (q) { pb.appendChild(S.postCard(q)); });
-    $('asof').textContent = (D.stock ? '재고 ' + D.stock.기준시각 : '재고 준비 중') + (D.prices ? ' · 가격표 ' + D.prices.기준 : '');
+    var k = D.cars.기준 || {}; $('asof').textContent = (k.재고 ? '재고 ' + k.재고 : '재고 준비 중') + (k.가격표 ? ' · 가격표 ' + k.가격표 : '') + (S.promoOK(D.promo) ? ' · 조건 ' + D.promo.월 : '');
     $('mq').addEventListener('input', function () { var box = $('mList'); box.textContent = ''; var q = S.norm(this.value); if (!q) return; if (!D.mou) { box.appendChild(el('div', 'empty', '제휴 목록 준비 중 — 회사명을 남겨 주시면 확인해 드립니다.')); return; } var hit = (D.mou.목록 || []).filter(function (n) { return S.norm(n).indexOf(q) >= 0; }).slice(0, 20); hit.forEach(function (n) { var r = el('div', 'row'); r.appendChild(el('div', 'c', n)); r.appendChild(el('div', 'n', '제휴')); box.appendChild(r); }); if (!hit.length) box.appendChild(el('div', 'empty', '검색 결과 없음 — 계열사는 상담으로 확인해 드립니다.')); });
   }
-  // 깊은 링크 ?car=E200 / ?car=GLE
+  // 깊은 링크 ?car=E300 / ?car=GLE
   function deep() {
-    var q = S.param('car'); if (!q) return; var k = nm(q), f = fams();
-    var fam = Object.keys(f).filter(function (x) { return S.famKey(x) === S.famKey(q); })[0];
-    var model = D.prices ? D.prices.목록.filter(function (r) { return nm(r.모델).indexOf(k) === 0; }).sort(function (a, b) { return b.연식 > a.연식 ? 1 : -1; })[0] : null;
-    if (model) { st.grp = grp(model.계열); st.fam = model.계열; st.model = model; } else if (fam) { st.grp = grp(fam); st.fam = fam; }
+    var q = S.param('car'); if (!q) return; var k = nm(q);
+    D.cars.차종.forEach(function (c) { if (st.trim) return; if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; return; } c.트림.forEach(function (t) { if (!st.trim && nm(t.모델).indexOf(k) === 0) { st.grp = grp(c.이름); st.fam = c; st.trim = t; st.year = years(t)[0]; } }); });
   }
-  Promise.all(['prices', 'stock', 'posts', 'promo', 'drive', 'mou'].map(function (k) { return S.getJSON(k + '.json').then(function (d) { D[k] = d; }).catch(function () {}); })).then(function () { deep(); renderGroups(); extras(); bar(); if (st.model) setTimeout(function () { $('car').scrollIntoView({ block: 'start' }); }, 50); });
+  Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {})]).then(function () { deep(); renderGroups(); extras(); bar(); if (st.trim) setTimeout(function () { $('car').scrollIntoView({ block: 'start' }); }, 50); })
+  .catch(function () { $('trims').appendChild(el('div', 'empty', '차종 정보를 불러오지 못했습니다 — 카톡으로 문의해 주세요.')); bar(); });
 })();
 </script>
 </body>
