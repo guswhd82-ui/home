@@ -79,6 +79,9 @@
   var st = { grp: '', fam: null, trim: null, year: '', color: '', pay: '', ben: {}, day: '', time: '' };
   var TIMES = ['10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시'], DOW = ['일', '월', '화', '수', '목', '금', '토'], PAYS = ['일시불', '할부', '리스'];
   function grp(f) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][1].test(f)) return GROUPS[i][0]; return '기타'; }
+  // 차종 순서 고정(차장님 10/26): A → CLA → C → CLE → E → S → 마이바흐 → GLA → GLB → GLC → GLE → GLS → G → 전기 → AMG GT → SL (목록에 없는 건 맨 뒤)
+  var ORDER = ['A클래스', 'CLA', 'C클래스', 'CLE', 'E클래스', 'S클래스', '마이바흐', 'V클래스', 'GLA', 'GLB', 'GLC', 'GLE', 'GLS', 'G클래스', 'EQA', 'EQB', 'EQE', 'EQS', 'CLA 일렉트릭', 'GLC 일렉트릭', 'AMG GT', 'SL'];
+  function ord(f) { var i = ORDER.indexOf(f); if (i < 0) i = ORDER.findIndex(function (o) { return S.famKey(f).indexOf(S.famKey(o)) === 0; }); return i < 0 ? 99 : i; }
   // 이름 맞춤(가격표 ↔ 조건표): 대소문자·띄어쓰기·Coupé/Coupe·괄호 꼬리 '(Launch Edition)'·Mercedes-AMG/AMG·오타 MANUFKATUR 까지 같은 것으로
   function nm(s) { return String(s || '').toLowerCase().replace(/[éèê]/g, 'e').replace(/\(.*?\)/g, '').replace(/mercedes-amg|m-amg/g, 'amg').replace(/mercedes-maybach/g, 'maybach').replace(/manufkatur/g, 'manufaktur').replace(/[^a-z0-9+가-힣]/g, ''); }
   function promoYear(fam, t) { var ys = years(t); for (var i = 0; i < ys.length; i++) if (promoOf(fam, t, ys[i])) return ys[i]; return null; }   // 이달 조건이 있는 가장 새 연식
@@ -104,7 +107,7 @@
   }
   function renderRail() {
     var rail = $('rail'); rail.textContent = '';
-    D.cars.차종.filter(function (c) { return grp(c.이름) === st.grp; }).forEach(function (c) {
+    D.cars.차종.filter(function (c) { return grp(c.이름) === st.grp; }).sort(function (a, b) { return ord(a.이름) - ord(b.이름); }).forEach(function (c) {
       var b = btn('mc', null, c.이름), n = c.트림.length, drv = c.트림.some(function (t) { return t.시승; }), av = c.트림.some(function (t) { return (t.재고 || []).length; });
       var top = el('div'); top.appendChild(el('b', 'num', en(c.이름))); top.appendChild(el('i', '', c.이름)); b.appendChild(top);
       b.appendChild(el('small', '', '트림 ' + n + '개' + (drv ? ' · 시승 가능' : '') + (av ? ' · 지금 출고 가능' : '')));
