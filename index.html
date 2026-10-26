@@ -96,7 +96,9 @@
   // 이달 조건: cars.json 트림의 '조건'(제작방이 합침 · 기준.조건월이 이번 달일 때만) → 없으면 promo.json에서 이름으로
   function promoOf(fam, t, y) {
     if (t.조건 && D.cars.기준 && D.cars.기준.조건월 === S.ym() && S.promoOK(D.promo)) { var c = t.조건.filter(function (x) { return x.연식 === y; })[0]; if (c) return c; }
-    if (!S.promoOK(D.promo)) return null; var k = nm(t.모델); return D.promo.목록.filter(function (x) { return x.계열 === fam.이름 && x.연식 === y && nm(x.모델) === k; })[0] || null;
+    if (!S.promoOK(D.promo)) return null; var k = nm(t.모델), pr = priceOf(t, y);
+    return D.promo.목록.filter(function (x) { return x.계열 === fam.이름 && x.연식 === y && nm(x.모델) === k; })[0]
+      || D.promo.목록.filter(function (x) { return x.계열 === fam.이름 && x.연식 === y && pr && x.정가 === pr && nm(x.모델).indexOf(k.slice(0, 6)) === 0; })[0] || null;   // 이름이 달라도 같은 계열·연식·정가면(S 450 표준/롱처럼 가격표가 이름을 가른 경우)
   }
   function rows(t, y) { if (!t.재고) return t.재고; return t.재고.filter(function (r) { return !y || !r.연식 || r.연식 === '20' + y.slice(2); }); }
   function man(n) { return (Math.floor(n / 10000)).toLocaleString('ko-KR') + '만 원'; }   // 화면 숫자는 만 원 단위로 끊어 읽기 쉽게
@@ -141,7 +143,7 @@
       var py = promoYear(st.fam, t), y = py || years(t)[0], pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm), av = (rows(t, y) || []).length;
       var b = btn('li', null, t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', t.모델));
       var tags = el('div', 'tags'); tags.appendChild(el('span', 'pill', years(t).map(function (v) { return '20' + v.slice(2); }).join('·') + '년식')); if (av) tags.appendChild(el('span', 'pill ok', '지금 출고 가능')); if (t.시승) tags.appendChild(el('span', 'pill gold', '시승')); if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
-      var p = el('div', 'p num'); if (pm && c) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('b', '', man(c.최종가))); } else p.appendChild(el('b', '', c ? man(c.정가) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
+      var p = el('div', 'p num'); if (pm && c && c.할인율 > 0) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('b', '', man(c.최종가))); } else p.appendChild(el('b', '', c ? man(c.정가) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
       b.setAttribute('aria-pressed', String(st.trim === t));
       b.addEventListener('click', function () { st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = promoYear(st.fam, t) || years(t)[0]; st.color = ''; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { $('trimSec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60); });
       box.appendChild(b);
@@ -157,7 +159,8 @@
     var ysw = $('ysw'); ysw.textContent = ''; ysw.style.display = ys.length > 1 ? '' : 'none'; ys.forEach(function (v) { var b = btn('', '20' + v.slice(2) + '년식', v); b.setAttribute('aria-pressed', String(v === y)); b.addEventListener('click', function () { st.year = v; renderDetail(); }); ysw.appendChild(b); });
     var big = $('dBig'), lab = $('dLab'), ln = $('dLines'); ln.textContent = '';
     function line(a, b, m, sum) { var r = el('div', sum ? 'sum' : ''); var l = el('span', '', a); if (m) l.appendChild(el('span', 'm', m)); r.appendChild(l); r.appendChild(el('b', 'num', b)); ln.appendChild(r); }
-    if (pm) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.최종가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
+    if (pm && pm.할인율 === 0) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.정가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
+    else if (pm) { big.textContent = ''; big.appendChild(document.createTextNode(Math.floor(pm.최종가 / 10000).toLocaleString('ko-KR'))); big.appendChild(el('small', '', '만 원')); lab.textContent = '일시불 기준 · ' + parseInt(D.promo.월.slice(5)) + '월 조건 반영';
       line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인', '−' + man(pm.할인액), pm.할인율 + '%'); if (pm.금융최종가) line('벤츠파이낸셜 이용 시', man(pm.금융최종가), '추가 ' + pm.금융할인율 + '%', true);
       $('dNote').textContent = '재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 견적에서 반영됩니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지.'; }
     else { big.textContent = ''; big.appendChild(document.createTextNode(pr ? Math.floor(pr / 10000).toLocaleString('ko-KR') : '—')); big.appendChild(el('small', '', '만 원')); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
@@ -206,8 +209,9 @@
       var rs = rows(t, st.year) || [], cols = []; rs.forEach(function (r) { var v = r.외장 + (r.내장 ? ' / ' + S.cleanInt(r.내장) : ''); if (cols.indexOf(v) < 0) cols.push(v); });
       if (st.color && cols.length) { var pre = cols.filter(function (v) { return v.indexOf(st.color) === 0; })[0]; if (pre) st.qColor = pre; }
       s.appendChild(el('div', 'h3', '색')); var ob = el('div', 'opts'); cols.concat(['색 상관없음 · 추천']).forEach(function (v) { var b = btn('opt', v, v); b.setAttribute('aria-pressed', String(st.qColor === v)); b.addEventListener('click', function () { st.qColor = v; press(ob, '.opt', v); sum(); }); ob.appendChild(b); }); s.appendChild(ob);
-      s.appendChild(el('div', 'h3', '해당되는 혜택')); var bens = [['재구매', '벤츠 재구매', '벤츠를 보유했거나 보유 중'], ['타 브랜드 보유', '타 브랜드 차 보유', 'GLC · GLE'], ['제휴(MOU)', '제휴 회사 재직', '회사명은 제휴 확인에서']];
-      bens.forEach(function (b) { if (b[0] === '타 브랜드 보유' && !/^GL[CE]$/.test(st.fam.이름)) return; var lab = el('label', 'chk'), ck = el('input'); ck.type = 'checkbox'; ck.checked = !!st.ben[b[0]]; ck.addEventListener('change', function () { st.ben[b[0]] = ck.checked; sum(); }); lab.appendChild(ck); lab.appendChild(el('b', '', b[1])); lab.appendChild(el('small', '', b[2])); s.appendChild(lab); });
+      var pq = promoOf(st.fam, t, st.year) || {}; function pct(v, alt) { return v ? '+' + v + '%' : alt; }   // 조건표에 있는 혜택 %를 같이 보여 줌
+      s.appendChild(el('div', 'h3', '해당되는 혜택')); var bens = [['재구매', '벤츠 재구매', pct(pq.재구매, '벤츠를 보유했거나 보유 중')], ['트레이드인', '보유 차 처분(트레이드인)', pct(pq.트레이드인, '어떤 차든')], ['타 브랜드 보유', '타 브랜드 차 보유', pct(pq.컨퀘스트, 'GLC · GLE')], ['제휴(MOU)', '제휴 회사 재직', '+2% · 회사명은 제휴 확인에서']];
+      bens.forEach(function (b) { if (b[0] === '타 브랜드 보유' && !pq.컨퀘스트 && !/^GL[CE]$/.test(st.fam.이름)) return; var lab = el('label', 'chk'), ck = el('input'); ck.type = 'checkbox'; ck.checked = !!st.ben[b[0]]; ck.addEventListener('change', function () { st.ben[b[0]] = ck.checked; sum(); }); lab.appendChild(ck); lab.appendChild(el('b', '', b[1])); lab.appendChild(el('small', '', b[2])); s.appendChild(lab); });
       s.appendChild(el('div', 'h3', '구매 방법')); var pb = el('div', 'opts'); PAYS.forEach(function (v) { var b = btn('opt', v, v); b.setAttribute('aria-pressed', String(st.pay === v)); b.addEventListener('click', function () { st.pay = v; press(pb, '.opt', v); sum(); }); pb.appendChild(b); }); s.appendChild(pb);
       s.appendChild(el('div', 'h3', '이름 (선택)')); var nmI = el('input', 'inp'); nmI.placeholder = '홍길동'; nmI.autocomplete = 'name'; nmI.addEventListener('input', sum); s.appendChild(nmI);
       var sm = el('div', 'sum'), send = S.a('#', 'btn p', '유 차장에게 견적 요청 보내기', 'sms'); s.appendChild(sm); s.appendChild(send); s.appendChild(el('p', 'note', '보내기를 누르면 문자 앱이 열리고 고르신 내용이 적혀 있습니다 — 그대로 보내시면 견적서로 답해 드립니다.'));
