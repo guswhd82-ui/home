@@ -114,7 +114,7 @@
   // 블로그 글
   S.allPosts = function (d) { var out = [], seen = {}; (d.차종 || []).forEach(function (c) { (c.글 || []).forEach(function (p) { if (!seen[p.주소]) { seen[p.주소] = 1; out.push(p); } }); }); (d.소식 || []).forEach(function (p) { if (!seen[p.주소]) { seen[p.주소] = 1; out.push(p); } }); return out.sort(function (a, b) { return a.날짜 < b.날짜 ? 1 : -1; }); };
   S.news = function (d, n) { var list = d.소식 && d.소식.length ? d.소식 : S.allPosts(d).filter(function (p) { return /신차|사전계약|사전예약|출시|런칭|신형|페이스리프트/.test(p.제목); }); return list.slice(0, n || 6); };
-  S.monthly = function (d) { return S.allPosts(d).filter(function (p) { return /이달|이번 달|월 구매|구매 가이드|구매 전략|핫딜/.test(p.제목); }); };
+  S.monthly = function (d) { return S.allPosts(d).filter(function (p) { return /이달|이번 달|월 구매|구매 가이드|구매 전략/.test(p.제목); }); };
   S.postCard = function (p, kind) { var a = S.a(p.주소, 'post', null, kind || 'post'); a.appendChild(el('b', '', p.제목)); a.appendChild(el('span', '', p.날짜)); return a; };
   S.famPosts = function (d, fam) { var k = S.famKey(fam); return (d.차종 || []).filter(function (c) { var n = S.famKey(c.이름); return n === k || n.indexOf(k) === 0; }); };
 
