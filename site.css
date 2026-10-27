@@ -205,3 +205,8 @@ footer{padding:24px var(--pad) 10px;font-size:11px;color:var(--mute2);line-heigh
 .pc.cat b{font-weight:700;font-size:14px}
 .pc.cat b::after{content:'';display:inline-block;width:6px;height:6px;margin-left:7px;border-right:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg);vertical-align:2px}
 .pc.cat{justify-content:center;flex:0 0 150px}
+/* 전체 색상 확인하기(블로그 색상 글) — 색 목록 끝 한 줄 */
+.colorlink{display:flex;align-items:center;gap:6px;margin:12px 0 0;padding:13px 16px;border:1px solid var(--hair2);border-radius:12px;background:var(--bg)}
+.colorlink b{font-size:15px;font-weight:700}
+.colorlink span{font-size:13px;color:var(--mute);flex:1}
+.colorlink .chev{width:7px;height:7px;border-right:1.5px solid var(--ink2);border-bottom:1.5px solid var(--ink2);transform:rotate(-45deg);flex:none}
