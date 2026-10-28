@@ -44,6 +44,10 @@
   S.color = function (name) { var p = String(name || '').split('/'); return p.length >= 2 ? 'linear-gradient(135deg,' + one(p[0]) + ' 50%,' + one(p[1]) + ' 50%)' : one(name); };
   S.swatch = function (name, small) { var s = el('span', 'sw' + (small ? ' s' : '')); s.style.background = S.color(name); return s; };
   S.cleanInt = function (s) { return String(s || '').replace(/^(MANUFAKTUR|MAYBACH|AMG|마이바흐|익스클루시브|나파|아티코|인조|투톤|가죽|레더|다이나미카|,|\.|\s)+/g, '').trim() || String(s || ''); };
+  // 시트색 순서: 블랙 → 브라운 → 베이지 → 그 밖 특수색(차장님 10/28) · 투톤은 앞에 나온 색 기준 · 같은 칸이면 단색 먼저, 나머지는 원래 순서
+  var INT_RANK = [[/블랙|black/i, 0], [/브라운|brown|통카|시에나|트러플|바히아|바이아|발라오|토바코|헤이즐넛|에스프레소|코냑/i, 1], [/베이지|beige|마키아토|macchiato|아이보리|실크/i, 2], [/레드|red|그레이|gr[ae]y|화이트|white|실버|블루|blue|자바|헬리오스|그린|오렌지|옐로/i, 3]];
+  S.intRank = function (s) { var t = String(s || ''), best = 3, at = Infinity; INT_RANK.forEach(function (p) { var m = t.search(p[0]); if (m >= 0 && m < at) { at = m; best = p[1]; } }); return best; };
+  S.intSort = function (list, key) { var k = key || function (x) { return x; }; return list.map(function (x, i) { return [x, i]; }).sort(function (a, b) { var A = k(a[0]), B = k(b[0]); return (S.intRank(A) - S.intRank(B)) || ((/\//.test(A) ? 1 : 0) - (/\//.test(B) ? 1 : 0)) || (a[1] - b[1]); }).map(function (p) { return p[0]; }); };
 
   // 재고: 줄 목록 → 모델별 묶음 (★대수·합계는 쓰지 않는다)
   S.stockModels = function (d, fam, text) {
@@ -77,7 +81,7 @@
     var box = document.createDocumentFragment();
     Object.keys(ext).sort(function (a, b) { return rank(a) - rank(b); }).forEach(function (e) {
       var g = el('div', 'ext'), h = el('div', 'ext-h'); h.appendChild(S.swatch(e)); h.appendChild(el('span', '', e)); g.appendChild(h);
-      var ints = el('div', 'ints'); ext[e].forEach(function (i) { var t = el('span', 'int'); t.appendChild(S.swatch(i, true)); t.appendChild(el('span', '', '내장 ' + i)); ints.appendChild(t); });
+      var ints = el('div', 'ints'); S.intSort(ext[e]).forEach(function (i) { var t = el('span', 'int'); t.appendChild(S.swatch(i, true)); t.appendChild(el('span', '', '내장 ' + i)); ints.appendChild(t); });
       g.appendChild(ints); box.appendChild(g);
     });
     return box;

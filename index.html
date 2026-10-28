@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://benzyoo.kr/">
 <meta property="og:title" content="유현종 차장 — 내 벤츠 고르기">
 <meta property="og:description" content="차종 → 트림 → 정가·이달 조건 · 색 · 견적 요청 · 시승 신청이 한 화면에">
-<link rel="stylesheet" href="site.css?v=1027a">
+<link rel="stylesheet" href="site.css?v=1028a">
 </head>
 <body><div class="app" id="app">
 <!-- 한 화면 '내 벤츠 고르기' v3 — 데이터: cars.json(차종·트림·가격·재고·글·시승) + promo.json(이달 조건 · 월 지나면 숨김) · 대수 없음 · 연락처는 블로그 공개분만 -->
@@ -81,7 +81,7 @@
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet"><div id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<script src="site.js?v=1027a"></script>
+<script src="site.js?v=1028a"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$, el = S.el;
@@ -201,7 +201,7 @@
       var box = el('div', 'card'); names.forEach(function (n) {
         var g = btn('li', null, n), c = el('span', 'c'); c.style.background = S.color(n); c.style.cssText += 'width:34px;height:34px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.12);box-shadow:0 2px 6px rgba(0,0,0,.12)';
         var t = el('div', 't'), bb = el('b', '', n.replace(/^MANUFAKTUR\s*/, '')); if (ext[n].imm || !ext[n].eta) { bb.appendChild(el('span', 'pill ok', '지금 출고 가능')); bb.lastChild.style.marginLeft = '6px'; } if (ext[n].eta) { bb.appendChild(el('span', 'pill gold', ext[n].eta)); bb.lastChild.style.marginLeft = '6px'; } t.appendChild(bb);
-        var ib = el('div', 'ints'); ib.style.marginTop = '6px'; ext[n].ints.forEach(function (i) { var s = el('span', 'int'), ci = el('span', 'c'); ci.style.background = S.color(i); s.appendChild(ci); s.appendChild(document.createTextNode(i)); ib.appendChild(s); }); ib.style.cssText += 'flex:0 0 100%;margin-top:2px';
+        var ib = el('div', 'ints'); ib.style.marginTop = '6px'; S.intSort(ext[n].ints).forEach(function (i) { var s = el('span', 'int'), ci = el('span', 'c'); ci.style.background = S.color(i); s.appendChild(ci); s.appendChild(document.createTextNode(i)); ib.appendChild(s); }); ib.style.cssText += 'flex:0 0 100%;margin-top:2px';
         if (ext[n].arr) { bb.appendChild(el('span', 'pill', '한국 도착')); bb.lastChild.style.marginLeft = '6px'; }
         g.appendChild(c); g.appendChild(t);
         if (ext[n].lo) { var pc = el('div', 'p num pp'), rate = pm0 && pm0.할인율 ? pm0.할인율 : 0, tl = ext[n].hi !== ext[n].lo ? '~' : '', mf = rate && pm && pm.금융최종가 ? pm.금융할인율 : 0, f = function (v) { return man(Math.round(v * (1 - rate / 100))); }, ff = function (v) { return man(v === pm.정가 ? pm.금융최종가 : Math.round(v * (1 - (rate + mf) / 100))); };
@@ -250,6 +250,7 @@
     if (kind === 'quote' && t) {
       s.appendChild(el('h2', 'serif', '견적 요청')); s.appendChild(el('p', 'cap', t.모델 + ' · 20' + st.year.slice(2) + '년식'));
       var rs = rows(t, st.year) || [], cols = []; rs.forEach(function (r) { var v = r.외장 + (r.내장 ? ' / ' + S.cleanInt(r.내장) : ''); if (cols.indexOf(v) < 0) cols.push(v); });
+      cols = Object.keys(rs.reduce(function (o, r) { o[r.외장] = 1; return o; }, {})).reduce(function (a, e) { return a.concat(S.intSort(cols.filter(function (v) { return v.indexOf(e + ' / ') === 0 || v === e; }), function (v) { return v.slice(e.length); })); }, []);   // 외장끼리 묶은 채 그 안 시트색만 순서대로
       if (st.color && cols.length) { var pre = cols.filter(function (v) { return v.indexOf(st.color) === 0; })[0]; if (pre) st.qColor = pre; }
       s.appendChild(el('div', 'h3', '색')); var ob = el('div', 'opts'); cols.concat(['색 상관없음 · 추천']).forEach(function (v) { var b = btn('opt', v, v); b.setAttribute('aria-pressed', String(st.qColor === v)); b.addEventListener('click', function () { st.qColor = v; press(ob, '.opt', v); sum(); }); ob.appendChild(b); }); s.appendChild(ob);
       var pq = promoOf(st.fam, t, st.year) || {}; function pct(v, alt) { return v ? '+' + v + '%' : alt; }   // 조건표에 있는 혜택 %를 같이 보여 줌
@@ -339,7 +340,8 @@
   function deep() {
     var q = S.param('car'); if (!q) return; var k = nm(q);
     var all = []; D.cars.차종.forEach(function (c) { if (S.famKey(c.이름) === S.famKey(q)) { st.grp = grp(c.이름); st.fam = c; } c.트림.forEach(function (t) { all.push([c, t]); }); }); if (st.fam) return;
-    var hit = all.filter(function (x) { return nm(x[1].모델) === k; })[0] || all.filter(function (x) { return nm(x[1].모델).indexOf(k) === 0 && hasStock(x[1]); })[0] || all.filter(function (x) { return nm(x[1].모델).indexOf(k) === 0; })[0]; if (!hit) return;
+    // 글자 그대로 먼저 → 같은 이름 중 재고 있는 것(Coupe·Coupé 두 줄이 nm 으로는 같아짐 → 재고 없는 쪽이 먼저 잡혀 차종만 열리던 것 · 10/28)
+    var hit = all.filter(function (x) { return x[1].모델 === q; })[0] || all.filter(function (x) { return nm(x[1].모델) === k && hasStock(x[1]); })[0] || all.filter(function (x) { return nm(x[1].모델) === k; })[0] || all.filter(function (x) { return nm(x[1].모델).indexOf(k) === 0 && hasStock(x[1]); })[0] || all.filter(function (x) { return nm(x[1].모델).indexOf(k) === 0; })[0]; if (!hit) return;
     var c = hit[0], t = hit[1], y = S.param('y'); st.grp = grp(c.이름); st.fam = c; if (!hasStock(t)) return;   // 그 사이 재고가 빠졌으면 차종만 열기(재고 있는 트림 + 알림 한 줄이 보임)
     st.trim = t; st.sub = family(t.모델); st.year = (y && (rows(t, y) || []).length) ? y : pickYear(c, t);
   }
