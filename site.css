@@ -1,4 +1,4 @@
-/* 유현종 차장 — '내 벤츠 고르기' 앱 화면 꾸밈 v4 '흰 바탕 · 벤츠 코리아 분위기' (2026-10-26 · 차장님 "흰 바탕 벤츠 코리아 톤 + 버튼 축소")
+/* 유현종 차장 — (10/29 맨 끝에 첫 화면 큰 사진·차장님 띠 .show/.slide/.me 추가) '내 벤츠 고르기' 앱 화면 꾸밈 v4 '흰 바탕 · 벤츠 코리아 분위기' (2026-10-26 · 차장님 "흰 바탕 벤츠 코리아 톤 + 버튼 축소")
    분위기만 가져옴(흰 바탕 · 연회색 면 · 검정 글자·검정 버튼 · 여백) — 로고·삼각별·공식 글꼴·메뉴 구성은 쓰지 않음(회사 브랜드 흉내 금지)
    기준: 폰 375px · 버튼 44~46px · 글씨 15~16px · 큰 숫자만 굵게 · 가로로 넘기는 카드 · 아래에서 올라오는 시트
    10/26 손질(Hallmark·Impeccable 지침 · 본부 지시): 머리 위 영문 꼬리표 없앰 · 글자 사이 벌림 없앰 · 흐린 글씨 진하게(4.5:1) · 키보드 초점 · 움직임 줄이기 설정 · 손가락 닿는 크기 44px · 상자 안 상자 없앰 · 레이아웃·색·버튼은 그대로 */
@@ -210,3 +210,25 @@ footer{padding:24px var(--pad) 10px;font-size:11px;color:var(--mute2);line-heigh
 .colorlink b{font-size:15px;font-weight:700}
 .colorlink span{font-size:13px;color:var(--mute);flex:1}
 .colorlink .chev{width:7px;height:7px;border-right:1.5px solid var(--ink2);border-bottom:1.5px solid var(--ink2);transform:rotate(-45deg);flex:none}
+/* 10/29 첫 화면: 이달 추천 차 큰 사진(옆으로 넘기기) + 차장님 띠 — 본부 주문 '홈페이지 심심해 → a·b 섞기' */
+.show{margin:0;padding:6px 0 0;background:linear-gradient(180deg,#fff 0%,var(--sf) 100%);border-bottom:1px solid var(--hair)}
+.show[hidden],.show-dots[hidden]{display:none}
+.show-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.show-track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px var(--pad) 12px;background:none;border:0;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.slide .eye{font-size:12px;color:var(--mute);font-weight:500}
+.slide .nm{font-size:22px;line-height:1.25;margin:2px 0 0}
+.slide img,.slide .noimg{display:block;width:100%;aspect-ratio:16/8.4;object-fit:contain;margin:8px 0 6px;filter:drop-shadow(0 14px 14px rgba(0,0,0,.14))}
+.slide .big{font-family:Inter,"Noto Sans KR",sans-serif;font-size:21px;font-weight:700;letter-spacing:-.01em}
+.slide .sm{font-size:12px;color:var(--mute)}
+.show-dots{display:flex;justify-content:center;gap:2px;padding:0 0 8px}
+.show-dots button{width:28px;height:28px;border:0;background:none;padding:0;cursor:pointer;position:relative}
+.show-dots button::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--hair2);transition:width .2s var(--ease)}
+.show-dots button.on::after{background:var(--ink);width:18px;margin-left:-9px;border-radius:4px}
+.me{display:flex;align-items:center;gap:12px;margin:14px var(--pad) 0;padding:12px 14px;background:var(--sf);border-radius:var(--r)}
+.me-ph{position:relative;flex:0 0 46px;width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Noto Serif KR",serif;font-size:18px;overflow:hidden}
+.me-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.me-t{display:flex;flex-direction:column;line-height:1.35;min-width:0}
+.me-t b{font-size:14px;font-weight:700}
+.me-t span{font-size:13px;color:var(--ink2)}
+.me-t small{font-size:11.5px;color:var(--mute);margin-top:2px}

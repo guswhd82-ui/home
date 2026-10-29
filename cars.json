@@ -2765,7 +2765,8 @@
        "트레이드인": 1.0,
        "출처": "전산"
       }
-     ]
+     ],
+     "사진": "img/car/e200amgline.webp"
     },
     {
      "모델": "E 200 AMG Line (RoF Edition)",
@@ -6872,7 +6873,8 @@
        "컨퀘스트": 1.0,
        "출처": "조건표+xlsx"
       }
-     ]
+     ],
+     "사진": "img/car/gle4504maticcoupeamgline.webp"
     },
     {
      "모델": "GLE 450 d 4MATIC Coupé",
@@ -8690,7 +8692,8 @@
        "트레이드인": 1.0,
        "출처": "전산"
       }
-     ]
+     ],
+     "사진": "img/car/c200amglinespecialedition.webp"
     },
     {
      "모델": "C 200 Final Edition",
