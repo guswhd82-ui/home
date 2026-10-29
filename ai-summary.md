@@ -50,9 +50,10 @@
 | [E 300 4MATIC EXCLUSIVE](https://benzyoo.kr/?car=E%20300%204MATIC%20EXCLUSIVE&y=MY26) | 2026 | 9,480만원 | 8,532만원 (−10%) | 8,152만원 | 지금 출고 가능 | 가능 | 폴라 화이트 |
 | [E 350 e 4MATIC EXCLUSIVE with EQ Hybrid Technology](https://benzyoo.kr/?car=E%20350%20e%204MATIC%20EXCLUSIVE%20with%20EQ%20Hybrid%20Technology&y=MY26) | 2026 | 1억원 | 8,600만원 (−14%) | — | 지금 출고 가능 | 가능 | 폴라 화이트 |
 | [E 300 4MATIC AMG Line](https://benzyoo.kr/?car=E%20300%204MATIC%20AMG%20Line&y=MY27) | 2027 | 1억 10만원 | 9,209만원 (−8%) | 8,808만원 | 지금 출고 가능 | 가능 | 그라파이트 그레이, 노틱 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 |
-| [E 450 4MATIC AMG Line](https://benzyoo.kr/?car=E%20450%204MATIC%20AMG%20Line&y=MY27) | 2027 | 1억 1,220만원 | 1억 98만원 (−10%) | — | 지금 출고 가능 | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드 |
+| [E 450 4MATIC AMG Line (KR9)](https://benzyoo.kr/?car=E%20450%204MATIC%20AMG%20Line%20(KR9)&y=MY27) | 2027 | 1억 1,220만원 | 1억 98만원 (−10%) | — | 지금 출고 가능 | 가능 | 그라파이트 그레이 메탈릭, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드 |
+| [E 450 4MATIC AMG Line (KR7)](https://benzyoo.kr/?car=E%20450%204MATIC%20AMG%20Line%20(KR7)&y=MY27) | 2027 | 1억 1,720만원 | 1억 548만원 (−10%) | — | 지금 출고 가능 | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드 |
 | [E 450 4MATIC EXCLUSIVE](https://benzyoo.kr/?car=E%20450%204MATIC%20EXCLUSIVE&y=MY27) | 2027 | 1억 2,950만원 | 1억 1,655만원 (−10%) | — | 지금 출고 가능 | 가능 | 노틱 블루, 옵시디안 블랙, 폴라 화이트, 알파인 그레이 솔리드 |
-| [Mercedes-AMG E 53 HYBRID 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20E%2053%20HYBRID%204MATIC%2B&y=MY26) | 2026 | 1억 4,840만원 | 1억 3,356만원 (−10%) | — | 지금 출고 가능 | 상담 후 | 그라파이트 그레이, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 |
+| [Mercedes-AMG E 53 HYBRID 4MATIC+ (KR4)](https://benzyoo.kr/?car=Mercedes-AMG%20E%2053%20HYBRID%204MATIC%2B%20(KR4)&y=MY26) | 2026 | 1억 4,840만원 | 1억 3,356만원 (−10%) | — | 지금 출고 가능 | 상담 후 | 그라파이트 그레이, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 |
 
 ## S클래스
 

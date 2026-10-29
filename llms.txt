@@ -7,7 +7,7 @@
 - 벤츠는 전국 같은 권장 소비자가격입니다. 이 페이지가 따로 알려 주는 것은 지금 있는 재고 색 · 출고 시기 · 시승 가능 여부 · 이달 조건입니다.
 
 ## 바로 읽기
-- [트림별 가격·재고·시승 요약(표)](https://benzyoo.kr/ai-summary.html): 지금 재고가 있는 74개 트림 · 차종 CLA, C클래스, CLE, E클래스, S클래스, V클래스, GLA, GLB, GLC, GLE, GLS, G클래스, EQS, AMG GT, SL, AMG
+- [트림별 가격·재고·시승 요약(표)](https://benzyoo.kr/ai-summary.html): 지금 재고가 있는 75개 트림 · 차종 CLA, C클래스, CLE, E클래스, S클래스, V클래스, GLA, GLB, GLC, GLE, GLS, G클래스, EQS, AMG GT, SL, AMG
 - [홈 — 내 벤츠 고르기](https://benzyoo.kr/): 화면(자바스크립트) · 머리에 schema.org JSON-LD(Person · Offer/Car · FAQPage)
 - 트림 화면 바로 가기: https://benzyoo.kr/?car=<트림 이름>&y=<연식 MY26 등> (예: https://benzyoo.kr/?car=CLA%20200%20electric%20Essential&y=MY27)
 - 같은 표 마크다운: https://benzyoo.kr/ai-summary.md
