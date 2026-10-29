@@ -1,4 +1,4 @@
-/* 유현종 차장 개인 상담 페이지 — 공통 코드 v2 '앱처럼' (홈페이지 방 2026-10-26)
+/* 유현종 차장 개인 상담 페이지 — 공통 코드 v2 '앱처럼' (홈페이지 방 2026-10-26 · 10/29 재고 상태 = '재고 있음' 하나(차장님 10/29 지시) · S.ko 영어 색·소재 이름 한글 표기)
    하는 일: 위 머리(이름·카톡) + 메뉴 9칸 + 아래 탭 5개(홈·차종·재고·가격·상담)를 모든 장에 같이 넣고, 데이터 읽기·색 동그라미·재고 카드(★대수 없음)·할인 표·버튼 세기 자리를 한 곳에 둔다.
    데이터 파일(전부 프로그램이 만듦): stock.json 재고 · prices.json 정가 · posts.json 블로그 글 · videos.json 유튜브 · promo.json 이달 조건(월초 1번 채우는 표) · mou.json 제휴 목록(있으면)
    연락처는 블로그에 이미 공개된 것만. 손님 정보·내부 정보 없음. */
@@ -43,7 +43,20 @@
   function one(name) { var n = String(name || ''); for (var i = 0; i < COLORS.length; i++) if (n.indexOf(COLORS[i][0]) >= 0) return COLORS[i][1]; return '#4a4a46'; }
   S.color = function (name) { var p = String(name || '').split('/'); return p.length >= 2 ? 'linear-gradient(135deg,' + one(p[0]) + ' 50%,' + one(p[1]) + ' 50%)' : one(name); };
   S.swatch = function (name, small) { var s = el('span', 'sw' + (small ? ' s' : '')); s.style.background = S.color(name); return s; };
-  S.cleanInt = function (s) { return String(s || '').replace(/^(MANUFAKTUR|MAYBACH|AMG|마이바흐|익스클루시브|나파|아티코|인조|투톤|가죽|레더|다이나미카|,|\.|\s)+/g, '').trim() || String(s || ''); };
+  // (10/29 두 사이트 개선 7번) 전산 원문이 영어인 색·소재 이름 → 한글: 같은 재고 자료의 한글 이름에 이미 있는 말만 바꿈(아티코 인조 가죽·나파 가죽·가죽 · 마키아토 베이지·베이지·블랙)
+  //   모르는 색 이름(예 hazelnut brown · elbaite green)은 임의 번역하지 않고 원문 그대로
+  var KO_M = [['artico man-made leather', '아티코 인조 가죽'], ['nappa leather', '나파 가죽'], ['leather', '가죽']], KO_C = { 'macchiato beige': '마키아토 베이지', 'beige': '베이지', 'black': '블랙' };
+  S.ko = function (s) {
+    s = String(s || '').replace(/^ARTICO\s+(?=[가-힣])/, '아티코 ').replace(/^아티코\s+아티코\s+/, '아티코 ').trim();
+    if (/[가-힣]/.test(s)) return s;
+    var low = s.toLowerCase(), mat = '';
+    KO_M.some(function (p) { var i = low.indexOf(p[0]); if (i < 0) return false; mat = p[1]; low = low.slice(0, i) + ' ' + low.slice(i + p[0].length); return true; });
+    if (!mat) return s;
+    if (!low.trim()) return mat;
+    var col = low.split('/').map(function (x) { return KO_C[x.trim().replace(/\s+/g, ' ')] || null; });
+    return col.indexOf(null) >= 0 ? s : mat + ', ' + col.join('/');
+  };
+  S.cleanInt = function (s) { s = S.ko(s); return String(s || '').replace(/^(MANUFAKTUR|MAYBACH|AMG|마이바흐|익스클루시브|나파|아티코|인조|투톤|가죽|레더|다이나미카|,|\.|\s)+/g, '').trim() || String(s || ''); };
   // 시트색 순서: 블랙 → 브라운 → 베이지 → 그 밖 특수색(차장님 10/28) · 투톤은 앞에 나온 색 기준 · 같은 칸이면 단색 먼저, 나머지는 원래 순서
   var INT_RANK = [[/블랙|black/i, 0], [/브라운|brown|통카|시에나|트러플|바히아|바이아|발라오|토바코|헤이즐넛|에스프레소|코냑/i, 1], [/베이지|beige|마키아토|macchiato|아이보리|실크/i, 2], [/레드|red|그레이|gr[ae]y|화이트|white|실버|블루|blue|자바|헬리오스|그린|오렌지|옐로/i, 3]];
   S.intRank = function (s) { var t = String(s || ''), best = 3, at = Infinity; INT_RANK.forEach(function (p) { var m = t.search(p[0]); if (m >= 0 && m < at) { at = m; best = p[1]; } }); return best; };
@@ -57,21 +70,18 @@
       if (q && S.norm([r.계열, r.차종, r.외장, r.내장, r.연식].join(' ')).indexOf(q) < 0) return;
       var m = models[r.차종] = models[r.차종] || { 계열: r.계열, 차종: r.차종, years: {}, pdd: {}, imm: false, rows: [] };
       m.rows.push(r); if (r.연식) m.years[r.연식] = 1;
-      var ms = S.pddMonths(r); if (ms.length) ms.forEach(function (k) { m.pdd[k] = 1; }); else m.imm = true;
+      m.imm = true;   // 10/29 차장님: 재고 목록에 있으면 '재고 있음' 하나(출고 달 판단 없음)
     });
     return Object.keys(models).sort().map(function (k) { return models[k]; });
   };
-  // 출고예정: {"YYYY-MM": 대수} 또는 ["YYYY-MM", …] 둘 다 받음 · 이번 달 이하는 '지금 출고 가능'으로 봄
+  // 출고예정: {"YYYY-MM": 대수} 또는 ["YYYY-MM", …] 둘 다 받음 · (10/29 차장님) 화면에는 출고 달을 안 씀 — 재고 있음 하나
   S.pddMonths = function (r) { var p = r.출고예정; if (!p) return []; return Array.isArray(p) ? p.slice() : Object.keys(p); };
   S.etaLater = function (r) { var ref = S.ym(); return S.pddMonths(r).filter(function (k) { return String(k) > ref; }).sort(); };
   S.fams = function (d) { var f = {}; (d && d.목록 || []).forEach(function (r) { f[r.계열] = (f[r.계열] || 0) + 1; }); return f; };
   S.pddBadges = function (m) {
     var now = new Date(), ref = now.getFullYear() * 100 + (now.getMonth() + 1), box = el('span', 'meta'), ys = Object.keys(m.years).sort();
     if (ys.length > 1) ys.forEach(function (y) { box.appendChild(el('span', 'badge', 'MY' + String(y).slice(-2))); });
-    var later = [], imm = m.imm;
-    Object.keys(m.pdd).sort().forEach(function (k) { var v = parseInt(k.slice(0, 4)) * 100 + parseInt(k.slice(5, 7)); if (v <= ref) imm = true; else later.push(k); });
-    if (imm) box.appendChild(el('span', 'badge b-imm', '지금 출고 가능'));
-    later.forEach(function (k, i) { box.appendChild(el('span', 'badge ' + (i ? 'b-later' : 'b-next'), parseInt(k.slice(5, 7)) + '월 출고 예정')); });
+    if (m.imm) box.appendChild(el('span', 'badge b-imm', '재고 있음'));
     return box;
   };
   function extGroups(rows) {
