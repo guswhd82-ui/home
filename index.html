@@ -302,6 +302,8 @@
       s.appendChild(el('h2', 'serif', '유현종 차장')); s.appendChild(el('p', 'cap', '메르세데스-벤츠 서초 전시장 · 개인 영업 상담'));
       s.appendChild(el('p', '', '차종 고르기부터 색·옵션, 출고 일정까지 함께 정리해 드립니다. 블로그 글은 전시장에서 직접 찍고 썼고, 이 페이지의 재고·가격·조건은 프로그램이 새로 만듭니다.'));
       s.appendChild(S.a(S.kakao, 'btn p', '카톡 오픈채팅', 'kakao')); var r2 = el('div', 'row2'); r2.appendChild(S.a('tel:' + S.tel, 'btn', '전화 010-3820-8633', 'tel')); r2.appendChild(S.a(S.blog, 'btn', '블로그', 'blog')); s.appendChild(r2);
+      // 유튜브(10/29): videos.json(홈페이지_자료.py 유튜브 · 매일) — 채널이 있으면 '채널 보기' · 영상이 생기면 최신 3편이 저절로 위에
+      var vd = D.vid || {}; if (vd.채널) { var vl = vd.목록 || []; if (vl.length) { s.appendChild(el('p', 'cap', '최근 영상')); vl.slice(0, 3).forEach(function (v) { s.appendChild(S.postCard(v, 'video')); }); } s.appendChild(S.a(vd.채널, 'btn', '유튜브 채널 보기 (벤츠 유차장)', 'youtube')); }
       s.appendChild(el('p', 'note', '전시장 방문은 미리 연락 주시면 차를 준비해 두겠습니다.'));
     } else { s.appendChild(el('h2', 'serif', '먼저 차를 골라 주세요')); s.appendChild(el('p', 'cap', '위에서 차종과 트림을 고르면 견적·시승을 바로 보낼 수 있어요.')); }
     document.body.classList.add('open'); s.scrollTop = 0;
@@ -348,7 +350,7 @@
     var c = hit[0], t = hit[1], y = S.param('y'); st.grp = grp(c.이름); st.fam = c; if (!hasStock(t)) return;   // 그 사이 재고가 빠졌으면 차종만 열기(재고 있는 트림 + 알림 한 줄이 보임)
     st.trim = t; st.sub = family(t.모델); st.year = (y && (rows(t, y) || []).length) ? y : pickYear(c, t);
   }
-  Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {}), S.getJSON('catalogs.json').then(function (d) { D.cat = d; }).catch(function () {})]).then(function () {
+  Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {}), S.getJSON('catalogs.json').then(function (d) { D.cat = d; }).catch(function () {}), S.getJSON('videos.json').then(function (d) { D.vid = d; }).catch(function () {})]).then(function () {
     deep(); renderSeg(); renderTrims(); dock(); renderRec();
     var k = D.cars.기준 || {}; $('asof').textContent = (k.재고 ? '재고 ' + k.재고 : '재고 준비 중') + (k.가격표 ? ' · 가격표 ' + k.가격표 : '') + (S.promoOK(D.promo) ? ' · 조건 ' + D.promo.월 : '');
     $('promoCap').textContent = S.promoOK(D.promo) ? parseInt(D.promo.월.slice(5)) + '월 조건 반영 중' + (dday() ? ' · 마감 ' + dday() : '') : parseInt(S.ym().slice(5)) + '월 조건 확인 중';

@@ -33,6 +33,7 @@
       <a class="quick" href="price.html"><b>가격</b><span>정가 · 이달 조건</span></a>
       <a class="quick" href="stock.html"><b>재고 · 출고</b><span>지금 살 수 있는 차</span></a>
       <a class="quick" data-track="blog" href="https://blog.naver.com/guswhd82" target="_blank" rel="noopener"><b>블로그</b><span>색상 360도 · 출고 이야기</span></a>
+      <a class="quick" id="ytQuick" data-track="youtube" href="#" target="_blank" rel="noopener" hidden><b>유튜브</b><span>벤츠 유차장 채널 보기</span></a>
     </div>
   </section>
   <section id="contact">
@@ -54,7 +55,7 @@
   var S = window.SITE, $ = S.$; S.chrome('about.html');
   $('smsBtn').href = S.sms('상담 신청: 관심 차종·색상·희망 시기를 남겨 주세요.');
   S.getJSON('posts.json').then(function (d) { var n = S.allPosts(d).length; if (n) { $('numbers').hidden = false; $('nPosts').textContent = n + '편 이상'; } }).catch(function () {});
-  S.getJSON('videos.json').then(function (d) { if (d.목록 && d.목록.length) { $('numbers').hidden = false; $('rowVideos').hidden = false; $('nVideos').textContent = d.목록.length + '편'; } }).catch(function () {});
+  S.getJSON('videos.json').then(function (d) { if (d.채널) { $('ytQuick').href = d.채널; $('ytQuick').hidden = false; } if (d.목록 && d.목록.length) { $('numbers').hidden = false; $('rowVideos').hidden = false; $('nVideos').textContent = d.목록.length + '편'; } }).catch(function () {});
 })();
 </script>
 </body>

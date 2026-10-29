@@ -56,7 +56,8 @@
     body.appendChild(c3);
     // ④ 영상
     var vs = D.videos && D.videos.목록 ? D.videos.목록.filter(function (v) { return S.norm(v.제목).indexOf(S.famKey(fam)) >= 0; }) : [];
-    if (vs.length) { var c4 = card('영상'); vs.slice(0, 3).forEach(function (v) { c4.appendChild(S.postCard(v, 'video')); }); body.appendChild(c4); }
+    if (vs.length) { var c4 = card('영상'); vs.slice(0, 3).forEach(function (v) { c4.appendChild(S.postCard(v, 'video')); }); if (D.videos.채널) c4.appendChild(S.a(D.videos.채널, 'more', '유튜브 채널 보기', 'youtube')); body.appendChild(c4); }
+    else if (D.videos && D.videos.채널) { var c4b = card('영상'); c4b.appendChild(el('div', 'empty', '이 차종 영상은 준비 중입니다.')); c4b.appendChild(S.a(D.videos.채널, 'more', '유튜브 채널 보기 (벤츠 유차장)', 'youtube')); body.appendChild(c4b); }   // 10/29: 영상 0편이어도 채널 링크
     // ⑤ 상담
     var c5 = card('이 차종으로 상담'); var big = el('div', 'big'); big.appendChild(S.a(S.kakao, 'p', '카톡으로 상담', 'kakao')); big.appendChild(S.a(S.sms('상담 신청: ' + fam + ' · 원하는 색 · 희망 시기를 남겨 주세요.'), '', '문자로 남기기 (' + fam + ')', 'sms')); c5.appendChild(big); body.appendChild(c5);
     window.scrollTo({ top: 0 });
