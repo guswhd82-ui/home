@@ -2,8 +2,8 @@
 
 메르세데스-벤츠 서초 전시장 유현종 차장의 개인 영업 상담 페이지(https://benzyoo.kr/ · 회사 공식 사이트 아님)의 차 화면과 같은 값입니다. 매일 재고를 갱신할 때 같이 새로 만듭니다.
 
-- 재고 기준: 2026-10-28 12:23 (지금 재고가 있는 트림만 · 재고 대수는 공개하지 않음 · 실제 배정은 상담으로 확인)
-- 가격표 기준: 2026-10-22 · 정가 = 권장 소비자가격(부가세 포함 · 개별소비세 5%)
+- 재고 기준: 2026-10-29 10:35 (지금 재고가 있는 트림만 · 재고 대수는 공개하지 않음 · 실제 배정은 상담으로 확인)
+- 가격표 기준: 2026-10-27 · 정가 = 권장 소비자가격(부가세 포함 · 개별소비세 5%)
 - 이달 조건: 2026년 10월 · 2026-10-31까지 · 현금가 = 기본 할인(일시불 기준) 반영 · 벤츠 파이낸셜 = 이용 시 추가 할인까지 반영
 - 금액은 만 원 아래를 버린 값 · 재구매·트레이드인·타 브랜드 보유·제휴(MOU) 등 추가 혜택과 재고 차량별 조건은 견적에서 반영
 - 상담: 카톡 https://open.kakao.com/o/szY84nJi · 전화·문자 010-3820-8633 · 서울 서초구 반포대로 52(서초 전시장 · 방문 전 연락)
@@ -13,10 +13,12 @@
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 출고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
 | [CLA 200 electric Essential](https://benzyoo.kr/?car=CLA%20200%20electric%20Essential&y=MY27) | 2027 | 5,290만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 제트 블랙, 폴라 화이트 |
-| [CLA 200 electric Advanced](https://benzyoo.kr/?car=CLA%20200%20electric%20Advanced&y=MY27) | 2027 | 5,580만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 아쿠아 민트, 제트 블랙 |
+| [CLA 200 electric Advanced](https://benzyoo.kr/?car=CLA%20200%20electric%20Advanced&y=MY27) | 2027 | 5,580만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 아쿠아 민트, 제트 블랙, 폴라 화이트 |
+| [CLA 200 electric AMG Line](https://benzyoo.kr/?car=CLA%20200%20electric%20AMG%20Line&y=MY27) | 2027 | 5,890만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 쉬어 블루, 하이 테크 실버 |
 | [CLA 220 Base](https://benzyoo.kr/?car=CLA%20220%20Base&y=MY27) | 2027 | 5,990만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 아쿠아 민트, 제트 블랙, 폴라 화이트 |
 | [CLA 220 Launch Edition](https://benzyoo.kr/?car=CLA%20220%20Launch%20Edition&y=MY27) | 2027 | 6,290만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 시어 블루, 하이 테크 실버 |
 | [CLA 250+ electric](https://benzyoo.kr/?car=CLA%20250%2B%20electric&y=MY27) | 2027 | 6,370만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 아쿠아 민트, 제트 블랙, 폴라 화이트 |
+| [CLA 250+ electric AMG Line](https://benzyoo.kr/?car=CLA%20250%2B%20electric%20AMG%20Line&y=MY27) | 2027 | 6,770만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 쉬어 블루 |
 
 ## C클래스
 
@@ -40,7 +42,6 @@
 
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 출고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
-| [E 200 AVANTGARDE](https://benzyoo.kr/?car=E%20200%20AVANTGARDE&y=MY26) | 2026 | 7,750만원 | 6,510만원 (−16%) | — | 1월 출고 예정 | 가능 | 옵시디안 블랙 |
 | [E 200 EXCLUSIVE](https://benzyoo.kr/?car=E%20200%20EXCLUSIVE&y=MY27) | 2027 | 7,750만원 | 6,665만원 (−14%) | 6,355만원 | 11월 출고 예정 | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 폴라 화이트 |
 | [E 200 AMG Line](https://benzyoo.kr/?car=E%20200%20AMG%20Line&y=MY27) | 2027 | 8,100만원 | 6,966만원 (−14%) | 6,723만원 | 11월 출고 예정 | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 |
 | [E 220 d 4MATIC EXCLUSIVE](https://benzyoo.kr/?car=E%20220%20d%204MATIC%20EXCLUSIVE&y=MY26) | 2026 | 8,720만원 | 7,673만원 (−12%) | — | 지금 출고 가능 | 상담 후 | 그라파이트 그레이, 폴라 화이트 |
@@ -49,7 +50,6 @@
 | [E 300 4MATIC EXCLUSIVE](https://benzyoo.kr/?car=E%20300%204MATIC%20EXCLUSIVE&y=MY26) | 2026 | 9,480만원 | 8,532만원 (−10%) | 8,152만원 | 지금 출고 가능 | 가능 | 폴라 화이트 |
 | [E 350 e 4MATIC EXCLUSIVE with EQ Hybrid Technology](https://benzyoo.kr/?car=E%20350%20e%204MATIC%20EXCLUSIVE%20with%20EQ%20Hybrid%20Technology&y=MY26) | 2026 | 1억원 | 8,600만원 (−14%) | — | 지금 출고 가능 | 가능 | 폴라 화이트 |
 | [E 300 4MATIC AMG Line](https://benzyoo.kr/?car=E%20300%204MATIC%20AMG%20Line&y=MY27) | 2027 | 1억 10만원 | 9,209만원 (−8%) | 8,808만원 | 지금 출고 가능 | 가능 | 그라파이트 그레이, 노틱 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 |
-| [E 350 e 4MATIC EXCLUSIVE](https://benzyoo.kr/?car=E%20350%20e%204MATIC%20EXCLUSIVE&y=MY27) | 2027 | 1억 110만원 | 10월 기본 할인 없음 | — | 지금 출고 가능 (일부 색 11월·4월 출고 예정) | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 베르데 실버, 벨벳 브라운, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드 |
 | [E 450 4MATIC AMG Line](https://benzyoo.kr/?car=E%20450%204MATIC%20AMG%20Line&y=MY27) | 2027 | 1억 1,220만원 | 1억 98만원 (−10%) | — | 지금 출고 가능 | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드 |
 | [E 450 4MATIC EXCLUSIVE](https://benzyoo.kr/?car=E%20450%204MATIC%20EXCLUSIVE&y=MY27) | 2027 | 1억 2,950만원 | 1억 1,655만원 (−10%) | — | 지금 출고 가능 | 가능 | 노틱 블루, 옵시디안 블랙, 폴라 화이트, 알파인 그레이 솔리드 |
 | [Mercedes-AMG E 53 HYBRID 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20E%2053%20HYBRID%204MATIC%2B&y=MY26) | 2026 | 1억 4,840만원 | 1억 3,356만원 (−10%) | — | 지금 출고 가능 | 상담 후 | 그라파이트 그레이, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 |
@@ -59,14 +59,15 @@
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 출고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
 | [S 350 d 4MATIC](https://benzyoo.kr/?car=S%20350%20d%204MATIC&y=MY27) | 2027 | 1억 5,400만원 | 10월 기본 할인 없음 | — | 지금 출고 가능 (일부 색 1월 출고 예정) | 상담 후 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 오팔라이트 화이트 브라이트 |
-| [S 450 4MATIC](https://benzyoo.kr/?car=S%20450%204MATIC&y=MY27) | 2027 | 1억 6,240만원 | 10월 기본 할인 없음 | — | 1월 출고 예정 | 가능 | 옵시디안 블랙 |
+| [S 450 4MATIC](https://benzyoo.kr/?car=S%20450%204MATIC&y=MY27) | 2027 | 1억 6,240만원 | 10월 기본 할인 없음 | — | 1월 출고 예정 | 가능 | 옵시디안 블랙, 하이 테크 실버 |
 | [S 450 4MATIC Long Exclusive](https://benzyoo.kr/?car=S%20450%204MATIC%20Long%20Exclusive&y=MY27) | 2027 | 1억 7,540만원 | 10월 기본 할인 없음 | — | 지금 출고 가능 (일부 색 1월·2월·4월 출고 예정) | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 웜 그레이, 오팔라이트 화이트 브라이트 |
-| [S 450 4MATIC Long AMG Line](https://benzyoo.kr/?car=S%20450%204MATIC%20Long%20AMG%20Line&y=MY27) | 2027 | 1억 9,540만원 | 10월 기본 할인 없음 | — | 지금 출고 가능 (일부 색 4월 출고 예정) | 가능 | 그라파이트 그레이 메탈릭, 노틱 블루, 오팔라이트 화이트 브라이트 |
+| [S 450 4MATIC Long AMG Line](https://benzyoo.kr/?car=S%20450%204MATIC%20Long%20AMG%20Line&y=MY27) | 2027 | 1억 9,540만원 | 10월 기본 할인 없음 | — | 지금 출고 가능 (일부 색 4월 출고 예정) | 가능 | 옵시디안 블랙, 오팔라이트 화이트 브라이트 |
 | [S 500 4MATIC Long](https://benzyoo.kr/?car=S%20500%204MATIC%20Long&y=MY27) | 2027 | 2억 2,000만원 | 10월 기본 할인 없음 | — | 지금 출고 가능 (일부 색 2월·4월 출고 예정) | 상담 후 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 웜 그레이, 하이 테크 실버, 스파클링 블랙 에디션, 오팔라이트 화이트 브라이트 |
 | [S 580 4MATIC Long](https://benzyoo.kr/?car=S%20580%204MATIC%20Long&y=MY27) | 2027 | 2억 7,000만원 | 10월 기본 할인 없음 | — | 4월 출고 예정 | 가능 | 옵시디안 블랙, 웜 그레이 |
 | [Mercedes-Maybach S 580](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580&y=MY27) | 2027 | 3억 1,700만원 | 10월 기본 할인 없음 | — | 1월 출고 예정 | 상담 후 | 노틱 블루, 옵시디안 블랙, 웜 그레이, 하이 테크 실버, 오팔라이트 화이트 브라이트 |
-| [Mercedes-Maybach S 580 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%204MATIC&y=MY26) | 2026 | 3억 1,700만원 | 2억 8,847만원 (−9%) | 2억 8,149만원 | 지금 출고 가능 | 상담 후 | 그라파이트 그레이 |
+| [Mercedes-Maybach S 580 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%204MATIC&y=MY26) | 2026 | 3억 1,700만원 | 2억 8,847만원 (−9%) | 2억 8,213만원 | 지금 출고 가능 | 상담 후 | 옵시디안 블랙, 그라파이트 그레이 |
 | [Mercedes-Maybach S 580 MANUFAKTUR](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%20MANUFAKTUR&y=MY27) | 2027 | 3억 3,600만원 | 10월 기본 할인 없음 | — | 4월 출고 예정 | 상담 후 | 옵시디안 블랙 |
+| [Mercedes-Maybach S 680 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20680%204MATIC&y=MY26) | 2026 | 4억 300만원 | 3억 6,673만원 (−9%) | 3억 5,867만원 | 지금 출고 가능 | 상담 후 | 옵시디안 블랙 |
 | [Mercedes-Maybach S 680](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20680&y=MY27) | 2027 | 4억 700만원 | 10월 기본 할인 없음 | — | 1월 출고 예정 | 상담 후 | 옵시디안 블랙, 오팔라이트 화이트 브라이트 |
 
 ## V클래스
@@ -85,7 +86,8 @@
 
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 출고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
-| [Mercedes-AMG GLB 35 4MATIC](https://benzyoo.kr/?car=Mercedes-AMG%20GLB%2035%204MATIC&y=MY26) | 2026 | 7,950만원 | — | — | 지금 출고 가능 | 가능 | 마운틴 그레이 메탈릭, 제트 블랙, 코스모스 블랙, 폴라 화이트 |
+| [GLB 250+ electric](https://benzyoo.kr/?car=GLB%20250%2B%20electric&y=MY27) | 2027 | 6,990만원 | 10월 기본 할인 없음 | — | 11월 출고 예정 | 상담 후 | 아쿠아 민트, 제트 블랙, 폴라 화이트 |
+| [Mercedes-AMG GLB 35 4MATIC](https://benzyoo.kr/?car=Mercedes-AMG%20GLB%2035%204MATIC&y=MY26) | 2026 | 7,950만원 | — | — | 지금 출고 가능 (일부 색 1월 출고 예정) | 가능 | 마운틴 그레이 메탈릭, 제트 블랙, 코스모스 블랙, 폴라 화이트 |
 
 ## GLC
 
@@ -95,7 +97,7 @@
 | [GLC 220 d 4MATIC](https://benzyoo.kr/?car=GLC%20220%20d%204MATIC&y=MY27) | 2027 | 8,220만원 | 10월 기본 할인 없음 | — | 지금 출고 가능 | 상담 후 | 그라파이트 그레이 메탈릭, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드 |
 | [GLC 300 4MATIC AVANTGARDE](https://benzyoo.kr/?car=GLC%20300%204MATIC%20AVANTGARDE&y=MY27) | 2027 | 8,250만원 | 7,672만원 (−7%) | — | 지금 출고 가능 (일부 색 12월 출고 예정) | 가능 | 그라파이트 그레이 메탈릭, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드 |
 | [GLC 300 4MATIC Coupé AVANTGARDE](https://benzyoo.kr/?car=GLC%20300%204MATIC%20Coup%C3%A9%20AVANTGARDE&y=MY27) | 2027 | 8,660만원 | 8,227만원 (−5%) | — | 지금 출고 가능 (일부 색 2월 출고 예정) | 가능 | 그라파이트 그레이 메탈릭, 옵시디안 블랙, 폴라 화이트 |
-| [GLC 300 4MATIC electric AMG Line+](https://benzyoo.kr/?car=GLC%20300%204MATIC%20electric%20AMG%20Line%2B&y=MY27) | 2027 | 9,480만원 | — | — | 5월 출고 예정 | 상담 후 | 라벤더 실버 메탈릭, 소다라이트 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드, 오팔라이트 화이트 메탈릭 |
+| [GLC 300 4MATIC electric AMG Line+](https://benzyoo.kr/?car=GLC%20300%204MATIC%20electric%20AMG%20Line%2B&y=MY27) | 2027 | 9,480만원 | 10월 기본 할인 없음 | — | 4월 출고 예정 | 상담 후 | 라벤더 실버 메탈릭, 소다라이트 블루, 쉬어 블루, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버, 알파인 그레이 솔리드, 오팔라이트 화이트 메탈릭 |
 | [GLC 300 4MATIC AMG Line](https://benzyoo.kr/?car=GLC%20300%204MATIC%20AMG%20Line&y=MY27) | 2027 | 9,550만원 | 8,881만원 (−7%) | — | 지금 출고 가능 | 가능 | 그라파이트 그레이 메탈릭, 옵시디안 블랙, 폴라 화이트, 하이 테크 실버 |
 | [GLC 300 4MATIC Coupé AMG Line AIRMATIC®](https://benzyoo.kr/?car=GLC%20300%204MATIC%20Coup%C3%A9%20AMG%20Line%20AIRMATIC%C2%AE&y=MY27) | 2027 | 9,790만원 | 9,300만원 (−5%) | — | 2월 출고 예정 | 상담 후 | 그라파이트 그레이 메탈릭, 옵시디안 블랙, 폴라 화이트 |
 | [Mercedes-AMG GLC 43 4MATIC](https://benzyoo.kr/?car=Mercedes-AMG%20GLC%2043%204MATIC&y=MY26) | 2026 | 1억 360만원 | 9,634만원 (−7%) | — | 지금 출고 가능 | 가능 | 옵시디안 블랙, 폴라 화이트 |
@@ -105,9 +107,9 @@
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 출고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
 | [GLE 350 4MATIC](https://benzyoo.kr/?car=GLE%20350%204MATIC&y=MY26) | 2026 | 1억 1,800만원 | 1억 620만원 (−10%) | — | 지금 출고 가능 | 가능 | 옵시디안 블랙, 폴라 화이트 |
-| [GLE 450 d 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%20d%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 3,400만원 | 1억 1,792만원 (−12%) | — | 지금 출고 가능 | 가능 | 옵시디안 블랙, 폴라 화이트 |
-| [GLE 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20AMG%20Line&y=MY26) | 2026 | 1억 3,900만원 | 1억 2,232만원 (−12%) | 1억 1,676만원 | 11월 출고 예정 | 가능 | 알파인 그레이 솔리드 |
-| [GLE 450 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 4,250만원 | 1억 2,112만원 (−15%) | 1억 1,542만원 | 지금 출고 가능 | 가능 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트, 알파인 그레이 솔리드 |
+| [GLE 450 d 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%20d%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 3,400만원 | 1억 1,792만원 (−12%) | — | 지금 출고 가능 | 상담 후 | 옵시디안 블랙, 폴라 화이트 |
+| [GLE 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20AMG%20Line&y=MY26) | 2026 | 1억 3,900만원 | 1억 2,232만원 (−12%) | 1억 1,676만원 | 지금 출고 가능 | 가능 | 알파인 그레이 솔리드 |
+| [GLE 450 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 4,250만원 | 1억 2,112만원 (−15%) | 1억 1,542만원 | 지금 출고 가능 (일부 색 1월 출고 예정) | 가능 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트, 알파인 그레이 솔리드 |
 | [Mercedes-AMG GLE 53 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20GLE%2053%204MATIC%2B&y=MY26) | 2026 | 1억 6,600만원 | 1억 5,272만원 (−8%) | — | 지금 출고 가능 | 가능 | 옵시디안 블랙, 폴라 화이트 |
 | [Mercedes-AMG GLE 53 4MATIC+ Coupé](https://benzyoo.kr/?car=Mercedes-AMG%20GLE%2053%204MATIC%2B%20Coup%C3%A9&y=MY26) | 2026 | 1억 7,000만원 | 1억 6,150만원 (−5%) | — | 지금 출고 가능 | 상담 후 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트 |
 
@@ -119,7 +121,7 @@
 | [GLS 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLS%20450%204MATIC%20AMG%20Line&y=MY26) | 2026 | 1억 5,400만원 | 1억 4,168만원 (−8%) | — | 지금 출고 가능 (일부 색 11월 출고 예정) | 가능 | 옵시디안 블랙, 폴라 화이트 |
 | [GLS 580 4MATIC AMG Line](https://benzyoo.kr/?car=GLS%20580%204MATIC%20AMG%20Line&y=MY26) | 2026 | 1억 9,340만원 | 1억 7,599만원 (−9%) | — | 지금 출고 가능 | 가능 | 옵시디안 블랙, 폴라 화이트, 알파인 그레이 솔리드 |
 | [Mercedes-AMG GLS 63 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20GLS%2063%204MATIC%2B&y=MY26) | 2026 | 2억 1,000만원 | 2억 790만원 (−1%) | — | 지금 출고 가능 | 가능 | 옵시디안 블랙, 폴라 화이트 |
-| [Mercedes-Maybach GLS 600](https://benzyoo.kr/?car=Mercedes-Maybach%20GLS%20600&y=MY26) | 2026 | 2억 9,500만원 | 2억 8,025만원 (−5%) | — | 지금 출고 가능 | 상담 후 | 옵시디안 블랙, 오팔라이트 화이트 브라이트 |
+| [Mercedes-Maybach GLS 600](https://benzyoo.kr/?car=Mercedes-Maybach%20GLS%20600&y=MY26) | 2026 | 2억 9,500만원 | 2억 8,025만원 (−5%) | — | 지금 출고 가능 | 상담 후 | 셀레나이트 그레이, 옵시디안 블랙, 오팔라이트 화이트 브라이트 |
 | [Mercedes-Maybach GLS 600 MANUFAKTUR](https://benzyoo.kr/?car=Mercedes-Maybach%20GLS%20600%20MANUFAKTUR&y=MY26) | 2026 | 3억 3,700만원 | 3억 2,015만원 (−5%) | — | 지금 출고 가능 | 상담 후 | 하이 테크 실버 |
 
 ## G클래스
@@ -145,8 +147,7 @@
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 출고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
 | [Mercedes-AMG GT 43](https://benzyoo.kr/?car=Mercedes-AMG%20GT%2043&y=MY27) | 2027 | 1억 4,950만원 | 1억 3,754만원 (−8%) | — | 지금 출고 가능 | 가능 | 옵시디안 블랙 |
-| [Mercedes-AMG GT 43](https://benzyoo.kr/?car=Mercedes-AMG%20GT%2043&y=MY26) | 2026 | 1억 4,950만원 | 1억 3,604만원 (−9%) | — | 11월 출고 예정 | 가능 | 옵시디안 블랙 |
-| [Mercedes-AMG GT 55 4MATIC+ Coupe](https://benzyoo.kr/?car=Mercedes-AMG%20GT%2055%204MATIC%2B%20Coupe&y=MY26) | 2026 | 2억 1,000만원 | 2억 370만원 (−3%) | — | 지금 출고 가능 | 상담 후 | elbaite green metallic |
+| [Mercedes-AMG GT 55 4MATIC+ Coupe](https://benzyoo.kr/?car=Mercedes-AMG%20GT%2055%204MATIC%2B%20Coupe&y=MY26) | 2026 | 2억 1,000만원 | 2억 265만원 (−3.5%) | — | 지금 출고 가능 | 상담 후 | elbaite green metallic |
 | [Mercedes-AMG GT 55 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20GT%2055%204MATIC%2B&y=MY27) | 2027 | 2억 1,260만원 | 2억 834만원 (−2%) | — | 지금 출고 가능 | 상담 후 | 셀레나이트 그레이, 옵시디안 블랙, 하이 테크 실버, 오팔라이트 화이트 메탈릭 |
 
 ## SL
@@ -161,7 +162,7 @@
 
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 출고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
-| [M-AMG GLB 35 4MATIC](https://benzyoo.kr/?car=M-AMG%20GLB%2035%204MATIC&y=MY26) | 2026 | 7,950만원 | 7,234만원 (−9%) | 6,916만원 | 지금 출고 가능 | 가능 | 마운틴 그레이 메탈릭, 제트 블랙, 코스모스 블랙, 폴라 화이트 |
+| [M-AMG GLB 35 4MATIC](https://benzyoo.kr/?car=M-AMG%20GLB%2035%204MATIC&y=MY26) | 2026 | 7,950만원 | 7,234만원 (−9%) | 6,916만원 | 지금 출고 가능 (일부 색 1월 출고 예정) | 가능 | 마운틴 그레이 메탈릭, 제트 블랙, 코스모스 블랙, 폴라 화이트 |
 
 ## 자주 묻는 질문
 
