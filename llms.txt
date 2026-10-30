@@ -2,12 +2,12 @@
 
 > 메르세데스-벤츠 서초 전시장 유현종 차장의 개인 영업 상담 페이지입니다(회사 공식 사이트 아님). 차종 → 트림을 고르면 정가·이달 조건 반영 가격, 지금 고를 수 있는 외장·내장 색, 시승·견적 신청이 한 화면에 나옵니다.
 
-- 재고 기준 2026-10-29 10:35 · 가격표 2026-10-27 · 이달 조건 2026-10 (2026-10-31까지)
+- 재고 기준 2026-10-30 09:39 · 가격표 2026-10-27 · 이달 조건 2026-10 (2026-10-31까지)
 - 가격 = 권장 소비자가격(부가세 포함 · 개별소비세 5%) · 금액은 만 원 아래 절삭 · 재고 대수는 공개하지 않음 · 실제 배정과 최종 견적은 상담으로
 - 벤츠는 전국 같은 권장 소비자가격입니다. 이 페이지가 따로 알려 주는 것은 지금 있는 재고 색 · 시승 가능 여부 · 이달 조건입니다.
 
 ## 바로 읽기
-- [트림별 가격·재고·시승 요약(표)](https://benzyoo.kr/ai-summary.html): 지금 재고가 있는 75개 트림 · 차종 CLA, C클래스, CLE, E클래스, S클래스, V클래스, GLA, GLB, GLC, GLE, GLS, G클래스, EQS, AMG GT, SL, AMG
+- [트림별 가격·재고·시승 요약(표)](https://benzyoo.kr/ai-summary.html): 지금 재고가 있는 74개 트림 · 차종 CLA, C클래스, CLE, E클래스, S클래스, V클래스, GLA, GLB, GLC, GLE, GLS, G클래스, EQS, AMG GT, SL, AMG
 - [홈 — 내 벤츠 고르기](https://benzyoo.kr/): 화면(자바스크립트) · 머리에 schema.org JSON-LD(Person · Offer/Car · FAQPage)
 - 트림 화면 바로 가기: https://benzyoo.kr/?car=<트림 이름>&y=<연식 MY26 등> (예: https://benzyoo.kr/?car=CLA%20200%20electric%20Essential&y=MY27)
 - 같은 표 마크다운: https://benzyoo.kr/ai-summary.md
