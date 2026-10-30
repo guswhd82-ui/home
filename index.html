@@ -271,7 +271,7 @@
     var pp = $('dPosts'); pp.textContent = ''; var ps = (st.fam.글 || []).filter(function (q) { return q !== cp; }), key = nm(t.모델).replace(/4matic.*$/, ''), hit = ps.filter(function (q) { return nm(q.제목).indexOf(key) >= 0; });
     // 공식 카탈로그(차장님 10/26 "1번" = 공식 사이트 PDF로 바로 · 파일은 안 올림) — 맨 앞 카드 · AMG·마이바흐 트림은 그 카탈로그 먼저
     var cl = D.cat && D.cat.목록, ck = st.fam.이름 + (/maybach/i.test(t.모델) ? '|마이바흐' : /^(Mercedes-AMG|M-AMG)/.test(t.모델) ? '|AMG' : ''), cg = cl && (cl[ck] || cl[st.fam.이름]);
-    if (cg) { var ca = S.a(cg.주소, 'pc cat', null, 'catalog'); ca.appendChild(el('b', '', '카탈로그 다운로드')); ca.setAttribute('aria-label', '카탈로그 다운로드 (PDF' + (cg.날짜 ? ' · ' + cg.날짜 + ' 판' : '') + ')'); pp.appendChild(ca); }   // 글자는 이것만(차장님 10/26)
+    if (cg) { var ca = S.a(cg.주소, 'pc cat', null, 'catalog'); ca.referrerPolicy = 'no-referrer'; ca.rel = 'noopener noreferrer'; ca.appendChild(el('b', '', '카탈로그 다운로드')); ca.setAttribute('aria-label', '카탈로그 다운로드 (PDF' + (cg.날짜 ? ' · ' + cg.날짜 + ' 판' : '') + ')'); pp.appendChild(ca); }   // 글자는 이것만(차장님 10/26) · 10/30 공식 PDF는 다른 사이트 referer면 404 → no-referrer 필수(점검 = 카탈로그_링크점검.py)
     (hit.length ? hit : ps).slice(0, 5).forEach(function (q) { var a = S.a(q.주소, 'pc', null, 'post'); a.appendChild(el('b', '', q.제목)); a.appendChild(el('span', '', q.날짜)); pp.appendChild(a); });
     if (!ps.length) pp.appendChild(el('div', 'empty', '아직 이 차 글이 없습니다 — 궁금한 점은 상담으로.'));
     $('bDrive').textContent = t.시승 ? '시승 신청' : '시승 문의';
