@@ -123,7 +123,7 @@
   S.after = function (p) { var s = 0; for (var i = 1; i < arguments.length; i++) s += Number(arguments[i]) || 0; return Math.round(p * (100 - s) / 100); };
   S.priceRow = function (r, promo) {   // 정가 줄 + (있으면) 이달 조건 → .row
     var row = el('div', 'row'), c = el('div', 'c', r.모델), n = el('div', 'n', S.man(r.가격)), x = S.promoFor(promo, r);
-    if (x && x.할인율) { c.appendChild(el('span', 's', '이달 ' + x.할인율 + '%' + (x.조건 ? ' · ' + x.조건 : ''))); n.textContent = S.man(S.after(r.가격, x.할인율)); /* 10/31 차장님 "공식 가격표가 맞아": 가격표 정가 × (1−%) 수식만(전산값 안 씀) · 원 단위 반올림 뒤 만원 절삭 = 가격계산.py */ n.appendChild(el('small', '', '정가 ' + S.man(r.가격) + ' × (1−' + x.할인율 + '%)')); }
+    if (x && x.할인율) { c.appendChild(el('span', 's', '이달 ' + x.할인율 + '%' + (x.조건 ? ' · ' + x.조건 : ''))); n.textContent = S.man(S.after(r.가격, x.할인율)); /* 10/31 차장님 "공식 가격표가 맞아": 가격표 정가 × (1−%) 수식만(전산값 안 씀) · 원 단위 반올림 뒤 만원 절삭 = 가격계산.py */ }
     row.appendChild(c); row.appendChild(n); return row;
   };
 

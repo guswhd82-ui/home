@@ -642,3 +642,23 @@ body.sub .arrow{transition:transform 200ms var(--ease-out)}
   body.sub .chip:active,body.sub .menu a:active,body.sub .big a:active,body.sub .ask:active,body.sub .next a:active,body.sub .top .bar a.k:active,body.sub .tabs a:active,body.sub .quick:active,body.sub .tile:active,body.sub .post:active,body.sub .model>button:active{transform:none}
   body.sub .arrow{transition:none}
 }
+
+/* 11/1 대기 문의 — 재고 0 연식: 대기 차종 뱃지 · 색 줄 작은 문의 버튼(디자인 A 토큰만) */
+.pill.st-wait{background:var(--sf2);color:var(--ink2)}
+.li.wl{cursor:default;flex-wrap:nowrap}
+.wq{flex:none;border:0;background:var(--sf2);color:var(--ink);font-size:12px;font-weight:600;padding:0 12px;min-height:36px;border-radius:999px;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 160ms ease;white-space:nowrap}
+.wq:active{transform:scale(.97)}
+@media (hover:hover){.wq:hover{background:var(--sf3)}}
+@media (max-width:359px){.li.wl{flex-wrap:wrap}}
+
+/* 가격 카드 아래 두 줄(10/31 보류판 · 11/1 굵은 줄 = 혜택 이름): ① 굵게 · ② 작게 */
+#dNote{margin-top:14px}#dNote p{margin:0}#dNote .n1{font-size:14px;font-weight:600;color:var(--ink);line-height:1.5}#dNote .n1 a{white-space:nowrap;color:var(--ink);text-decoration:underline;text-underline-offset:3px}#dNote .n2{font-size:12px;color:var(--mute);line-height:1.6;margin-top:6px}
+
+/* 추가 혜택 칩(11/1): 눌러서 조건 한 줄 펼침 · 디자인 A 토큰만 */
+#dNote .bchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+#dNote .bchip{border:1px solid var(--hair2);background:var(--bg);color:var(--ink);font-size:13px;font-weight:600;min-height:36px;padding:0 12px;border-radius:999px;cursor:pointer;transition:background-color 160ms ease,color 160ms ease,transform 160ms var(--ease-out)}
+#dNote .bchip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+#dNote .bchip:active{transform:scale(.97)}
+#dNote .bmore{font-size:12px;color:var(--ink2);line-height:1.6;margin-top:8px;word-break:keep-all}
+#dNote .bmore[hidden]{display:none}
+#dNote .n2{margin-top:10px}

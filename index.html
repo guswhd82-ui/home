@@ -80,7 +80,7 @@
   <div class="lines" id="dLines"></div>
   <p class="note" id="dNote"></p>
 
-  <div class="h3">지금 고를 수 있는 색</div>
+  <div class="h3">고를 수 있는 색</div>
   <div id="dColors"></div>
 
   <div class="h3">이 차 이야기</div>
@@ -129,7 +129,7 @@
   function segClip(anim) { var seg = $('seg'), act = seg.querySelector('.seg-active'), b = seg.querySelector('button[aria-pressed=true]'); if (!act || !b) return; if (!anim) act.classList.add('no-anim'); var l = b.offsetLeft - act.offsetLeft, r = act.clientWidth - (l + b.offsetWidth); act.style.clipPath = 'inset(0 ' + r + 'px 0 ' + l + 'px round 999px)'; if (!anim) { act.getBoundingClientRect(); requestAnimationFrame(function () { act.classList.remove('no-anim'); }); } }
   window.addEventListener('resize', function () { segClip(false); }); if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { segClip(false); });
   var GROUPS = [['세단', /^(A|C|E|S|V)클래스$|^CLA$|^CLE$/], ['SUV', /^G클래스$|^GL/], ['전기차', /^EQ|일렉트릭/], ['쿠페·AMG', /AMG GT|^SL$/]];
-  var D = { cars: null, promo: null, posts: null, mou: null };
+  var D = { cars: null, promo: null, posts: null, mou: null, rule: null };
   var st = { grp: '', fam: null, trim: null, year: '', color: '', pay: '', ben: {}, day: '', time: '' };
   var TIMES = ['10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시'], DOW = ['일', '월', '화', '수', '목', '금', '토'], PAYS = ['일시불', '할부', '리스'];
   function grp(f) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i][1].test(f)) return GROUPS[i][0]; return '기타'; }
@@ -244,29 +244,55 @@
   var MAN = { 'E클래스': ['e', 'E클래스'], 'C클래스': ['c', 'C클래스'], 'S클래스': ['s', 'S클래스'], 'SL': ['sl', 'SL'], 'GLC': ['glc', 'GLC'], 'GLE': ['gle', 'GLE'] };
   function manOf(f, t, sub) { var m = MAN[f && f.이름]; if (!m) return null; var name = t ? t.모델 : (sub || ''); if (/maybach|마이바흐/i.test(name)) return null; var id = m[0], lab = m[1]; if (/coup/i.test(name) && (id === 'glc' || id === 'gle')) { id += 'c'; lab += ' 쿠페'; } return { url: 'https://manual.benzyoo.kr/' + id + '.html', lab: lab + ' 사용 설명서' }; }
   function manLink(mo, cls) { var a = S.a(mo.url, cls || 'manlink', null, 'manual'); a.appendChild(el('b', '', mo.lab)); a.appendChild(el('span', '', '직접 정리한 기능별 사용법')); a.appendChild(el('span', 'chev')); return a; }
+  // 11/1 대기 문의: 이 연식 재고가 0일 때 '고를 수 있는 색' = 같은 트림 다른 연식 재고에 있는 외장색(참고) · 출고 달·기간은 안 씀
+  function waitColors(t) { var o = {}, a = []; (t.재고 || []).forEach(function (r) { var k = S.ko(r.외장); if (k && !o[k]) { o[k] = 1; a.push(k); } }); return a; }
+  function isWait(t, y) { return !!(t && t.재고 && !(rows(t, y) || []).length); }
   function pl(l, v) { var d = el('div', 'pl'); d.appendChild(el('i', '', l)); d.appendChild(el('b', '', v)); return d; }   // 라벨 + 금액 한 줄
+  // 가격 카드 아래 글(10/31 차장님 "A로 · 계산식은 필요없음" · 보류판_두줄 + 11/1 차장님 "이거는 매달 안 변하는 거임 · 10월 프로모션 정리된 파일에서 정확히 파악해")
+  //   ① 굵게 + 칩: 추가조건.json(고정 규칙 · 근거 = 조건 완벽정리 md 3절 · MBK 10월 조건표 p.5·6·8)에서 그 차(계열·모델·연식)에 맞는 혜택만 '이름 +n%' 칩 · 누르면 조건 한 줄 · MOU 안 씀 · 0개면 칩 없음
+  //   ② 작게: 조건 · 날짜는 promo.json 유효기간에서(없으면 '이달 말') · 이달 조건 없으면 끝 = '이달 조건 확인 중' · 끝에 '내 조건으로 견적 받기 →'
+  function dateKo(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || '')); return m ? parseInt(m[2], 10) + '월 ' + parseInt(m[3], 10) + '일' : '이달 말'; }
+  function ruleHit(c, fam, t, y) { if (c.계열 && c.계열.indexOf(fam.이름) < 0) return false; if (c.모델정규식 && !new RegExp(c.모델정규식).test(t.모델)) return false; if (c.연식 && c.연식.indexOf(y) < 0) return false; return true; }
+  function benChips(fam, t, y, pq) {   // [{이름, 값, 펼침}] · 추가조건.json 규칙대로(이달 조건 줄 유무와 상관없음)
+    var out = []; if (!D.rule) return out;   // 고정 규칙 = 이달 조건 줄 유무와 상관없이 판매 차종이면 보임(차종·트림·연식 판정은 추가조건.json 규칙대로 · 11/1부터 새 조건이 들어올 때까지도 칩이 안 사라지게)
+    (D.rule.혜택 || []).forEach(function (b) {
+      var v = null, may = false; if (!b.대상 || (b.대상.계열 && b.대상.계열.indexOf(fam.이름) >= 0)) v = b.기본;
+      (b.예외 || []).forEach(function (e) { if (ruleHit(e, fam, t, y)) { if (v != null || e.대상포함) { v = e.값; may = !!e.대상포함; } } });
+      if (v == null) return; out.push({ 이름: b.칩, 값: v, 펼침: b.펼침, 링크: b.펼침링크 || '', 더: b['펼침+다른브랜드'] || '' });
+    });
+    var oth = out.some(function (c) { return c.이름 === '다른 브랜드 보유'; }); out.forEach(function (c) { if (oth && c.더) c.펼침 += c.더; }); return out;
+  }
+  function dNoteFill(ok, oy, chips) {
+    var nt = $('dNote'); nt.textContent = '';
+    if (chips.length) {
+      nt.appendChild(el('p', 'n1', '해당되면 더 내려갑니다'));
+      var row = el('div', 'bchips'), more = el('p', 'bmore'); more.hidden = true; more.setAttribute('aria-live', 'polite');
+      chips.forEach(function (c) { var b = btn('bchip', c.이름 + ' +' + c.값 + '%'); b.setAttribute('aria-pressed', 'false'); b.addEventListener('click', function () { var on = b.getAttribute('aria-pressed') === 'true'; Array.prototype.forEach.call(row.children, function (x) { x.setAttribute('aria-pressed', 'false'); }); if (on) { more.hidden = true; return; } b.setAttribute('aria-pressed', 'true'); more.textContent = c.이름 + ' — ' + c.펼침; if (c.링크) { more.appendChild(document.createTextNode(' → ')); var ml = el('a', '', c.링크); ml.href = '#'; ml.style.cssText = 'text-decoration:underline;color:var(--ink);font-weight:600'; ml.addEventListener('click', function (e) { e.preventDefault(); sheet('quote'); }); more.appendChild(ml); } more.hidden = false; }); row.appendChild(b); });
+      nt.appendChild(row); nt.appendChild(more);
+    }
+    var n2 = el('p', 'n2', '등록비 별도 · 벤츠 파이낸셜은 심사 후 · ' + (ok ? dateKo(D.promo.유효기간) + '까지 조건' : '이달 조건 확인 중')); nt.appendChild(n2);
+    if (oy) { n2.appendChild(document.createTextNode(' · ')); var sw = el('a', '', '20' + oy.slice(2) + '년식 조건 보기 →'); sw.href = '#'; sw.style.cssText = 'text-decoration:underline;color:inherit;white-space:nowrap'; sw.addEventListener('click', function (e) { e.preventDefault(); st.year = oy; renderDetail(); }); n2.appendChild(sw); }
+    n2.appendChild(document.createTextNode(' · ')); var q2 = el('a', '', '내 조건으로 견적 받기 →'); q2.href = '#'; q2.style.cssText = 'text-decoration:underline;color:inherit;white-space:nowrap'; q2.addEventListener('click', function (e) { e.preventDefault(); sheet('quote'); }); n2.appendChild(q2);
+  }
   // ③ 차 한 대
   function renderDetail() {
     var t = st.trim, d = $('detail'); d.hidden = !t; dock(); var tm = $('trimMan'); if (tm) { tm.textContent = ''; var mo0 = st.fam && manOf(st.fam, null, st.sub); if (mo0) tm.appendChild(manLink(mo0, 'manlink sm')); } if (!t) { syncURL(); seo(); return; }
     var ys = years(t); if (ys.indexOf(st.year) < 0) st.year = ys[0]; syncURL(); var y = st.year, pr = priceOf(t, y), pm0 = promoOf(st.fam, t, y), pm = pm0 ? calc(t, y, pm0) : null; seo(t, y);
     $('dEye').textContent = st.fam.이름 + ' · ' + (t.시승 ? '시승 가능' : '상담 후 시승'); $('dName').textContent = t.모델; $('dSub').textContent = '20' + y.slice(2) + '년식 · 권장 소비자가격 기준(부가세 포함 · 개소세 5%)';
     var ysw = $('ysw'); ysw.textContent = ''; ysw.style.display = ys.length > 1 ? '' : 'none'; ys.forEach(function (v) { var b = btn('', '20' + v.slice(2) + '년식', v); if (t.재고 && !(rows(t, v) || []).length) b.appendChild(el('small', '', ' 재고 없음')); b.setAttribute('aria-pressed', String(v === y)); b.addEventListener('click', function () { st.year = v; renderDetail(); }); ysw.appendChild(b); });
-    var ds = $('dState'); ds.textContent = ''; if (t.재고) ds.appendChild(stPill(stOf(rows(t, y)), '20' + y.slice(2) + '년식'));
+    var ds = $('dState'); ds.textContent = ''; if (t.재고) { if ((rows(t, y) || []).length) ds.appendChild(stPill(stOf(rows(t, y)), '20' + y.slice(2) + '년식')); else ds.appendChild(el('span', 'pill st-wait', '20' + y.slice(2) + '년식 · 대기 차종')); }   // 11/1 대기 문의: 그 연식 구매 가능 재고 0 = '대기 차종'(출고 달·기간 안 씀)
     var big = $('dBig'), lab = $('dLab'), ln = $('dLines'); ln.textContent = '';
     function line(a, b, m, sum) { var r = el('div', sum ? 'sum' : ''); var l = el('span', '', a); if (m) l.appendChild(el('span', 'm', m)); r.appendChild(l); r.appendChild(el('b', 'num', b)); ln.appendChild(r); }
-    big.className = 'big num'; if (pm && pm.할인율 === 0) { big.textContent = ''; var bn0 = bigNum(pm.정가); big.appendChild(document.createTextNode(bn0[0])); big.appendChild(el('small', '', bn0[1])); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; $('dNote').textContent = '이달엔 기본 할인이 없는 모델입니다 — 재구매·보유 차 처분·제휴 등 혜택은 견적 요청으로 안내합니다.'; }
+    big.className = 'big num'; if (pm && pm.할인율 === 0) { big.textContent = ''; var bn0 = bigNum(pm.정가); big.appendChild(document.createTextNode(bn0[0])); big.appendChild(el('small', '', bn0[1])); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; }
     else if (pm) { big.textContent = ''; big.className = 'big num two' + (pm.최종가 >= 100000000 ? ' long' : ''); function blk(l, v) { var d = el('div', 'pr'), n = bigNum(v); d.appendChild(el('i', '', l)); var b = el('b', ''); b.appendChild(document.createTextNode(n[0])); b.appendChild(el('small', '', n[1])); d.appendChild(b); big.appendChild(d); } blk('현금가', pm.최종가); if (pm.금융최종가) blk('벤츠 파이낸셜 이용 시', pm.금융최종가); lab.textContent = parseInt(D.promo.월.slice(5)) + '월 조건 반영 · 할인율은 모두 정가(권장 소비자가격) 기준';
-      line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인 (현금가)', '−' + man(pm.할인액), '정가의 ' + pm.할인율 + '%'); if (pm.금융최종가) line('벤츠 파이낸셜 이용 시 더', '−' + man(pm.최종가 - pm.금융최종가), '정가의 ' + pm.금융할인율 + '%');
-      var fx = el('p', 'fx', fxText(pm)); fx.style.cssText = 'margin:8px 0 0;font-size:12px;line-height:1.5;color:var(--mute);word-break:keep-all'; ln.appendChild(fx);   // 10/31 수식 줄
-      $('dNote').textContent = '표시 금액은 차량 가격(부가세·개소세 5% 포함)이며 등록 비용(취득세 등)은 별도입니다. 벤츠 파이낸셜 금액은 금융 상품 이용 조건(심사 등)을 충족할 때 기준입니다. 재구매 · 타 브랜드 보유 · 제휴 등 추가 혜택과 재고 차량별 조건은 사람마다 달라 견적에서 확인해 드립니다. 조건은 ' + (D.promo.유효기간 || '이달 말') + '까지' + (dday() ? ' (' + dday() + ')' : '') + '.'; }
-    else { big.textContent = ''; var bn1 = pr ? bigNum(pr) : ['—', '']; big.appendChild(document.createTextNode(bn1[0])); big.appendChild(el('small', '', bn1[1])); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식';
-      var oy = promoYear(st.fam, t), nt = $('dNote'); nt.textContent = '';
-      if (oy) { nt.appendChild(document.createTextNode('이 연식은 ' + parseInt(S.ym().slice(5)) + '월 조건표에 없고, ')); var sw = el('a', '', '20' + oy.slice(2) + '년식 조건 보기 →'); sw.href = '#'; sw.style.textDecoration = "underline"; sw.addEventListener('click', function (e) { e.preventDefault(); st.year = oy; renderDetail(); }); nt.appendChild(sw); }
-      else { nt.appendChild(document.createTextNode(parseInt(S.ym().slice(5)) + '월 조건표에 없는 모델입니다(신차·한정판 등) — ')); var q = el('a', '', '이달 조건은 견적 요청 →'); q.href = '#'; q.style.textDecoration = "underline"; q.addEventListener('click', function (e) { e.preventDefault(); sheet('quote'); }); nt.appendChild(q); } }
+      line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인 (현금가)', '−' + man(pm.할인액), '정가의 ' + pm.할인율 + '%'); if (pm.금융최종가) line('벤츠 파이낸셜 이용 시 더', '−' + man(pm.최종가 - pm.금융최종가), '정가의 ' + pm.금융할인율 + '%'); }
+    else { big.textContent = ''; var bn1 = pr ? bigNum(pr) : ['—', '']; big.appendChild(document.createTextNode(bn1[0])); big.appendChild(el('small', '', bn1[1])); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식'; }
+    dNoteFill(!!pm, pm ? null : promoYear(st.fam, t), benChips(st.fam, t, y, pm0));
     // 색
     var cc = $('dColors'); cc.textContent = ''; var rs = rows(t, y);
     if (rs == null) cc.appendChild(el('div', 'empty', '재고 공개를 준비 중입니다 — 지금 고를 수 있는 색은 견적 요청하시면 바로 확인해 드립니다.'));
-    else if (!rs.length) { var oy2 = stockYears(t).filter(function (v) { return v !== y; })[0], em = el('div', 'empty', '20' + y.slice(2) + '년식은 지금 공개된 재고가 없습니다 — 주문·배정 가능 여부는 상담으로 확인해 드립니다. '); if (oy2) { var sw2 = el('a', '', '20' + oy2.slice(2) + '년식 재고 보기 →'); sw2.href = '#'; sw2.style.textDecoration = 'underline'; sw2.addEventListener('click', function (e) { e.preventDefault(); st.year = oy2; renderDetail(); }); em.appendChild(sw2); } cc.appendChild(em); }
+    else if (!rs.length) { var oy2 = stockYears(t).filter(function (v) { return v !== y; })[0], em = el('div', 'empty', '20' + y.slice(2) + '년식은 지금 공개된 재고가 없습니다 — 주문·배정 가능 여부는 상담으로 확인해 드립니다. '); if (oy2) { var sw2 = el('a', '', '20' + oy2.slice(2) + '년식 재고 보기 →'); sw2.href = '#'; sw2.style.textDecoration = 'underline'; sw2.addEventListener('click', function (e) { e.preventDefault(); st.year = oy2; renderDetail(); }); em.appendChild(sw2); } cc.appendChild(em);
+      var wc = waitColors(t); if (wc.length) { var wb = el('div', 'card wait'); wc.forEach(function (n) { var r = el('div', 'li wl'), c = el('span', 'c'); c.style.cssText = 'background:' + S.color(n) + ';width:34px;height:34px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.12);box-shadow:0 2px 6px rgba(0,0,0,.12)'; var tt = el('div', 't'); tt.appendChild(el('b', '', n.replace(/^MANUFAKTUR\s*/, ''))); r.appendChild(c); r.appendChild(tt); var q = btn('wq', '이 색으로 대기 문의'); q.addEventListener('click', function () { st.qColor = n; sheet('quote'); }); r.appendChild(q); wb.appendChild(r); }); cc.appendChild(wb); cc.appendChild(el('p', 'note', '같은 트림의 다른 연식 재고에 있는 색을 참고로 보여 드립니다 · 이 연식에서 실제로 고를 수 있는 색은 문의하시면 확인해 답해 드립니다.')); } }
     else {
       var ext = {}; rs.forEach(function (r) { (ext[r.외장] = ext[r.외장] || { ints: [], eta: false }); if (r.정가) { var e0 = ext[r.외장]; e0.lo = e0.lo ? Math.min(e0.lo, r.정가) : r.정가; e0.hi = e0.hi ? Math.max(e0.hi, r.정가) : r.정가; } (ext[r.외장].rs = ext[r.외장].rs || []).push(r); var i = S.cleanInt(r.내장); if (i && ext[r.외장].ints.indexOf(i) < 0) ext[r.외장].ints.push(i); (ext[r.외장].ir = ext[r.외장].ir || {}); (ext[r.외장].ir[i] = ext[r.외장].ir[i] || []).push(r); });
       var names = Object.keys(ext); if (!st.color || names.indexOf(st.color) < 0) { st.color = names[0]; st.colorPicked = false; }
@@ -331,9 +357,10 @@
     var s = $('sheet'); s.textContent = ''; s.appendChild(el('div', 'grab')); var x = btn('x', '×'); x.addEventListener('click', close); s.appendChild(x);
     var t = st.trim;
     if (kind === 'quote' && t) {
-      s.appendChild(el('h2', 'serif', '견적 요청')); s.appendChild(el('p', 'cap', t.모델 + ' · 20' + st.year.slice(2) + '년식'));
+      s.appendChild(el('h2', 'serif', '견적 요청')); var wait = isWait(t, st.year); s.appendChild(el('p', 'cap', t.모델 + ' · 20' + st.year.slice(2) + '년식' + (wait ? ' · 대기 문의' : '')));
       var rs = rows(t, st.year) || [], cols = []; rs.forEach(function (r) { var v = S.ko(r.외장) + (r.내장 ? ' / ' + S.cleanInt(r.내장) : ''); if (cols.indexOf(v) < 0) cols.push(v); });
       cols = Object.keys(rs.reduce(function (o, r) { o[S.ko(r.외장)] = 1; return o; }, {})).reduce(function (a, e) { return a.concat(S.intSort(cols.filter(function (v) { return v.indexOf(e + ' / ') === 0 || v === e; }), function (v) { return v.slice(e.length); })); }, []);   // 외장끼리 묶은 채 그 안 시트색만 순서대로
+      if (wait) cols = waitColors(t);   // 대기 문의: 재고가 없어 같은 트림 다른 연식 색을 후보로(내장 없음)
       if (st.qColor && st.qColor !== '색 상관없음 · 추천' && cols.indexOf(st.qColor) < 0) st.qColor = '';   // ★10/29 두 사이트 개선 5번: 손님이 고른 값만 — 화면이 처음 띄운 색(기본 추천)은 견적에 안 넣음
       if (st.colorPicked && st.color && cols.length && !st.qColor) { var pre = cols.filter(function (v) { return v.indexOf(S.ko(st.color) + ' / ') === 0 || v === S.ko(st.color); }); if (pre.length === 1) st.qColor = pre[0]; else if (pre.length > 1) st.qColor = S.ko(st.color) + ' / 내장 미정'; }
       if (/ \/ 내장 미정$/.test(st.qColor || '') && cols.indexOf(st.qColor) < 0) cols.unshift(st.qColor);   // 차 화면에서 외장만 누른 경우
@@ -344,7 +371,7 @@
       s.appendChild(el('div', 'h3', '구매 방법')); var pb = el('div', 'opts'); PAYS.forEach(function (v) { var b = btn('opt', v, v); b.setAttribute('aria-pressed', String(st.pay === v)); b.addEventListener('click', function () { st.pay = v; press(pb, '.opt', v); sum(); }); pb.appendChild(b); }); s.appendChild(pb);
       s.appendChild(el('div', 'h3', '이름 (선택)')); var nmI = el('input', 'inp'); nmI.placeholder = '홍길동'; nmI.autocomplete = 'name'; nmI.addEventListener('input', sum); s.appendChild(nmI);
       var sm = el('div', 'sum'), send = S.a('#', 'btn p', '유 차장에게 견적 요청 보내기', 'sms'); s.appendChild(sm); s.appendChild(send); s.appendChild(el('p', 'note', '보내기를 누르면 문자 앱이 열리고 고르신 내용이 적혀 있습니다(고르지 않은 칸은 미정으로) — 직접 보내시면 견적서로 답해 드립니다.'));
-      function sum() { var ben = Object.keys(st.ben).filter(function (k) { return st.ben[k]; }), col = !st.qColor ? '색상 미정 · 추천 요청' : st.qColor === '색 상관없음 · 추천' ? '색상 상관없음 · 추천 요청' : st.qColor, bt = ben.length ? ben.join(', ') : '적용 여부 미확인', nmv = (nmI.value || '').trim(); sm.textContent = ''; sm.appendChild(el('b', '', t.모델 + ' 20' + st.year.slice(2) + '년식')); sm.appendChild(document.createTextNode(' · 색: ' + col + ' · ' + (st.pay || '구매 방법 미정') + ' · 혜택: ' + bt)); send.href = S.sms('[견적 요청] ' + t.모델 + ' 20' + st.year.slice(2) + '년식\n색: ' + col + '\n구매 방법: ' + (st.pay || '미정') + '\n혜택: ' + bt + (nmv ? '\n이름: ' + nmv : '')); }
+      function sum() { var ben = Object.keys(st.ben).filter(function (k) { return st.ben[k]; }), col = !st.qColor ? '색상 미정 · 추천 요청' : st.qColor === '색 상관없음 · 추천' ? '색상 상관없음 · 추천 요청' : st.qColor, bt = ben.length ? ben.join(', ') : '적용 여부 미확인', nmv = (nmI.value || '').trim(); sm.textContent = ''; sm.appendChild(el('b', '', t.모델 + ' 20' + st.year.slice(2) + '년식')); sm.appendChild(document.createTextNode(' · 색: ' + col + ' · ' + (st.pay || '구매 방법 미정') + ' · 혜택: ' + bt)); send.href = S.sms('[견적 요청] ' + t.모델 + ' 20' + st.year.slice(2) + '년식' + (wait ? '\n구분: 대기 문의(현재 재고 없는 연식)' : '') + '\n색: ' + col + '\n구매 방법: ' + (st.pay || '미정') + '\n혜택: ' + bt + (nmv ? '\n이름: ' + nmv : '')); }
       sum();
     } else if (kind === 'drive' && t) {
       s.appendChild(el('h2', 'serif', t.시승 ? '시승 신청' : '시승 문의')); s.appendChild(el('p', 'cap', t.모델 + (t.시승 ? ' · 시승차 준비됨' : ' · 비슷한 차로 안내드릴 수 있어요')));
@@ -453,7 +480,7 @@
     var c = hit[0], t = hit[1], y = S.param('y'); if (/^20\d\d$/.test(y)) y = 'MY' + y.slice(2); st.grp = grp(c.이름); st.fam = c; if (!hasStock(t)) return;   // 그 사이 재고가 빠졌으면 차종만 열기(재고 있는 트림 + 알림 한 줄이 보임)
     st.trim = t; st.sub = family(t.모델); st.year = (y && (rows(t, y) || []).length) ? y : pickYear(c, t);
   }
-  Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {}), S.getJSON('catalogs.json').then(function (d) { D.cat = d; }).catch(function () {}), S.getJSON('videos.json').then(function (d) { D.vid = d; }).catch(function () {})]).then(function () {
+  Promise.all([S.getJSON('cars.json').then(function (d) { D.cars = d; }), S.getJSON('promo.json').then(function (d) { D.promo = d; }).catch(function () {}), S.getJSON('posts.json').then(function (d) { D.posts = d; }).catch(function () {}), S.getJSON('추가조건.json').then(function (d) { D.rule = d; }).catch(function () {}), S.getJSON('mou.json').then(function (d) { D.mou = d; }).catch(function () {}), S.getJSON('catalogs.json').then(function (d) { D.cat = d; }).catch(function () {}), S.getJSON('videos.json').then(function (d) { D.vid = d; }).catch(function () {})]).then(function () {
     deep(); renderSeg(); renderTrims(); dock(); renderRec();
     var k = D.cars.기준 || {}; $('asof').textContent = (k.재고 ? '재고 ' + k.재고 : '재고 준비 중') + (k.가격표 ? ' · 가격표 ' + k.가격표 : '') + (S.promoOK(D.promo) ? ' · 조건 ' + D.promo.월 : '');
     $('promoCap').textContent = S.promoOK(D.promo) ? parseInt(D.promo.월.slice(5)) + '월 조건 반영 중' + (dday() ? ' · 마감 ' + dday() : '') : parseInt(S.ym().slice(5)) + '월 조건 확인 중';
