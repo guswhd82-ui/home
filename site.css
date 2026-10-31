@@ -403,7 +403,7 @@ body.sub .tabs a.k span.i{background:var(--ink);border-radius:50%;width:40px;hei
 body.sub .tabs a.k svg{stroke:#fff}
 body.sub .tabs a.k{color:var(--ink)}
 
-/* ===== 10/31 A안(emil-design-eng · animate) — 차장님 "a 진행" · 시안 = 프로그램제작\_디자인시험_1031\비교\A.html =====
+/* ===== 10/31 A안(emil-design-eng · animate) — 차장님 "a 진행" =====
    첫 화면(<body class="home">)만 .home 으로 묶음 · 하위 쪽은 아래 'A — 하위 쪽' 블록(body.sub) · 내용·순서·숫자는 그대로(모양·움직임만)
    곡선 3개만: --ease-out(들어오고 나감) · --ease-in-out(화면 안 이동) · --ease-drawer(시트) · 누름 = 160ms scale(.97) · UI 움직임 300ms 아래 */
 body.home{background:#e9e7e2;font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;word-break:keep-all;

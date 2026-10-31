@@ -119,7 +119,7 @@
     p.목록.forEach(function (x) { if (x.계열 !== row.계열) return; if (x.연식 && x.연식 !== row.연식) return; if (x.모델) { if (S.norm(x.모델) === S.norm(row.모델) || (x.가격표이름 && S.norm(x.가격표이름) === S.norm(row.모델))) best = x; /* 10/31: 조건표 이름 ≠ 가격표 이름이면 홈페이지_조건.py 가 붙인 '가격표이름'으로 맞춤 */ } else if (!best) best = x; });
     return best;
   };
-  // ★할인 후 가격 수식 한 곳(10/31 · `_자동화\가격계산.py` 할인후() 와 같음): 정가 × (100 − Σ%) ÷ 100 → 원 단위 반올림 · 화면은 S.man 이 만 원 아래 버림 · 전산 견적값은 안 씀
+  // ★할인 후 가격 수식 한 곳(10/31 · 가격계산 할인후() 와 같음): 정가 × (100 − Σ%) ÷ 100 → 원 단위 반올림 · 화면은 S.man 이 만 원 아래 버림 · 전산 견적값은 안 씀
   S.after = function (p) { var s = 0; for (var i = 1; i < arguments.length; i++) s += Number(arguments[i]) || 0; return Math.round(p * (100 - s) / 100); };
   S.priceRow = function (r, promo) {   // 정가 줄 + (있으면) 이달 조건 → .row
     var row = el('div', 'row'), c = el('div', 'c', r.모델), n = el('div', 'n', S.man(r.가격)), x = S.promoFor(promo, r);

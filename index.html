@@ -25,7 +25,7 @@
 </head>
 <body class="home"><div class="app" id="app">
 <!-- 한 화면 '내 벤츠 고르기' v3 — 데이터: cars.json(차종·트림·가격·재고·글·시승) + promo.json(이달 조건 · 월 지나면 숨김) · 대수 없음 · 연락처는 블로그 공개분만 -->
-<!-- 10/29 두 사이트 개선(정본 프로그램제작\_분석\두사이트_개선지시_GPT_1029.md): ①재고 상태 한 곳 stOf(재고 목록에 있으면 '재고 있음' 하나 · 차장님 10/29 지시) ②차종 사용 설명서 manOf(8개만) ③담당자 칸·관리 3줄 ④주소 동기화 syncURL·?car=<id>&y=<연식>(형식 = _분석\홈페이지_차종주소_1029.md) ⑤견적·시승 문자 = 고른 값만·미정 표기·자리표시자 없음 ⑦영어 색 이름 S.ko·정가 기준 문구 ⑧og:image ⑨블로그·설명서 = 담당자 소개 -->
+<!-- 10/29 두 사이트 개선: ①재고 상태 한 곳 stOf(재고 목록에 있으면 '재고 있음' 하나 · 차장님 10/29 지시) ②차종 사용 설명서 manOf(8개만) ③담당자 칸·관리 3줄 ④주소 동기화 syncURL·?car=<id>&y=<연식> ⑤견적·시승 문자 = 고른 값만·미정 표기·자리표시자 없음 ⑦영어 색 이름 S.ko·정가 기준 문구 ⑧og:image ⑨블로그·설명서 = 담당자 소개 -->
 <div class="top">
   <div class="who"><b>유현종 차장</b><span>한성자동차 서초전시장</span></div>
   <a class="kk" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener" aria-label="카톡 상담"><svg viewBox="0 0 24 24"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.8 5.2 4.6 6.6L5.7 21l4.3-2.4c.6.1 1.3.2 2 .2 5.5 0 10-3.6 10-8S17.5 3 12 3z"/></svg></a>
@@ -232,7 +232,7 @@
   // 검색·AI용(10/28): 트림 화면이면 대표 주소(canonical)·제목을 그 차로 — 사이트맵의 트림 주소와 같은 꼴 · 화면은 그대로
   var TITLE0 = document.title;
   function seo(t, y) { var c = document.querySelector('link[rel=canonical]'); if (!c) { c = el('link'); c.rel = 'canonical'; document.head.appendChild(c); } c.href = 'https://benzyoo.kr/' + (t ? '?car=' + encodeURIComponent(t.모델) + '&y=' + y : ''); document.title = t ? t.모델 + ' 20' + y.slice(2) + '년식 가격 · 재고 색 · 시승 — 유현종 차장' : TITLE0; }
-  // ★주소(10/29 두 사이트 개선 4번 · 형식 = 프로그램제작\_분석\홈페이지_차종주소_1029.md): 고르면 주소창이 따라감 → 새로고침·공유·다른 기기에서 같은 화면
+  // ★주소(10/29 두 사이트 개선 4번): 고르면 주소창이 따라감 → 새로고침·공유·다른 기기에서 같은 화면
   //   차종만 = ?car=<차종 id>(e·c·s·sl·glc·gle·cle·cla·gls·g … = S.famKey · glcc·glec = GLC·GLE 쿠페 묶음) · 트림 = ?car=<트림 키>&y=<연식 4자리>(트림 키 = 모델 이름 글자·숫자만 소문자 = nm())
   //   옛 주소(?car=E%20200%20AMG%20Line&y=MY27 · 사이트맵·canonical)도 그대로 열림 · 차종·트림을 누를 때만 기록 1칸(뒤로가기 = 앞 화면) · 연식은 바꾸기만
   var navPush = false;
@@ -249,7 +249,7 @@
   function isWait(t, y) { return !!(t && t.재고 && !(rows(t, y) || []).length); }
   function pl(l, v) { var d = el('div', 'pl'); d.appendChild(el('i', '', l)); d.appendChild(el('b', '', v)); return d; }   // 라벨 + 금액 한 줄
   // 가격 카드 아래 글(10/31 차장님 "A로 · 계산식은 필요없음" · 보류판_두줄 + 11/1 차장님 "이거는 매달 안 변하는 거임 · 10월 프로모션 정리된 파일에서 정확히 파악해")
-  //   ① 굵게 + 칩: 추가조건.json(고정 규칙 · 근거 = 조건 완벽정리 md 3절 · MBK 10월 조건표 p.5·6·8)에서 그 차(계열·모델·연식)에 맞는 혜택만 '이름 +n%' 칩 · 누르면 조건 한 줄 · MOU 안 씀 · 0개면 칩 없음
+  //   ① 굵게 + 칩: 추가조건.json(고정 규칙)에서 그 차(계열·모델·연식)에 맞는 혜택만 '이름 +n%' 칩 · 누르면 조건 한 줄 · MOU 안 씀 · 0개면 칩 없음
   //   ② 작게: 조건 · 날짜는 promo.json 유효기간에서(없으면 '이달 말') · 이달 조건 없으면 끝 = '이달 조건 확인 중' · 끝에 '내 조건으로 견적 받기 →'
   function dateKo(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || '')); return m ? parseInt(m[2], 10) + '월 ' + parseInt(m[3], 10) + '일' : '이달 말'; }
   function ruleHit(c, fam, t, y) { if (c.계열 && c.계열.indexOf(fam.이름) < 0) return false; if (c.모델정규식 && !new RegExp(c.모델정규식).test(t.모델)) return false; if (c.연식 && c.연식.indexOf(y) < 0) return false; return true; }
