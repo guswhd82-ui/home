@@ -24,7 +24,7 @@
 
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 재고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
-| [C 200 AMG Line Special Edition](https://benzyoo.kr/?car=C%20200%20AMG%20Line%20Special%20Edition&y=MY26) | 2026 | 6,630만원 | 5,967만원 (−10%) | 5,701만원 | 재고 있음 | 상담 후 | 그라파이트 그레이 메탈릭, 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트 |
+| [C 200 AMG Line Special Edition](https://benzyoo.kr/?car=C%20200%20AMG%20Line%20Special%20Edition&y=MY26) | 2026 | 6,630만원 | 5,966만원 (−10%) | 5,701만원 | 재고 있음 | 상담 후 | 그라파이트 그레이 메탈릭, 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트 |
 
 ## CLE
 
@@ -110,7 +110,7 @@
 | [GLE 450 d 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%20d%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 3,400만원 | 1억 1,792만원 (−12%) | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 폴라 화이트 |
 | [GLE 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20AMG%20Line&y=MY26) | 2026 | 1억 3,900만원 | 1억 2,232만원 (−12%) | 1억 1,676만원 | 재고 있음 | 가능 | 알파인 그레이 솔리드 |
 | [GLE 450 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 4,250만원 | 1억 2,112만원 (−15%) | 1억 1,542만원 | 재고 있음 | 가능 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트, 알파인 그레이 솔리드 |
-| [Mercedes-AMG GLE 53 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20GLE%2053%204MATIC%2B&y=MY26) | 2026 | 1억 6,600만원 | 1억 5,272만원 (−8%) | — | 재고 있음 | 가능 | 옵시디안 블랙, 폴라 화이트 |
+| [Mercedes-AMG GLE 53 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20GLE%2053%204MATIC%2B&y=MY26) | 2026 | 1억 6,600만원 | 1억 5,271만원 (−8%) | — | 재고 있음 | 가능 | 옵시디안 블랙, 폴라 화이트 |
 | [Mercedes-AMG GLE 53 4MATIC+ Coupé](https://benzyoo.kr/?car=Mercedes-AMG%20GLE%2053%204MATIC%2B%20Coup%C3%A9&y=MY26) | 2026 | 1억 7,000만원 | 1억 6,150만원 (−5%) | — | 재고 있음 | 상담 후 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트 |
 
 ## GLS

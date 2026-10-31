@@ -6,7 +6,7 @@
   var S = window.SITE = {
     name: '유현종 차장', org: '메르세데스-벤츠 서초',
     tel: '010-3820-8633', kakao: 'https://open.kakao.com/o/szY84nJi', blog: 'https://blog.naver.com/guswhd82',
-    menu: [['index.html', '홈'], ['new.html', '신차·사전예약'], ['models.html', '차종 가이드'], ['price.html', '가격·조건'], ['stock.html', '재고'], ['drive.html', '시승 신청'], ['report.html', '이달 리포트'], ['cards.html', '카드혜택'], ['mou.html', '제휴 확인'], ['about.html', '상담']],
+    menu: [['index.html', '홈'], ['new.html', '신차·사전예약'], ['models.html', '차종 가이드'], ['price.html', '가격·조건'], ['stock.html', '재고'], ['report.html', '이달 리포트'], ['cards.html', '카드혜택'], ['mou.html', '제휴 확인'], ['about.html', '상담']],
     tabs: [['index.html', '홈', 'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z'], ['models.html', '차종', 'M3 13l2-5h14l2 5v6H3zM6 17h.01M18 17h.01M5 13h14'], ['stock.html', '재고', 'M4 7l8-4 8 4v10l-8 4-8-4zM4 7l8 4 8-4M12 11v10'], ['price.html', '가격', 'M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6'], ['about.html', '상담', 'M4 5h16v11H8l-4 4z']]
   };
   var $ = S.$ = function (id) { return document.getElementById(id); };
@@ -116,12 +116,12 @@
   S.promoOK = function (p) { if (!(p && p.월 === S.ym() && p.목록 && p.목록.length)) return false; if (p.유효기간) { var d = new Date(); var today = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); if (today > p.유효기간) return false; } return true; };
   S.promoFor = function (p, row) {   // row = prices 줄 → 맞는 할인 줄(모델 이름 우선 · 없으면 계열 전체)
     if (!S.promoOK(p)) return null; var best = null;
-    p.목록.forEach(function (x) { if (x.계열 !== row.계열) return; if (x.연식 && x.연식 !== row.연식) return; if (x.모델) { if (S.norm(x.모델) === S.norm(row.모델)) best = x; } else if (!best) best = x; });
+    p.목록.forEach(function (x) { if (x.계열 !== row.계열) return; if (x.연식 && x.연식 !== row.연식) return; if (x.모델) { if (S.norm(x.모델) === S.norm(row.모델) || (x.가격표이름 && S.norm(x.가격표이름) === S.norm(row.모델))) best = x; /* 10/31: 조건표 이름 ≠ 가격표 이름이면 홈페이지_조건.py 가 붙인 '가격표이름'으로 맞춤 */ } else if (!best) best = x; });
     return best;
   };
   S.priceRow = function (r, promo) {   // 정가 줄 + (있으면) 이달 조건 → .row
     var row = el('div', 'row'), c = el('div', 'c', r.모델), n = el('div', 'n', S.man(r.가격)), x = S.promoFor(promo, r);
-    if (x && x.할인율) { c.appendChild(el('span', 's', '이달 ' + x.할인율 + '%' + (x.조건 ? ' · ' + x.조건 : ''))); n.textContent = S.man(Math.floor(r.가격 * (1 - x.할인율 / 100) / 10000) * 10000); n.appendChild(el('small', '', '정가 ' + S.man(r.가격))); }
+    if (x && x.할인율) { c.appendChild(el('span', 's', '이달 ' + x.할인율 + '%' + (x.조건 ? ' · ' + x.조건 : ''))); n.textContent = S.man(Math.floor((x.확인현금가 && x.정가 === r.가격 ? x.확인현금가 : Math.round(r.가격 * (1 - x.할인율 / 100))) / 10000) * 10000); /* 10/31: 전산 견적 현금 총액 우선 · 소수 오차 막게 원 단위 반올림 뒤 만원 절삭 */ n.appendChild(el('small', '', '정가 ' + S.man(r.가격))); }
     row.appendChild(c); row.appendChild(n); return row;
   };
 
