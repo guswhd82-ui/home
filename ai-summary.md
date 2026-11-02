@@ -60,9 +60,9 @@
 | [S 500 4MATIC Long](https://benzyoo.kr/?car=S%20500%204MATIC%20Long&y=MY27) | 2027 | 2억 2,000만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 그라파이트 그레이 메탈릭, 노틱 블루, 옵시디안 블랙, 웜 그레이, 하이 테크 실버, 스파클링 블랙 에디션, 오팔라이트 화이트 브라이트 |
 | [S 580 4MATIC Long](https://benzyoo.kr/?car=S%20580%204MATIC%20Long&y=MY27) | 2027 | 2억 7,000만원 | 11월 기본 할인 없음 | — | 재고 있음 | 가능 | 그라파이트 그레이 메탈릭, 옵시디안 블랙, 웜 그레이, 하이 테크 실버, 오팔라이트 화이트 브라이트 |
 | [Mercedes-Maybach S 580](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580&y=MY27) | 2027 | 3억 1,700만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 노틱 블루, 옵시디안 블랙, 웜 그레이, 하이 테크 실버 |
-| [Mercedes-Maybach S 580 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%204MATIC&y=MY26) | 2026 | 3억 1,700만원 | 2억 8,847만원 (−9%) | 2억 8,213만원 | 재고 있음 | 상담 후 | 옵시디안 블랙, 그라파이트 그레이 |
+| [Mercedes-Maybach S 580 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%204MATIC&y=MY26) | 2026 | 3억 1,700만원 | 2억 8,847만원 (−9%) | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 그라파이트 그레이 |
 | [Mercedes-Maybach S 580 MANUFAKTUR](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%20MANUFAKTUR&y=MY27) | 2027 | 3억 3,600만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 그라파이트 그레이 메탈릭, 에메랄드 그린, 옵시디안 블랙, 오팔라이트 화이트 브라이트 |
-| [Mercedes-Maybach S 680 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20680%204MATIC&y=MY26) | 2026 | 4억 300만원 | 3억 6,673만원 (−9%) | 3억 5,867만원 | 재고 있음 | 상담 후 | 옵시디안 블랙 |
+| [Mercedes-Maybach S 680 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20680%204MATIC&y=MY26) | 2026 | 4억 300만원 | 3억 6,673만원 (−9%) | — | 재고 있음 | 상담 후 | 옵시디안 블랙 |
 | [Mercedes-Maybach S 680](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20680&y=MY27) | 2027 | 4억 700만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 옵시디안 블랙 |
 
 ## GLA
