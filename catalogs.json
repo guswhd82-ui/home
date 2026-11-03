@@ -1,10 +1,15 @@
 {
- "기준": "2026-10-26",
+ "기준": "2026-11-03",
  "목록": {
   "CLA 일렉트릭": {
    "제목": "The all-new electric CLA",
    "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20all%20new%20electric%20CLA_catalogue_20261021.pdf",
    "날짜": "2026-10-21"
+  },
+  "GLC 일렉트릭": {
+   "제목": "The all-new electric GLC",
+   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20all-new%20electric%20GLC_catalogue_20261016.pdf",
+   "날짜": "2026-10-16"
   },
   "EQA": {
    "제목": "The new EQA",
@@ -25,11 +30,6 @@
    "제목": "The new EQS",
    "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20new%20EQS_Catalogue_20260424.pdf",
    "날짜": "2026-04-24"
-  },
-  "GLC 일렉트릭": {
-   "제목": "The all-new electric GLC",
-   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20all-new%20electric%20GLC_catalogue_20261016.pdf",
-   "날짜": "2026-10-16"
   },
   "A클래스": {
    "제목": "The new A-Class",
@@ -93,8 +93,8 @@
   },
   "V클래스": {
    "제목": "The new V-Class",
-   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20new%20V-Class_catalogue_20261021.pdf",
-   "날짜": "2026-10-21"
+   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20new%20V-Class_catalogue_20261029.pdf",
+   "날짜": "2026-10-29"
   },
   "A클래스|AMG": {
    "제목": "The new Mercedes-AMG A-Class",
@@ -140,11 +140,6 @@
    "제목": "The new Mercedes-AMG GLE & GLE Coupé",
    "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/Mercedes-AMG%20GLE%20n%20GLE%20Coupe_Catalogue_20260619.pdf",
    "날짜": "2026-06-19"
-  },
-  "G클래스|AMG": {
-   "제목": "The new Mercedes-AMG G-Class",
-   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20new%20Mercedes-AMG%20G-Class_Catalogue_20260424.pdf",
-   "날짜": "2026-04-24"
   },
   "S클래스|마이바흐": {
    "제목": "The new Mercedes-Maybach S-Class",
