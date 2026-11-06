@@ -76,7 +76,7 @@
   <div class="sub" id="dSub"></div>
   <div class="tags dstate" id="dState"></div>
   <div class="ysw" id="ysw"></div>
-  <div class="price"><div class="big num" id="dBig"></div><div class="lab" id="dLab"></div></div>
+  <div class="price"><div class="big num" id="dBig"></div><p id="dOpt" style="font-size:12px;color:var(--mute);line-height:1.5;margin:8px 0 0" hidden>옵션·시트에 따라 달라집니다.</p><div class="lab" id="dLab"></div></div>
   <div class="lines" id="dLines"></div>
   <p class="note" id="dNote"></p>
 
@@ -281,10 +281,10 @@
     $('dEye').textContent = st.fam.이름 + ' · ' + (t.시승 ? '시승 가능' : '상담 후 시승'); $('dName').textContent = t.모델; $('dSub').textContent = '20' + y.slice(2) + '년식 · 권장 소비자가격 기준(부가세 포함 · 개소세 5%)';
     var ysw = $('ysw'); ysw.textContent = ''; ysw.style.display = ys.length > 1 ? '' : 'none'; ys.forEach(function (v) { var b = btn('', '20' + v.slice(2) + '년식', v); if (t.재고 && !(rows(t, v) || []).length) b.appendChild(el('small', '', ' 재고 없음')); b.setAttribute('aria-pressed', String(v === y)); b.addEventListener('click', function () { st.year = v; renderDetail(); }); ysw.appendChild(b); });
     var ds = $('dState'); ds.textContent = ''; if (t.재고) { if ((rows(t, y) || []).length) ds.appendChild(stPill(stOf(rows(t, y)), '20' + y.slice(2) + '년식')); else ds.appendChild(el('span', 'pill st-wait', '20' + y.slice(2) + '년식 · 대기 차종')); }   // 11/1 대기 문의: 그 연식 구매 가능 재고 0 = '대기 차종'(출고 달·기간 안 씀)
-    var big = $('dBig'), lab = $('dLab'), ln = $('dLines'); ln.textContent = '';
+    var big = $('dBig'), lab = $('dLab'), ln = $('dLines'); ln.textContent = ''; $('dOpt').hidden = true;
     function line(a, b, m, sum) { var r = el('div', sum ? 'sum' : ''); var l = el('span', '', a); if (m) l.appendChild(el('span', 'm', m)); r.appendChild(l); r.appendChild(el('b', 'num', b)); ln.appendChild(r); }
     big.className = 'big num'; if (pm && pm.할인율 === 0) { big.textContent = ''; var bn0 = bigNum(pm.정가); big.appendChild(document.createTextNode(bn0[0])); big.appendChild(el('small', '', bn0[1])); lab.textContent = '권장 소비자가격 · ' + parseInt(D.promo.월.slice(5)) + '월 기본 할인 없음'; }
-    else if (pm) { big.textContent = ''; big.className = 'big num two' + (pm.최종가 >= 100000000 ? ' long' : ''); function blk(l, v) { var d = el('div', 'pr'), n = bigNum(v); d.appendChild(el('i', '', l)); var b = el('b', ''); b.appendChild(document.createTextNode(n[0])); b.appendChild(el('small', '', n[1])); d.appendChild(b); big.appendChild(d); } blk('현금가', pm.최종가); if (pm.금융최종가) blk('벤츠 파이낸셜 이용 시', pm.금융최종가); lab.textContent = parseInt(D.promo.월.slice(5)) + '월 조건 반영 · 할인율은 모두 정가(권장 소비자가격) 기준';
+    else if (pm) { $('dOpt').hidden = false; big.textContent = ''; big.className = 'big num two' + (pm.최종가 >= 100000000 ? ' long' : ''); function blk(l, v) { var d = el('div', 'pr'), n = bigNum(v); d.appendChild(el('i', '', l)); var b = el('b', ''); b.appendChild(document.createTextNode(n[0])); b.appendChild(el('small', '', n[1])); d.appendChild(b); big.appendChild(d); } blk('현금가', pm.최종가); if (pm.금융최종가) blk('벤츠 파이낸셜 이용 시', pm.금융최종가); lab.textContent = parseInt(D.promo.월.slice(5)) + '월 조건 반영 · 할인율은 모두 정가(권장 소비자가격) 기준';
       line('정가 (개소세 5%)', man(pm.정가)); line('이달 기본 할인 (현금가)', '−' + man(pm.할인액), '정가의 ' + pm.할인율 + '%'); if (pm.금융최종가) line('벤츠 파이낸셜 이용 시 더', '−' + man(pm.최종가 - pm.금융최종가), '정가의 ' + pm.금융할인율 + '%'); }
     else { big.textContent = ''; var bn1 = pr ? bigNum(pr) : ['—', '']; big.appendChild(document.createTextNode(bn1[0])); big.appendChild(el('small', '', bn1[1])); lab.textContent = '권장 소비자가격 · 20' + y.slice(2) + '년식'; }
     dNoteFill(!!pm, pm ? null : promoYear(st.fam, t), benChips(st.fam, t, y, pm0));
