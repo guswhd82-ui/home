@@ -20,7 +20,7 @@
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="유현종 차장 사진과 E클래스 공식 사진">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="site.css?v=1112c">
+<link rel="stylesheet" href="site.css?v=1112v">
 <script>try{if(localStorage.getItem('bz-seen'))document.documentElement.className+=' seen';localStorage.setItem('bz-seen','1')}catch(e){}</script><!-- 10/31 A안: 첫 방문만 담당자 칸 등장 움직임(두 번째부터 끔) -->
 <link rel="alternate" type="text/html" href="ai-summary.html" title="트림별 가격 · 재고 · 시승 요약">
 </head>
@@ -42,24 +42,17 @@
   </div>
   <div class="me-act rise" style="--i:2" id="heroAct"><a class="btn" data-track="tel" href="tel:010-3820-8633"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg><span class="num">전화 010-3820-8633</span></a><a class="btn" data-track="kakao" href="https://open.kakao.com/o/szY84nJi" target="_blank" rel="noopener">카톡 상담</a></div>
 </section>
-<!-- 10/31 A안: 관리 3줄을 검정 담당자 칸 아래 흰 카드로 분리(문구·순서 그대로) -->
-<section class="care-card rise" style="--i:3" aria-labelledby="careH">
-  <h1 class="care-h serif" id="careH">출고 준비부터 차량 사용까지 안내합니다</h1>
-  <ol class="care">
-    <li><b>계약·출고</b><span>단계마다 진행 과정과 준비할 것을 안내합니다</span></li>
-    <li><b>차량 사용</b><span>직접 만든 차종별 사용 설명서로 안내합니다 <a data-track="manual" id="careManual" href="https://manual.benzyoo.kr/" target="_blank" rel="noopener">설명서 보기</a></span></li>
-    <li><b>출고 이후</b><span>정기점검과 보증 만료 시점을 안내합니다</span></li>
-  </ol>
-</section>
 <header class="hero" id="find">
   <h2 class="serif">차종 고르기</h2>
   <p>매일 아침 확인한 정가·이달 조건·재고 색상 <small id="meTime"></small></p>
+  <p class="quick"><a href="stock.html" data-track="stock">재고 전체 보기</a><a href="price.html" data-track="price">가격표 전체 보기</a></p><!-- 11/12 시인성 11 -->
 </header>
 
 <div class="seg" id="seg" role="tablist"></div>
 <div class="rail" id="rail"></div>
 <!-- 이달 추천 차 공식 사진(아무 차종도 안 골랐을 때만 보임 · 고르면 숨어서 트림·차 화면이 바로 위로) -->
 <section class="show" id="show" hidden aria-label="이달 추천 차">
+  <h2 class="serif show-h">이달의 추천 <small id="showCap"></small></h2><!-- 11/12 시인성 4 -->
   <div class="show-track" id="showTrack"></div>
   <div class="show-dots" id="showDots"></div>
 </section>
@@ -69,6 +62,7 @@
   <div id="trimMan"></div>
   <div class="opts" id="subChips" style="margin:0 0 12px"></div>
   <div class="card ring" id="trims"></div>
+  <div id="trimAsk"></div><!-- 11/12 시인성 5: 상자 밖 링크 -->
 </section>
 
 <section class="detail ring" id="detail" hidden>
@@ -97,12 +91,13 @@
 
 <!-- 이달의 추천 3대 : 프로그램이 매일 자동(손 갱신 0) — 후보 = 이달 조건 유효 + 재고 있음 · 할인율 높은 순 · 서로 다른 차종 · 조건 만료면 '재고 있음' 기준 -->
 <section class="sec" id="rec" hidden style="margin-top:22px">
-  <h2 class="serif">이달의 추천 <small id="recCap"></small></h2>
+  <h2 class="serif">다른 차종 · 이달의 추천 <small id="recCap"></small></h2>
   <div class="card" id="recList"></div>
   <p class="note" id="recNote" style="margin:8px 2px 0"></p>
 </section>
 
 <section class="more">
+  <h2 class="serif">더 알아보기</h2><!-- 11/12 시인성 3 -->
   <div class="card">
     <button class="li" data-sheet="news"><div class="t"><b>신차 · 사전예약 소식</b><span id="newsCap">블로그에서 자동으로</span></div><span class="chev"></span></button>
     <button class="li" data-sheet="promo"><div class="t"><b>이달 조건 안내</b><span id="promoCap"></span></div><span class="chev"></span></button>
@@ -111,6 +106,15 @@
     <button class="li" data-sheet="about"><div class="t"><b>유현종 차장 · 상담</b><span>카톡 · 전화 · 문자</span></div><span class="chev"></span></button>
   </div>
 </section>
+<!-- 10/31 A안 관리 3줄(문구·순서 그대로) · 11/12 시인성 12: 첫 화면 위에서 빼서 맨 아래로 · 한 줄로 접음(누르면 펼침) -->
+<details class="care-card fold" id="careFold"><summary>
+  <h1 class="care-h serif" id="careH">출고 준비부터 차량 사용까지 안내합니다</h1></summary>
+  <ol class="care">
+    <li><b>계약·출고</b><span>단계마다 진행 과정과 준비할 것을 안내합니다</span></li>
+    <li><b>차량 사용</b><span>직접 만든 차종별 사용 설명서로 안내합니다 <a data-track="manual" id="careManual" href="https://manual.benzyoo.kr/" target="_blank" rel="noopener">설명서 보기</a></span></li>
+    <li><b>출고 이후</b><span>정기점검과 보증 만료 시점을 안내합니다</span></li>
+  </ol>
+</details>
 <footer>유현종 차장 · 메르세데스-벤츠 공식 딜러 한성자동차 서초전시장(서울 서초구 반포대로 52 · 발렛파킹) · 개인 영업 상담 페이지이며 회사 공식 사이트가 아닙니다 · 가격은 권장 소비자가격(부가세 포함 · 개소세 5%) · 조건·재고는 기준일의 확인된 값 · 실제 배정과 최종 견적은 상담으로<br><span id="asof"></span></footer>
 </div>
 
@@ -118,7 +122,7 @@
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet"><div id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<script src="site.js?v=1031c"></script>
+<script src="site.js?v=1112v"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$, el = S.el;
@@ -205,7 +209,7 @@
   }
   // ② 트림 목록
   function renderTrims() {
-    var sec = $('trimSec'), box = $('trims'); box.textContent = ''; sec.hidden = !st.fam; if (D.showOK) $('show').hidden = !!st.fam; if (!st.fam) { renderDetail(); return; }
+    var sec = $('trimSec'), box = $('trims'); box.textContent = ''; $('trimAsk').textContent = ''; sec.hidden = !st.fam; $('app').classList.toggle('picked', !!st.fam);   /* 11/12 시인성 4: 차종을 고르면 '다른 차종 · 이달의 추천'이 아래에(첫 화면은 사진 넘기기 하나) */ if (D.showOK) $('show').hidden = !!st.fam; if (!st.fam) { renderDetail(); return; }
     var list = st.fam.트림.filter(hasStock).sort(function (a, b) { return (priceOf(a, stockYear(a)) || 0) - (priceOf(b, stockYear(b)) || 0); });
     // 2단계: 모델군(GLE 450 · GLE 450 d · AMG GLE 53 …) — 트림이 5개 넘을 때만
     var fams = []; list.forEach(function (t) { var f = family(t.모델); if (fams.indexOf(f) < 0) fams.push(f); });
@@ -220,14 +224,14 @@
     shown.forEach(function (t) {
       var y = pickYear(st.fam, t), py = promoOf(st.fam, t, y) ? y : null, pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm), av = (rows(t, y) || []).length;
       var b = btn('li', null, t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', t.모델));
-      var tags = el('div', 'tags'); stockYears(t).forEach(function (v) { tags.appendChild(stPill(stOf(rows(t, v)), '20' + v.slice(2) + '년식')); }); if (t.시승) tags.appendChild(el('span', 'pill gold', '시승')); if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
-      var p = el('div', 'p num'); if (pm && c && c.할인율 > 0) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('b', '', man(c.최종가))); } else p.appendChild(el('b', '', c ? man(c.정가) : '상담')); b.appendChild(p); b.appendChild(el('span', 'chev'));
+      var tags = el('div', 'tags'); stockYears(t).forEach(function (v) { tags.appendChild(stPill(stOf(rows(t, v)), '20' + v.slice(2) + '년식')); }); if (t.시승) tags.appendChild(el('span', 'pill drv', '시승'));   /* 11/12 시인성 5: 시승 = 다른 색 */ if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
+      var p = el('div', 'p num'); if (pm && c && c.할인율 > 0) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('i', 'plab', '현금가')); p.appendChild(el('b', '', man(c.최종가))); } else { if (c) p.appendChild(el('i', 'plab', '정가')); p.appendChild(el('b', '', c ? man(c.정가) : '상담')); }   /* 11/12 시인성 1: 이름표(최종가 = 차 장 '현금가'와 같은 값 · 할인 없으면 정가) */ b.appendChild(p); b.appendChild(el('span', 'chev'));
       b.setAttribute('aria-pressed', String(st.trim === t));
       b.addEventListener('click', function () { navPush = true; st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = pickYear(st.fam, t); st.color = ''; st.colorPicked = false; st.pay = ''; st.ben = {}; renderTrims(); setTimeout(function () { arrive('trimSec', 'detail'); }, 60); });
       box.appendChild(b);
     });
     if (st.trim && !st.showAll && pool.length > 1) { var m = btn('li', null, 'more'), mt = el('div', 't'); mt.appendChild(el('b', '', '다른 트림 보기')); mt.appendChild(el('span', '', (st.sub || st.fam.이름) + ' 트림 ' + pool.length + '개')); m.appendChild(mt); m.appendChild(el('span', 'chev')); m.addEventListener('click', function () { st.showAll = true; renderTrims(); }); box.appendChild(m); }
-    if (!st.trim && st.fam.트림.some(function (t) { return !hasStock(t); })) { var a = btn('li ask', null, 'alert'), at = el('div', 't'); at.appendChild(el('b', '', '찾는 트림이 없으신가요?')); at.appendChild(el('span', '', '재고가 들어오면 문자로 바로 알려 드려요')); a.appendChild(at); a.appendChild(el('span', 'chev')); a.addEventListener('click', function () { st.aFam = st.fam; st.aTrim = ''; sheet('alert', true); }); box.appendChild(a); }
+    if (!st.trim && st.fam.트림.some(function (t) { return !hasStock(t); })) { var a = btn('li ask', null, 'alert'), at = el('div', 't'); at.appendChild(el('b', '', '찾는 트림이 없으신가요?')); at.appendChild(el('span', '', '재고가 들어오면 문자로 바로 알려 드려요')); a.appendChild(at); a.appendChild(el('span', 'chev')); a.addEventListener('click', function () { st.aFam = st.fam; st.aTrim = ''; sheet('alert', true); }); $('trimAsk').appendChild(a); }
     renderDetail();
   }
   // 검색·AI용(10/28): 트림 화면이면 대표 주소(canonical)·제목을 그 차로 — 사이트맵의 트림 주소와 같은 꼴 · 화면은 그대로
@@ -305,7 +309,7 @@
                 g.appendChild(c); g.appendChild(t);
         if (ext[n].lo) { var pc = el('div', 'p num pp'), rate = pm0 && pm0.할인율 ? pm0.할인율 : 0, tl = ext[n].hi !== ext[n].lo ? '~' : '', mf = rate && pm && pm.금융최종가 ? pm.금융할인율 : 0, f = function (v) { return man(S.after(v, rate)); }, ff = function (v) { return man(S.after(v, rate, mf)); };   // 10/31: 색별 정가 × (1−%) 수식만(S.after)
           if (rate) { pc.appendChild(pl('현금', f(ext[n].lo) + tl)); if (mf) pc.appendChild(pl('벤츠 파이낸셜', ff(ext[n].lo) + tl)); } else { pc.className = 'p num'; pc.appendChild(el('b', '', man(ext[n].lo) + tl)); } g.appendChild(pc); }
-        g.appendChild(ib); g.style.cssText += 'align-items:flex-start;flex-wrap:wrap;row-gap:8px'; g.setAttribute('aria-pressed', String(n === st.color));
+        g.appendChild(ib); g.style.cssText += 'align-items:flex-start;flex-wrap:wrap;row-gap:8px'; g.setAttribute('aria-pressed', String(!!st.colorPicked && n === st.color));   /* 11/12 시인성 8: 처음엔 아무 색도 안 골라진 모양(견적 '색상 미정'과 같게) */
         g.addEventListener('click', function () { st.color = n; st.colorPicked = true; press(box, '.li', n); }); box.appendChild(g);
       });
       cc.appendChild(box); cc.appendChild(el('p', 'note', '외장색 아래가 그 색에 지금 재고가 있는 내장입니다 · 재고 기준 ' + (D.cars.기준.재고 || '') + ' · 실제 배정은 상담으로 확인해 드립니다.'));
@@ -365,7 +369,11 @@
       if (st.qColor && st.qColor !== '색 상관없음 · 추천' && cols.indexOf(st.qColor) < 0) st.qColor = '';   // ★10/29 두 사이트 개선 5번: 손님이 고른 값만 — 화면이 처음 띄운 색(기본 추천)은 견적에 안 넣음
       if (st.colorPicked && st.color && cols.length && !st.qColor) { var pre = cols.filter(function (v) { return v.indexOf(S.ko(st.color) + ' / ') === 0 || v === S.ko(st.color); }); if (pre.length === 1) st.qColor = pre[0]; else if (pre.length > 1) st.qColor = S.ko(st.color) + ' / 내장 미정'; }
       if (/ \/ 내장 미정$/.test(st.qColor || '') && cols.indexOf(st.qColor) < 0) cols.unshift(st.qColor);   // 차 화면에서 외장만 누른 경우
-      s.appendChild(el('div', 'h3', '색')); var ob = el('div', 'opts'); cols.concat(['색 상관없음 · 추천']).forEach(function (v) { var b = btn('opt', v, v); b.setAttribute('aria-pressed', String(st.qColor === v)); b.addEventListener('click', function () { st.qColor = v; press(ob, '.opt', v); sum(); }); ob.appendChild(b); }); s.appendChild(ob);
+      s.appendChild(el('div', 'h3', '색')); var ob = el('div', 'qcols'), qg = {}, qo = [];   // 11/12 시인성 9: 외장 줄(동그라미 + 이름) 아래 그 외장의 내장 칩 · 값('외장 / 내장')은 그대로
+      cols.forEach(function (v) { var i = v.indexOf(' / '), e = i < 0 ? v : v.slice(0, i); if (!qg[e]) { qg[e] = []; qo.push(e); } qg[e].push([v, i < 0 ? '' : v.slice(i + 3)]); });
+      function qopt(row, v, lab, sw) { var b = btn('opt', lab, v); if (sw) { var ci = el('span', 'c'); ci.style.background = S.color(sw); b.insertBefore(ci, b.firstChild); } b.setAttribute('aria-pressed', String(st.qColor === v)); b.addEventListener('click', function () { st.qColor = v; press(ob, '.opt', v); sum(); }); row.appendChild(b); }
+      qo.forEach(function (e) { var g = el('div', 'qc'), h = el('div', 'qc-h'), sw = el('span', 'c'); sw.style.background = S.color(e); h.appendChild(sw); h.appendChild(el('b', '', e.replace(/^MANUFAKTUR\s*/, ''))); g.appendChild(h); var row = el('div', 'opts'); qg[e].forEach(function (x) { qopt(row, x[0], x[1] || '이 색으로', x[1] && x[1] !== '내장 미정' ? x[1] : ''); }); g.appendChild(row); ob.appendChild(g); });
+      var any = el('div', 'opts'); qopt(any, '색 상관없음 · 추천', '색 상관없음 · 추천', ''); ob.appendChild(any); s.appendChild(ob);
       var pq = promoOf(st.fam, t, st.year) || {}; function pct(v, alt) { return v ? '+' + v + '%' : alt; }   // 조건표에 있는 혜택 %를 같이 보여 줌
       s.appendChild(el('div', 'h3', '해당되는 혜택')); var bens = [['재구매', '벤츠 재구매', pct(pq.재구매, '벤츠를 보유했거나 보유 중')], ['트레이드인', '보유 차 처분(트레이드인)', pct(pq.트레이드인, '어떤 차든')], ['타 브랜드 보유', '타 브랜드 차 보유', pct(pq.컨퀘스트, 'GLC · GLE')], ['제휴(MOU)', '제휴 회사 재직', '+2% · 회사명은 제휴 확인에서']];
       bens.forEach(function (b) { if (b[0] === '타 브랜드 보유' && !pq.컨퀘스트 && !/^GL[CE]$/.test(st.fam.이름)) return; var lab = el('label', 'chk'), ck = el('input'); ck.type = 'checkbox'; ck.checked = !!st.ben[b[0]]; ck.addEventListener('change', function () { st.ben[b[0]] = ck.checked; sum(); }); lab.appendChild(ck); lab.appendChild(el('b', '', b[1])); lab.appendChild(el('small', '', b[2])); s.appendChild(lab); });
@@ -443,7 +451,7 @@
       var seen = {}; c.forEach(function (x) { if (pick.length < 3 && !seen[x.f.이름]) { seen[x.f.이름] = 1; pick.push(x); } });
     }
     if (!pick.length) { sec.hidden = true; $('show').hidden = true; return; } sec.hidden = false;
-    $('recCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중'; if (ok && dday()) $('recCap').appendChild(el('span', 'pill gold dd', '마감 ' + dday())); $('recNote').textContent = ok ? '현금 = 정가에서 이달 기본 할인을 뺀 금액 · 벤츠 파이낸셜 = 금융 상품 이용 시 정가 기준 할인율을 더한 금액(이용 조건 충족 시) · 등록 비용 별도 — 사람마다 다른 혜택은 상담으로 확인해 드립니다.' : '이달 조건은 확인 중입니다 — 상담으로 바로 알려 드립니다.';
+    $('recCap').textContent = $('showCap').textContent = ok ? parseInt(D.promo.월.slice(5)) + '월 조건' : '이달 조건 확인 중'; if (ok && dday()) $('recCap').appendChild(el('span', 'pill gold dd', '마감 ' + dday())); $('recNote').textContent = ok ? '현금 = 정가에서 이달 기본 할인을 뺀 금액 · 벤츠 파이낸셜 = 금융 상품 이용 시 정가 기준 할인율을 더한 금액(이용 조건 충족 시) · 등록 비용 별도 — 사람마다 다른 혜택은 상담으로 확인해 드립니다.' : '이달 조건은 확인 중입니다 — 상담으로 바로 알려 드립니다.';
     pick.forEach(function (x) {
       var b = btn('li', null, x.t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', x.t.모델)); var tg = el('div', 'tags');
       var pm0 = ok ? promoOf(x.f, x.t, x.y) : null, cc = pm0 ? calc(x.t, x.y, pm0) : null, mx = cc && cc.금융최종가 ? cc.금융할인율 + cc.할인율 : (cc ? cc.할인율 : 0);   // 큰 숫자 = 이달 받을 수 있는 가장 큰 할인(현금 + MBM 파이낸셜 함께 적용) · 같이 못 받는 건 안 더함(조건표 기준)

@@ -10,7 +10,7 @@
 <meta name="description" content="메르세데스-벤츠 차종별 권장 소비자가격(부가세 포함 · 개별소비세 5%)과 이달 조건. 기준일 표시 · 세부 조건은 유현종 차장 상담으로.">
 <meta property="og:title" content="벤츠 가격 · 이달 조건">
 <meta property="og:description" content="가격표 기준 정가 + 이달 조건 — 유현종 차장 개인 상담 페이지">
-<link rel="stylesheet" href="site.css?v=1112c">
+<link rel="stylesheet" href="site.css?v=1112v">
 </head>
 <body class="sub" ontouchstart=""><div class="app">
 <main class="wrap">
@@ -28,7 +28,7 @@
 </main>
 <div id="bottom"></div>
 </div>
-<script src="site.js?v=1031c"></script>
+<script src="site.js?v=1112v"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$; S.chrome('price.html');
@@ -37,12 +37,12 @@
     var list = $('priceList'); list.textContent = '';
     var rows = P.d.목록.filter(function (r) { return r.계열 === P.fam; });
     if (!rows.length) { list.appendChild(S.el('div', 'empty', '차종을 골라 주세요.')); return; }
-    var box = S.el('div', 'plist'), ys = {}; rows.forEach(function (r) { ys[r.연식] = 1; });
-    Object.keys(ys).sort().reverse().forEach(function (my) {
-      box.appendChild(S.el('h3', '', '20' + my.slice(2) + '년식'));
+    var ys = {}; rows.forEach(function (r) { ys[r.연식] = 1; });
+    Object.keys(ys).sort().reverse().forEach(function (my) {   // 11/12 시인성 6: 연식마다 카드 하나 + 카드 위 제목
+      list.appendChild(S.el('h3', 'yh', '20' + my.slice(2) + '년식')); var box = S.el('div', 'plist');
       rows.filter(function (r) { return r.연식 === my; }).forEach(function (r) { box.appendChild(S.priceRow(r, P.promo)); });
+      list.appendChild(box);
     });
-    list.appendChild(box);
   }
   Promise.all([S.getJSON('prices.json'), S.getJSON('promo.json').catch(function () { return null; })]).then(function (a) {
     P.d = a[0]; P.promo = a[1];

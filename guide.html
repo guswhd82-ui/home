@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
 <title>차종 가이드 · 가격 · 이달 조건 · 지금 있는 색 — 유현종 차장</title>
 <meta name="description" content="벤츠 차종 하나의 가격·이달 조건·지금 살 수 있는 색·블로그 글·영상을 한 곳에 — 유현종 차장 개인 상담 페이지.">
-<link rel="stylesheet" href="site.css?v=1112c">
+<link rel="stylesheet" href="site.css?v=1112v">
 </head>
 <body class="sub" ontouchstart=""><div class="app">
 <main class="wrap">
@@ -23,7 +23,7 @@
 </main>
 <div id="bottom"></div>
 </div>
-<script src="site.js?v=1031c"></script>
+<script src="site.js?v=1112v"></script>
 <script>
 (function () {
   var S = window.SITE, $ = S.$, el = S.el; S.chrome('models.html');
@@ -38,9 +38,8 @@
     var c1 = card('가격 · 이달 조건', D.prices ? '가격표 ' + D.prices.기준 + (S.promoOK(D.promo) ? ' · 이달 조건 반영' : '') : '');
     if (D.promo && D.promo.모의) c1.firstChild.appendChild(el('span', 'mock', '조건은 모의'));
     if (pr.length) {
-      var ys = {}; pr.forEach(function (r) { ys[r.연식] = 1; }); var box = el('div', 'plist');
-      Object.keys(ys).sort().reverse().forEach(function (my) { box.appendChild(el('h3', '', '20' + my.slice(2) + '년식')); pr.filter(function (r) { return r.연식 === my; }).forEach(function (r) { box.appendChild(S.priceRow(r, D.promo)); }); });
-      c1.appendChild(box);
+      var ys = {}; pr.forEach(function (r) { ys[r.연식] = 1; });
+      Object.keys(ys).sort().reverse().forEach(function (my) { c1.appendChild(el('h3', 'yh', '20' + my.slice(2) + '년식')); var box = el('div', 'plist'); pr.filter(function (r) { return r.연식 === my; }).forEach(function (r) { box.appendChild(S.priceRow(r, D.promo)); }); c1.appendChild(box); });   // 11/12 시인성 6: 연식마다 카드
     } else c1.appendChild(el('div', 'empty', '가격표에 없는 차종입니다 — 상담으로 안내해 드립니다.'));
     body.appendChild(c1);
     // ② 지금 있는 색(대수 없음)

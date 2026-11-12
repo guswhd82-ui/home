@@ -81,7 +81,7 @@
   S.pddBadges = function (m) {
     var now = new Date(), ref = now.getFullYear() * 100 + (now.getMonth() + 1), box = el('span', 'meta'), ys = Object.keys(m.years).sort();
     if (ys.length > 1) ys.forEach(function (y) { box.appendChild(el('span', 'badge', 'MY' + String(y).slice(-2))); });
-    if (m.imm) box.appendChild(el('span', 'badge b-imm', '재고 있음'));
+    var nc = {}; (m.rows || []).forEach(function (r) { nc[r.외장] = 1; }); if (Object.keys(nc).length) box.appendChild(el('span', 'badge b-col', '색 ' + Object.keys(nc).length));   // 11/12 시인성 7: 60여 줄 모두 같은 '재고 있음' → 외장색 수(이 페이지는 다 재고 있는 차)
     return box;
   };
   function extGroups(rows) {
@@ -123,7 +123,8 @@
   S.after = function (p) { var s = 0; for (var i = 1; i < arguments.length; i++) s += Number(arguments[i]) || 0; return Math.round(p * (100 - s) / 100); };
   S.priceRow = function (r, promo) {   // 정가 줄 + (있으면) 이달 조건 → .row
     var row = el('div', 'row'), c = el('div', 'c', r.모델), n = el('div', 'n', S.man(r.가격)), x = S.promoFor(promo, r);
-    if (x && x.할인율) { c.appendChild(el('span', 's', '이달 ' + x.할인율 + '%' + (x.조건 ? ' · ' + x.조건 : ''))); n.textContent = S.man(S.after(r.가격, x.할인율)); /* 10/31 차장님 "공식 가격표가 맞아": 가격표 정가 × (1−%) 수식만(전산값 안 씀) · 원 단위 반올림 뒤 만원 절삭 = 가격계산.py */ }
+    n.textContent = ''; n.appendChild(el('i', 'plab', x && x.할인율 ? '현금가' : '정가')); n.appendChild(el('b', '', S.man(r.가격)));   // 11/12 시인성 2: 값마다 이름표(현금가 = 정가 × (1−이달 기본 할인율) · 정가 = 권장 소비자가격)
+    if (x && x.할인율) { var bd = el('span', 's'); bd.appendChild(el('em', 'rate', '이달 ' + x.할인율 + '%')); if (x.조건) bd.appendChild(document.createTextNode(' · ' + x.조건)); c.appendChild(bd); n.lastChild.textContent = S.man(S.after(r.가격, x.할인율)); /* 10/31 차장님 "공식 가격표가 맞아": 가격표 정가 × (1−%) 수식만(전산값 안 씀) · 원 단위 반올림 뒤 만원 절삭 = 가격계산.py */ }
     row.appendChild(c); row.appendChild(n); return row;
   };
 
