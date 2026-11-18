@@ -101,6 +101,7 @@
   }
   function close() { ov.hidden = true; lock(false); img.removeAttribute('src'); faces.forEach(function (f) { f.removeAttribute('src'); }); if (lastFocus) lastFocus.focus(); }
   btn.addEventListener('click', open); x.addEventListener('click', close);
+  window.__color = { open: function (t) { if (!cur) return; open(); if (t) setTab(t); } };   // 11/18 시안 B: 차 화면 '실내 360 보기' 글 링크가 바로 실내 탭으로
   tE.addEventListener('click', function () { setTab('ext'); }); tI.addEventListener('click', function () { setTab('int'); });
   pv.addEventListener('click', function () { turn(-1); }); nx.addEventListener('click', function () { turn(1); });
   ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
