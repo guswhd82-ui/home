@@ -2,7 +2,7 @@
 
 메르세데스-벤츠 서초 전시장 유현종 차장의 개인 영업 상담 페이지(https://benzyoo.kr/ · 회사 공식 사이트 아님)의 차 화면과 같은 값입니다. 매일 재고를 갱신할 때 같이 새로 만듭니다.
 
-- 재고 기준: 2026-11-18 17:33 (지금 재고가 있는 트림만 · 재고 대수는 공개하지 않음 · 실제 배정은 상담으로 확인)
+- 재고 기준: 2026-11-19 09:39 (지금 재고가 있는 트림만 · 재고 대수는 공개하지 않음 · 실제 배정은 상담으로 확인)
 - 가격표 기준: 2026-11-16 · 정가 = 권장 소비자가격(부가세 포함 · 개별소비세 5%)
 - 이달 조건: 2026년 11월 · 2026-11-30까지 · 현금가 = 기본 할인(일시불 기준) 반영 · 벤츠 파이낸셜 = 이용 시 추가 할인까지 반영
 - 금액은 만 원 아래를 버린 값 · 재구매·트레이드인·타 브랜드 보유·제휴(MOU) 등 추가 혜택과 재고 차량별 조건은 견적에서 반영
@@ -67,7 +67,7 @@
 | [Mercedes-AMG S 63 E Performance](https://benzyoo.kr/?car=Mercedes-AMG%20S%2063%20E%20Performance&y=MY26) | 2026 | 2억 9,900만원 | 2억 6,910만원 (−10%) | — | 재고 있음 | 상담 후 | AMG Imola grey |
 | [Mercedes-Maybach S 580](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580&y=MY27) | 2027 | 3억 1,700만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 옵시디안 블랙 |
 | [Mercedes-Maybach S 580 4MATIC](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%204MATIC&y=MY26) | 2026 | 3억 1,700만원 | 2억 8,847만원 (−9%) | — | 재고 있음 | 상담 후 | 그라파이트 그레이 |
-| [Mercedes-Maybach S 580 MANUFAKTUR](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%20MANUFAKTUR&y=MY27) | 2027 | 3억 3,600만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 웜 그레이, 하이 테크 실버, 오팔라이트 화이트 브라이트 |
+| [Mercedes-Maybach S 580 MANUFAKTUR](https://benzyoo.kr/?car=Mercedes-Maybach%20S%20580%20MANUFAKTUR&y=MY27) | 2027 | 3억 3,600만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 하이 테크 실버, 오팔라이트 화이트 브라이트 |
 
 ## GLA
 
@@ -100,7 +100,8 @@
 |---|---|---|---|---|---|---|---|
 | [GLE 350 4MATIC](https://benzyoo.kr/?car=GLE%20350%204MATIC&y=MY26) | 2026 | 1억 1,800만원 | 1억 620만원 (−10%) | — | 재고 있음 | 가능 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트 |
 | [GLE 450 d 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%20d%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 3,400만원 | 1억 1,792만원 (−12%) | — | 재고 있음 | 상담 후 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트 |
-| [GLE 450 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 4,250만원 | 1억 2,112만원 (−15%) | 1억 1,542만원 | 재고 있음 | 상담 후 | 폴라 화이트 |
+| [GLE 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20AMG%20Line&y=MY27) | 2027 | 1억 3,670만원 | 11월 기본 할인 없음 | — | 재고 있음 | 가능 | 옵시디안 블랙, 폴라 화이트, dark petrol non-metallic |
+| [GLE 450 4MATIC Coupé AMG Line](https://benzyoo.kr/?car=GLE%20450%204MATIC%20Coup%C3%A9%20AMG%20Line&y=MY26) | 2026 | 1억 4,250만원 | 1억 2,112만원 (−15%) | 1억 1,542만원 | 재고 있음 | 상담 후 | 셀레나이트 그레이, 폴라 화이트 |
 | [Mercedes-AMG GLE 53 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20GLE%2053%204MATIC%2B&y=MY26) | 2026 | 1억 6,600만원 | 1억 5,272만원 (−8%) | — | 재고 있음 | 가능 | 옵시디안 블랙, 폴라 화이트 |
 | [Mercedes-AMG GLE 53 4MATIC+ Coupé](https://benzyoo.kr/?car=Mercedes-AMG%20GLE%2053%204MATIC%2B%20Coup%C3%A9&y=MY26) | 2026 | 1억 7,000만원 | 1억 6,150만원 (−5%) | — | 재고 있음 | 상담 후 | 셀레나이트 그레이, 옵시디안 블랙, 폴라 화이트 |
 
@@ -108,9 +109,9 @@
 
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 재고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
-| [GLS 450 4MATIC](https://benzyoo.kr/?car=GLS%20450%204MATIC&y=MY27) | 2027 | 1억 5,510만원 | — | — | 재고 있음 | 가능 | 소다라이트 블루 |
+| [GLS 450 4MATIC](https://benzyoo.kr/?car=GLS%20450%204MATIC&y=MY27) | 2027 | 1억 5,510만원 | 11월 기본 할인 없음 | — | 재고 있음 | 가능 | 소다라이트 블루 |
+| [GLS 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLS%20450%204MATIC%20AMG%20Line&y=MY27) | 2027 | 1억 6,120만원 | 11월 기본 할인 없음 | — | 재고 있음 | 가능 | 하이 테크 실버 |
 | [GLS 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLS%20450%204MATIC%20AMG%20Line&y=MY26) | 2026 | 1억 5,400만원 | 1억 4,168만원 (−8%) | — | 재고 있음 | 가능 | 옵시디안 블랙, 폴라 화이트 |
-| [GLS 450 4MATIC AMG Line](https://benzyoo.kr/?car=GLS%20450%204MATIC%20AMG%20Line&y=MY27) | 2027 | 1억 6,120만원 | — | — | 재고 있음 | 가능 | 하이 테크 실버 |
 | [GLS 580 4MATIC AMG Line](https://benzyoo.kr/?car=GLS%20580%204MATIC%20AMG%20Line&y=MY26) | 2026 | 1억 9,340만원 | 1억 7,599만원 (−9%) | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 폴라 화이트, 알파인 그레이 솔리드 |
 | [Mercedes-AMG GLS 63 4MATIC+](https://benzyoo.kr/?car=Mercedes-AMG%20GLS%2063%204MATIC%2B&y=MY26) | 2026 | 2억 1,000만원 | 2억 790만원 (−1%) | — | 재고 있음 | 가능 | 옵시디안 블랙, 폴라 화이트 |
 | [Mercedes-Maybach GLS 600](https://benzyoo.kr/?car=Mercedes-Maybach%20GLS%20600&y=MY26) | 2026 | 2억 9,500만원 | 2억 8,025만원 (−5%) | — | 재고 있음 | 상담 후 | 셀레나이트 그레이, 옵시디안 블랙, 오팔라이트 화이트 브라이트 |
@@ -126,7 +127,7 @@
 
 | 트림 | 연식 | 정가 | 현금가 | 벤츠 파이낸셜 | 재고 | 시승 | 지금 있는 외장색 |
 |---|---|---|---|---|---|---|---|
-| [EQS 400](https://benzyoo.kr/?car=EQS%20400&y=MY27) | 2027 | 1억 5,900만원 | — | — | 재고 있음 | 상담 후 | 옵시디안 블랙 |
+| [EQS 400](https://benzyoo.kr/?car=EQS%20400&y=MY27) | 2027 | 1억 5,900만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 폴라 화이트 |
 | [EQS 580 4MATIC SUV](https://benzyoo.kr/?car=EQS%20580%204MATIC%20SUV&y=MY26) | 2026 | 1억 9,200만원 | 1억 7,280만원 (−10%) | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 폴라 화이트 |
 | [Mercedes-Maybach EQS 680 SUV](https://benzyoo.kr/?car=Mercedes-Maybach%20EQS%20680%20SUV&y=MY26) | 2026 | 2억 3,500만원 | 11월 기본 할인 없음 | — | 재고 있음 | 상담 후 | 옵시디안 블랙, 폴라 화이트, 하이테크 실버 |
 
