@@ -1000,3 +1000,6 @@ body.b2{background:var(--b2bg)}
 .b2 .rrow span{white-space:normal;overflow:visible}
 @media (max-width:479px){.b2 .rrow{flex-wrap:wrap;row-gap:2px}.b2 .rrow div{flex:1 1 calc(100% - 100px)}.b2 .rrow i{flex:1 1 100%;padding-left:100px}}
 .b2 .list2>*+*,.b2 .list2>.rrow+.rrow,.b2 .list2>.rowb{border-top:1px solid var(--b2line)}
+/* 11/23 무이자 배지(기존 pill gold 색 그대로 · 굵게만) — 차종 카드 · 트림 목록 · 차 한 대 상태 줄 */
+.pill.mui,.li .t .tags .pill.mui,.b2 .pill.mui{font-weight:700;color:#7a5c22}
+.b2 .mc2 .pill.mui{margin-top:6px}

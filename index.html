@@ -28,6 +28,7 @@
 <!-- 한 화면 '내 벤츠 고르기' v3 — 데이터: cars.json(차종·트림·가격·재고·글·시승) + promo.json(이달 조건 · 월 지나면 숨김) · 대수 없음 · 연락처는 블로그 공개분만 -->
 <!-- 10/29 두 사이트 개선: ①재고 상태 한 곳 stOf(재고 목록에 있으면 '재고 있음' 하나 · 차장님 10/29 지시) ②차종 사용 설명서 manOf(8개만) ③담당자 칸·관리 3줄 ④주소 동기화 syncURL·?car=<id>&y=<연식> ⑤견적·시승 문자 = 고른 값만·미정 표기·자리표시자 없음 ⑦영어 색 이름 S.ko·정가 기준 문구 ⑧og:image ⑨블로그·설명서 = 담당자 소개 -->
 <!-- 11/18 시안 B(시선 정리 · 본부 · 차장님 '시안 B로 진행') — 세 화면: 첫 화면(app[data-v=home]) · 트림 목록(fam) · 차 한 대(car) · 정본 = 홈페이지HP\_작업_시선개선_1118\시안B · 숫자는 아래 계산 함수(priceOf·promoOf·calc·rows·stOf) 그대로 -->
+<!-- 11/23 무이자 배지(muiOn·muiOf·muiTxt·muiYears): cars.json 트림 '무이자'·기준.무이자유효(홈페이지_구성.py MUI_MAP) → 차종 카드·트림 목록·차 한 대 상태 줄에 'pill gold mui' · 브라우저 오늘 > 무이자유효면 전부 꺼짐 -->
 <div class="top">
   <span class="me-ph" aria-hidden="true"><img src="img/me.webp" alt="" width="44" height="44" onerror="this.parentNode.remove()"></span>
   <div class="who"><b>유현종 차장</b><span>한성자동차 서초전시장</span></div>
@@ -174,6 +175,12 @@
   function stTxt(s) { return s.k === 'have' ? '재고 있음' : '재고 없음'; }
   function stPill(s, pre) { return el('span', 'pill st-' + s.k, (pre ? pre + ' · ' : '') + stTxt(s)); }
   function stockYears(t) { return years(t).filter(function (y) { return (rows(t, y) || []).length; }); }
+  // ★11/23 무이자 배지(차장님 "무이자 가능차량은 차량 선택에 무이자라고 강조해 전차종"): cars.json 트림 '무이자'(홈페이지_구성.py = 이달 벤츠 파이낸셜 금융안내 표 그대로) · 기준.무이자유효(그 달 말일)를 브라우저 오늘이 넘으면 전부 끔
+  //   차종 카드 = 재고 있는 연식에 무이자가 있는 트림 수 · 트림 목록 = 재고 있는 연식 중 무이자 연식만(일부 연식만이면 'YYYY년식' 붙임) · 차 한 대 = 고른 연식
+  function muiOn(today) { var v = D.cars && D.cars.기준 && D.cars.기준.무이자유효; if (!v) return false; var d = today || new Date(); return (d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2)) <= v; }
+  function muiOf(t, y) { if (!t || !t.무이자 || !muiOn()) return null; return t.무이자.filter(function (x) { return x.연식 === y; })[0] || null; }
+  function muiTxt(m) { return '무이자 ' + (m.선수 ? m.개월.map(function (k) { return k + '개월 · 선수 ' + m.선수[k] + '%'; }).join(' / ') : m.개월.join('·') + '개월'); }
+  function muiYears(t) { return stockYears(t).filter(function (y) { return muiOf(t, y); }); }
   // 이달 조건 마감 D-10부터 작게 표시(차장님 10/26) · 유효기간 없으면 안 보임
   function dday() { if (!S.promoOK(D.promo) || !D.promo.유효기간) return null; var e = new Date(D.promo.유효기간 + 'T00:00:00'), n = new Date(); n = new Date(n.getFullYear(), n.getMonth(), n.getDate()); var d = Math.round((e - n) / 86400000); return d >= 0 && d <= 10 ? (d ? 'D-' + d : '오늘 마감') : null; }
   // 금액 표기(차장님 10/26): 만 원 아래는 버리고(절삭) 1억 넘으면 '1억 4,000만원' · 억 단위가 딱 떨어지면 '1억원'
@@ -204,7 +211,9 @@
       var b = btn('mc2', null, c.이름), n = c.트림.filter(hasStock).length, drv = c.트림.some(function (t) { return hasStock(t) && t.시승; });
       b.appendChild(pic(famPhoto(c), i < 4)); b.appendChild(el('b', 'fn', en(c.이름)));
       var sm = el('span', 'fs', '트림 ' + n + '개'); if (drv) { sm.appendChild(document.createTextNode(' · ')); sm.appendChild(el('em', '', '시승 가능')); } b.appendChild(sm);
-      b.setAttribute('aria-label', c.이름 + ' · 트림 ' + n + '개' + (drv ? ' · 시승 가능' : ''));
+      var mk = c.트림.filter(function (t) { return hasStock(t) && muiYears(t).length; }).length, mt = mk ? (mk === n ? '무이자' : '무이자 트림 ' + mk + '개') : '';   // ★11/23 무이자 배지
+      if (mt) b.appendChild(el('span', 'pill gold mui', mt));
+      b.setAttribute('aria-label', c.이름 + ' · 트림 ' + n + '개' + (drv ? ' · 시승 가능' : '') + (mt ? ' · ' + mt : ''));
       b.addEventListener('click', function () { navPush = true; st.fam = c; st.trim = null; st.sub = ''; renderTrims(); toTop(); });
       rail.appendChild(b);
     });
@@ -226,7 +235,9 @@
     pool.forEach(function (t) {
       var y = pickYear(st.fam, t), py = promoOf(st.fam, t, y) ? y : null, pm = py ? promoOf(st.fam, t, y) : null, c = calc(t, y, pm);
       var b = btn('li', null, t.모델), tt = el('div', 't'); tt.appendChild(el('b', '', t.모델));
-      var tags = el('div', 'tags'); stockYears(t).forEach(function (v) { tags.appendChild(stPill(stOf(rows(t, v)), '20' + v.slice(2) + '년식')); }); if (t.시승) tags.appendChild(el('span', 'pill drv', '시승'));   /* 11/12 시인성 5: 시승 = 다른 색 */ if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
+      var tags = el('div', 'tags'), my = muiYears(t), mtx = my.map(function (v) { return muiTxt(muiOf(t, v)); }), mall = my.length === stockYears(t).length && mtx.every(function (x) { return x === mtx[0]; });   // ★11/23 무이자 배지 = 맨 앞
+      if (mall) tags.appendChild(el('span', 'pill gold mui', mtx[0])); else my.forEach(function (v, i) { tags.appendChild(el('span', 'pill gold mui', '20' + v.slice(2) + '년식 ' + mtx[i])); });
+      stockYears(t).forEach(function (v) { tags.appendChild(stPill(stOf(rows(t, v)), '20' + v.slice(2) + '년식')); }); if (t.시승) tags.appendChild(el('span', 'pill drv', '시승'));   /* 11/12 시인성 5: 시승 = 다른 색 */ if (pm && years(t).length > 1) tags.appendChild(el('span', 'pill gold', '20' + y.slice(2) + ' 조건')); tt.appendChild(tags); b.appendChild(tt);
       var p = el('div', 'p num'); if (pm && c && c.할인율 > 0) { p.appendChild(el('s', '', man(c.정가))); p.appendChild(el('i', 'plab', '현금가')); p.appendChild(el('b', '', man(c.최종가))); } else { if (c) p.appendChild(el('i', 'plab', '정가')); p.appendChild(el('b', '', c ? man(c.정가) : '상담')); }   /* 11/12 시인성 1: 이름표(최종가 = 차 장 '현금가'와 같은 값 · 할인 없으면 정가) */ b.appendChild(p); b.appendChild(el('span', 'chev'));
       b.addEventListener('click', function () { navPush = true; st.trim = t; st.sub = family(t.모델); st.showAll = false; st.year = pickYear(st.fam, t); st.color = ''; st.colorPicked = false; st.seat = ''; st.qColor = ''; st.pay = ''; st.ben = {}; renderTrims(); toTop(); });
       box.appendChild(b);
@@ -303,6 +314,7 @@
     // 상태 한 줄(재고만 초록)
     var ds = $('dState'); ds.textContent = ''; ds.appendChild(el('span', '', st.fam.이름 + ' · ' + yy)); if (t.재고) { if ((rows(t, y) || []).length) ds.appendChild(el('span', 'stk', '재고 있음')); else ds.appendChild(el('span', 'wt', '대기 차종')); }   // 11/1 대기 문의: 그 연식 구매 가능 재고 0 = '대기 차종'(출고 달·기간 안 씀)
     ds.appendChild(el('span', '', t.시승 ? '시승 가능' : '상담 후 시승'));
+    var mu = muiOf(t, y); if (mu) ds.appendChild(el('span', 'pill gold mui', muiTxt(mu).replace(/^무이자/, '무이자 할부') + ' · 벤츠 파이낸셜 · ' + dateKo(D.cars.기준.무이자유효) + '까지'));   // ★11/23 고른 연식만
     // 트림 바꾸기 = 트림 목록 화면(모델군 칩이 서면 그 모델군 수)
     var pool = st.fam.트림.filter(hasStock), fs = {}; pool.forEach(function (x) { fs[family(x.모델)] = 1; }); var subOn = pool.length > 5 && Object.keys(fs).length > 1, fm = family(t.모델), nn = subOn ? pool.filter(function (x) { return family(x.모델) === fm; }).length : pool.length;
     var tl = $('dTrim'); tl.textContent = '트림 바꾸기 · ' + (subOn ? fm : st.fam.이름) + ' 트림 ' + nn + '개'; tl.appendChild(chev());
