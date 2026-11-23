@@ -1,10 +1,10 @@
 {
- "기준": "2026-11-16",
+ "기준": "2026-11-23",
  "목록": {
   "CLA 일렉트릭": {
    "제목": "The all-new electric CLA",
-   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20all%20new%20electric%20CLA_catalogue_20261021.pdf",
-   "날짜": "2026-10-21"
+   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20all%20new%20electric%20CLA_catalogue_20261118.pdf",
+   "날짜": "2026-11-18"
   },
   "GLC 일렉트릭": {
    "제목": "The all-new electric GLC",
@@ -78,13 +78,13 @@
   },
   "GLE": {
    "제목": "The new GLE & GLE Coupé",
-   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20new%20GLE_n_GLE_Coupe_Catalogue_20260619.pdf",
-   "날짜": "2026-06-19"
+   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20new%20GLE_n_GLE_Coupe_Catalogue_20261118.pdf",
+   "날짜": "2026-11-18"
   },
   "GLS": {
    "제목": "The new GLS",
-   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/Mercedes-Benz_The%20new%20GLS_Catalogue_20260702.pdf",
-   "날짜": "2026-07-02"
+   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/Mercedes-Benz_The%20new%20GLS_Catalogue_20261118.pdf",
+   "날짜": "2026-11-18"
   },
   "G클래스": {
    "제목": "The new G-Class",
@@ -140,6 +140,11 @@
    "제목": "The new Mercedes-AMG GLE & GLE Coupé",
    "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/Mercedes-AMG%20GLE%20n%20GLE%20Coupe_Catalogue_20260619.pdf",
    "날짜": "2026-06-19"
+  },
+  "G클래스|AMG": {
+   "제목": "The new Mercedes-AMG G-Class",
+   "주소": "https://www.mercedes-benz.co.kr/content/dam/south-korea/passenger-cars/model/catalog/2026/The%20new%20Mercedes-AMG%20G-Class_Catalogue_20261029.pdf",
+   "날짜": "2026-10-29"
   },
   "S클래스|마이바흐": {
    "제목": "The new Mercedes-Maybach S-Class",
